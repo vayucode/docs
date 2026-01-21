@@ -18,7 +18,8 @@ servers:
     description: Sandbox server
 tags:
   - name: auth
-    description: The auth tag is used for endpoints related to authentication and
+    description:
+      The auth tag is used for endpoints related to authentication and
       authorization.
   - name: events
     description: The events tag is used for endpoints related to event ingestion.
@@ -97,7 +98,8 @@ components:
             $ref: "#/components/schemas/LoginRequest"
     DeleteEventsByRefsRequest:
       required: true
-      description: A list of event refs to delete. The request deletes the matching
+      description:
+        A list of event refs to delete. The request deletes the matching
         events for the authenticated account.
       content:
         application/json:
@@ -142,6 +144,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/WebhookSubscribeRequest"
+    SubmitCloudUsageRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SubmitCloudUsageRequest"
   responses:
     CreateCatalogProductResponse:
       description: RequestSuccess
@@ -385,6 +393,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/GetProductConsumptionResponse"
+    SubmitCloudUsageResponse:
+      description: RequestSuccess
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SubmitCloudUsageResponse"
   parameters: {}
   schemas:
     CreateCatalogProductRequest:
@@ -629,6 +643,47 @@ components:
           type: string
           nullable: true
       description: The address of the customer
+    CustomFieldValueTypes:
+      type: string
+      enum:
+        - String
+        - Number
+        - Boolean
+      description: 'The type of the value: "String", "Number", or "Boolean"'
+    CustomField:
+      type: object
+      properties:
+        integrationSource:
+          type: string
+          enum:
+            - NetSuite
+            - QuickBooks
+            - Stripe
+            - Salesforce
+            - Hubspot
+            - Vayu
+            - Slack
+            - S3
+            - Morning
+            - Anrok
+          description: The integration provider (e.g., "Salesforce", "HubSpot")
+        integrationEntityType:
+          type: string
+          description: The entity type in the integration (e.g., "Opportunity", "Deal")
+        fieldPath:
+          type: string
+          description: The path to the field in the integration (e.g., "root.path.field")
+        vayuCustomFieldName:
+          type: string
+          description: The name of the field in Vayu (e.g., "AE Name")
+        valueType:
+          $ref: "#/components/schemas/CustomFieldValueTypes"
+        value:
+          nullable: true
+          description: The actual value of the custom field
+      required:
+        - vayuCustomFieldName
+        - valueType
     CreateCustomerRequest:
       type: object
       properties:
@@ -647,7 +702,8 @@ components:
           nullable: true
           items:
             $ref: "#/components/schemas/Contact"
-          description: The contacts of the customer. Contact marked as primary is the
+          description:
+            The contacts of the customer. Contact marked as primary is the
             target for invoice sharing.
         source:
           $ref: "#/components/schemas/CustomerSource"
@@ -676,6 +732,11 @@ components:
             - 60_DAYS
             - 90_DAYS
           description: The due days of the customer
+        customFields:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomField"
+          description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
       required:
         - name
     CreateCustomerResponse:
@@ -699,7 +760,8 @@ components:
               nullable: true
               items:
                 $ref: "#/components/schemas/Contact"
-              description: The contacts of the customer. Contact marked as primary is the
+              description:
+                The contacts of the customer. Contact marked as primary is the
                 target for invoice sharing.
             source:
               $ref: "#/components/schemas/CustomerSource"
@@ -728,6 +790,11 @@ components:
                 - 60_DAYS
                 - 90_DAYS
               description: The due days of the customer
+            customFields:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomField"
+              description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
             id:
               type: string
             createdAt:
@@ -766,7 +833,8 @@ components:
                 nullable: true
                 items:
                   $ref: "#/components/schemas/Contact"
-                description: The contacts of the customer. Contact marked as primary is the
+                description:
+                  The contacts of the customer. Contact marked as primary is the
                   target for invoice sharing.
               source:
                 $ref: "#/components/schemas/CustomerSource"
@@ -795,6 +863,11 @@ components:
                   - 60_DAYS
                   - 90_DAYS
                 description: The due days of the customer
+              customFields:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CustomField"
+                description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
               id:
                 type: string
               createdAt:
@@ -839,7 +912,8 @@ components:
               nullable: true
               items:
                 $ref: "#/components/schemas/Contact"
-              description: The contacts of the customer. Contact marked as primary is the
+              description:
+                The contacts of the customer. Contact marked as primary is the
                 target for invoice sharing.
             source:
               $ref: "#/components/schemas/CustomerSource"
@@ -868,6 +942,11 @@ components:
                 - 60_DAYS
                 - 90_DAYS
               description: The due days of the customer
+            customFields:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomField"
+              description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
             id:
               type: string
             createdAt:
@@ -901,7 +980,8 @@ components:
           nullable: true
           items:
             $ref: "#/components/schemas/Contact"
-          description: The contacts of the customer. Contact marked as primary is the
+          description:
+            The contacts of the customer. Contact marked as primary is the
             target for invoice sharing.
         source:
           $ref: "#/components/schemas/CustomerSource"
@@ -930,6 +1010,11 @@ components:
             - 60_DAYS
             - 90_DAYS
           description: The due days of the customer
+        customFields:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomField"
+          description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
       additionalProperties: false
     UpdateCustomerResponse:
       type: object
@@ -952,7 +1037,8 @@ components:
               nullable: true
               items:
                 $ref: "#/components/schemas/Contact"
-              description: The contacts of the customer. Contact marked as primary is the
+              description:
+                The contacts of the customer. Contact marked as primary is the
                 target for invoice sharing.
             source:
               $ref: "#/components/schemas/CustomerSource"
@@ -981,6 +1067,11 @@ components:
                 - 60_DAYS
                 - 90_DAYS
               description: The due days of the customer
+            customFields:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomField"
+              description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
             id:
               type: string
             createdAt:
@@ -1017,7 +1108,8 @@ components:
               nullable: true
               items:
                 $ref: "#/components/schemas/Contact"
-              description: The contacts of the customer. Contact marked as primary is the
+              description:
+                The contacts of the customer. Contact marked as primary is the
                 target for invoice sharing.
             source:
               $ref: "#/components/schemas/CustomerSource"
@@ -1046,6 +1138,11 @@ components:
                 - 60_DAYS
                 - 90_DAYS
               description: The due days of the customer
+            customFields:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomField"
+              description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
             id:
               type: string
             createdAt:
@@ -1075,7 +1172,8 @@ components:
         - Average
         - First
         - Last
-      description: The aggregation method defines how the events should be summed to
+      description:
+        The aggregation method defines how the events should be summed to
         represent a usage value.
     AggregationMethod:
       type: object
@@ -1084,15 +1182,18 @@ components:
           $ref: "#/components/schemas/AggregationOperator"
         field:
           type: string
-          description: The field inside the "data" property to apply the aggregation
+          description:
+            The field inside the "data" property to apply the aggregation
             method to.
         instanceKey:
           type: string
-          description: The fields that is used to group different events together when
+          description:
+            The fields that is used to group different events together when
             measuring the usage.
       required:
         - operator
-      description: The aggregation method defines how the events should be summed to
+      description:
+        The aggregation method defines how the events should be summed to
         represent a usage value.
     CriterionOperator:
       type: string
@@ -1331,6 +1432,16 @@ components:
         - TOP_UP
       default: IGNORE
       description: The strategy to apply when the overage occurs
+    PaymentTerm:
+      type: string
+      nullable: true
+      enum:
+        - Prepayment
+        - Postpayment
+      description:
+        The payment term of the product. Can be prepayment or postpayment.
+        If not provided, the payment term will be determined by the pricing
+        model.
     ProductGroup:
       type: object
       properties:
@@ -1564,7 +1675,8 @@ components:
               catalogProductId:
                 type: string
                 nullable: true
-                description: The id of the a product from the catalog to connect the contract
+                description:
+                  The id of the a product from the catalog to connect the contract
                   product to
               productErpId:
                 type: string
@@ -1628,6 +1740,8 @@ components:
                 required:
                   - units
                 description: The commitment of the product
+              paymentTerm:
+                $ref: "#/components/schemas/PaymentTerm"
             required:
               - displayName
               - scheduling
@@ -1637,7 +1751,8 @@ components:
         baseAmount:
           type: number
           nullable: true
-          description: The base amount for the customer to pay even if the amount based on
+          description:
+            The base amount for the customer to pay even if the amount based on
             usage is lower
         commitment:
           type: object
@@ -1688,11 +1803,34 @@ components:
               $ref: "#/components/schemas/ExternalOverageStrategy"
           required:
             - units
-          description: The commitment of the product group. units are aggregated for all
+          description:
+            The commitment of the product group. units are aggregated for all
             products in the group
       required:
         - displayName
         - products
+    CustomFieldValue:
+      type: object
+      properties:
+        customFieldDefinitionId:
+          type: string
+        value:
+          type: string
+        fieldName:
+          type: string
+      required:
+        - customFieldDefinitionId
+    ContractStatus:
+      type: string
+      enum:
+        - InReview
+        - Active
+        - Inactive
+        - Expired
+        - Terminated
+        - PendingTermination
+        - Error
+      description: The status of the contract
     GetContractResponse:
       type: object
       properties:
@@ -1713,7 +1851,8 @@ components:
             salesForceOpportunityId:
               type: string
               nullable: true
-              description: The id of the sales force opportunity that the contract is
+              description:
+                The id of the sales force opportunity that the contract is
                 associated with
             endDate:
               type: string
@@ -1936,7 +2075,8 @@ components:
                   catalogProductId:
                     type: string
                     nullable: true
-                    description: The id of the a product from the catalog to connect the contract
+                    description:
+                      The id of the a product from the catalog to connect the contract
                       product to
                   productErpId:
                     type: string
@@ -2000,6 +2140,8 @@ components:
                     required:
                       - units
                     description: The commitment of the product
+                  paymentTerm:
+                    $ref: "#/components/schemas/PaymentTerm"
                 required:
                   - displayName
                   - scheduling
@@ -2009,7 +2151,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ProductGroup"
-              description: Product groups are list of products that can be grouped as a single
+              description:
+                Product groups are list of products that can be grouped as a single
                 line item with shared settings like ERP settings, commitment
                 settings, etc.
             accountManager:
@@ -2018,12 +2161,26 @@ components:
               description: The name of the account manager of the contract
             shouldProRateInvoices:
               type: boolean
-              description: Whether to pro rate the invoices for the contract. If not provided,
+              description:
+                Whether to pro rate the invoices for the contract. If not provided,
                 it will default to false
             autoRenewContract:
               type: boolean
-              description: Whether the contract is set to auto renew. If not provided, it will
+              description:
+                Whether the contract is set to auto renew. If not provided, it will
                 be treated as true
+            customFields:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomField"
+              description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
+            customFieldValues:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomFieldValue"
+              description: The stored custom field values associated with the contract
+            status:
+              $ref: "#/components/schemas/ContractStatus"
             id:
               type: string
             createdAt:
@@ -2061,7 +2218,8 @@ components:
             salesForceOpportunityId:
               type: string
               nullable: true
-              description: The id of the sales force opportunity that the contract is
+              description:
+                The id of the sales force opportunity that the contract is
                 associated with
             endDate:
               type: string
@@ -2284,7 +2442,8 @@ components:
                   catalogProductId:
                     type: string
                     nullable: true
-                    description: The id of the a product from the catalog to connect the contract
+                    description:
+                      The id of the a product from the catalog to connect the contract
                       product to
                   productErpId:
                     type: string
@@ -2348,6 +2507,8 @@ components:
                     required:
                       - units
                     description: The commitment of the product
+                  paymentTerm:
+                    $ref: "#/components/schemas/PaymentTerm"
                 required:
                   - displayName
                   - scheduling
@@ -2357,7 +2518,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ProductGroup"
-              description: Product groups are list of products that can be grouped as a single
+              description:
+                Product groups are list of products that can be grouped as a single
                 line item with shared settings like ERP settings, commitment
                 settings, etc.
             accountManager:
@@ -2366,12 +2528,26 @@ components:
               description: The name of the account manager of the contract
             shouldProRateInvoices:
               type: boolean
-              description: Whether to pro rate the invoices for the contract. If not provided,
+              description:
+                Whether to pro rate the invoices for the contract. If not provided,
                 it will default to false
             autoRenewContract:
               type: boolean
-              description: Whether the contract is set to auto renew. If not provided, it will
+              description:
+                Whether the contract is set to auto renew. If not provided, it will
                 be treated as true
+            customFields:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomField"
+              description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
+            customFieldValues:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomFieldValue"
+              description: The stored custom field values associated with the contract
+            status:
+              $ref: "#/components/schemas/ContractStatus"
             id:
               type: string
             createdAt:
@@ -2414,7 +2590,8 @@ components:
               salesForceOpportunityId:
                 type: string
                 nullable: true
-                description: The id of the sales force opportunity that the contract is
+                description:
+                  The id of the sales force opportunity that the contract is
                   associated with
               endDate:
                 type: string
@@ -2637,7 +2814,8 @@ components:
                     catalogProductId:
                       type: string
                       nullable: true
-                      description: The id of the a product from the catalog to connect the contract
+                      description:
+                        The id of the a product from the catalog to connect the contract
                         product to
                     productErpId:
                       type: string
@@ -2701,6 +2879,8 @@ components:
                       required:
                         - units
                       description: The commitment of the product
+                    paymentTerm:
+                      $ref: "#/components/schemas/PaymentTerm"
                   required:
                     - displayName
                     - scheduling
@@ -2710,7 +2890,8 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/ProductGroup"
-                description: Product groups are list of products that can be grouped as a single
+                description:
+                  Product groups are list of products that can be grouped as a single
                   line item with shared settings like ERP settings, commitment
                   settings, etc.
               accountManager:
@@ -2719,12 +2900,26 @@ components:
                 description: The name of the account manager of the contract
               shouldProRateInvoices:
                 type: boolean
-                description: Whether to pro rate the invoices for the contract. If not provided,
+                description:
+                  Whether to pro rate the invoices for the contract. If not provided,
                   it will default to false
               autoRenewContract:
                 type: boolean
-                description: Whether the contract is set to auto renew. If not provided, it will
+                description:
+                  Whether the contract is set to auto renew. If not provided, it will
                   be treated as true
+              customFields:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CustomField"
+                description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
+              customFieldValues:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CustomFieldValue"
+                description: The stored custom field values associated with the contract
+              status:
+                $ref: "#/components/schemas/ContractStatus"
               id:
                 type: string
               createdAt:
@@ -2767,7 +2962,8 @@ components:
         salesForceOpportunityId:
           type: string
           nullable: true
-          description: The id of the sales force opportunity that the contract is
+          description:
+            The id of the sales force opportunity that the contract is
             associated with
         endDate:
           type: string
@@ -2990,7 +3186,8 @@ components:
               catalogProductId:
                 type: string
                 nullable: true
-                description: The id of the a product from the catalog to connect the contract
+                description:
+                  The id of the a product from the catalog to connect the contract
                   product to
               productErpId:
                 type: string
@@ -3054,6 +3251,8 @@ components:
                 required:
                   - units
                 description: The commitment of the product
+              paymentTerm:
+                $ref: "#/components/schemas/PaymentTerm"
             required:
               - displayName
               - scheduling
@@ -3063,7 +3262,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ProductGroup"
-          description: Product groups are list of products that can be grouped as a single
+          description:
+            Product groups are list of products that can be grouped as a single
             line item with shared settings like ERP settings, commitment
             settings, etc.
         accountManager:
@@ -3072,12 +3272,26 @@ components:
           description: The name of the account manager of the contract
         shouldProRateInvoices:
           type: boolean
-          description: Whether to pro rate the invoices for the contract. If not provided,
+          description:
+            Whether to pro rate the invoices for the contract. If not provided,
             it will default to false
         autoRenewContract:
           type: boolean
-          description: Whether the contract is set to auto renew. If not provided, it will
+          description:
+            Whether the contract is set to auto renew. If not provided, it will
             be treated as true
+        customFields:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomField"
+          description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
+        customFieldValues:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomFieldValue"
+          description: The stored custom field values associated with the contract
+        status:
+          $ref: "#/components/schemas/ContractStatus"
       required:
         - startDate
         - customerId
@@ -3102,7 +3316,8 @@ components:
             salesForceOpportunityId:
               type: string
               nullable: true
-              description: The id of the sales force opportunity that the contract is
+              description:
+                The id of the sales force opportunity that the contract is
                 associated with
             endDate:
               type: string
@@ -3325,7 +3540,8 @@ components:
                   catalogProductId:
                     type: string
                     nullable: true
-                    description: The id of the a product from the catalog to connect the contract
+                    description:
+                      The id of the a product from the catalog to connect the contract
                       product to
                   productErpId:
                     type: string
@@ -3389,6 +3605,8 @@ components:
                     required:
                       - units
                     description: The commitment of the product
+                  paymentTerm:
+                    $ref: "#/components/schemas/PaymentTerm"
                 required:
                   - displayName
                   - scheduling
@@ -3398,7 +3616,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ProductGroup"
-              description: Product groups are list of products that can be grouped as a single
+              description:
+                Product groups are list of products that can be grouped as a single
                 line item with shared settings like ERP settings, commitment
                 settings, etc.
             accountManager:
@@ -3407,12 +3626,26 @@ components:
               description: The name of the account manager of the contract
             shouldProRateInvoices:
               type: boolean
-              description: Whether to pro rate the invoices for the contract. If not provided,
+              description:
+                Whether to pro rate the invoices for the contract. If not provided,
                 it will default to false
             autoRenewContract:
               type: boolean
-              description: Whether the contract is set to auto renew. If not provided, it will
+              description:
+                Whether the contract is set to auto renew. If not provided, it will
                 be treated as true
+            customFields:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomField"
+              description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
+            customFieldValues:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomFieldValue"
+              description: The stored custom field values associated with the contract
+            status:
+              $ref: "#/components/schemas/ContractStatus"
             id:
               type: string
             createdAt:
@@ -3462,7 +3695,8 @@ components:
           description: The day the usage took place
         value:
           type: number
-          description: The updated value of product units consumed by the customer, for
+          description:
+            The updated value of product units consumed by the customer, for
             the product for given day
       required:
         - customerId
@@ -3504,7 +3738,8 @@ components:
               description: The day the usage took place
             value:
               type: number
-              description: The updated value of product units consumed by the customer, for
+              description:
+                The updated value of product units consumed by the customer, for
                 the product for given day
             id:
               type: string
@@ -3561,7 +3796,8 @@ components:
                 description: The day the usage took place
               value:
                 type: number
-                description: The updated value of product units consumed by the customer, for
+                description:
+                  The updated value of product units consumed by the customer, for
                   the product for given day
               id:
                 type: string
@@ -3624,7 +3860,8 @@ components:
               description: The day the usage took place
             value:
               type: number
-              description: The updated value of product units consumed by the customer, for
+              description:
+                The updated value of product units consumed by the customer, for
                 the product for given day
             id:
               type: string
@@ -3679,7 +3916,8 @@ components:
               description: The day the usage took place
             value:
               type: number
-              description: The updated value of product units consumed by the customer, for
+              description:
+                The updated value of product units consumed by the customer, for
                 the product for given day
             id:
               type: string
@@ -3766,7 +4004,8 @@ components:
             name:
               type: string
               minLength: 1
-              description: The name of the invoice, usually a description of the billing
+              description:
+                The name of the invoice, usually a description of the billing
                 period
             billingCycle:
               $ref: "#/components/schemas/FullDayPeriod"
@@ -3815,7 +4054,8 @@ components:
               name:
                 type: string
                 minLength: 1
-                description: The name of the invoice, usually a description of the billing
+                description:
+                  The name of the invoice, usually a description of the billing
                   period
               billingCycle:
                 $ref: "#/components/schemas/FullDayPeriod"
@@ -3932,7 +4172,8 @@ components:
       properties:
         refreshToken:
           type: string
-          description: The refresh token issued for the authentication process. It is
+          description:
+            The refresh token issued for the authentication process. It is
             required to obtain a new access token.
       required:
         - refreshToken
@@ -3941,7 +4182,8 @@ components:
       properties:
         accessToken:
           type: string
-          description: The new access token to be used for subsequent API calls. It is set
+          description:
+            The new access token to be used for subsequent API calls. It is set
             to expire every hour.
       required:
         - accessToken
@@ -3967,13 +4209,15 @@ components:
             properties:
               name:
                 type: string
-                description: The distinctive label assigned to an event, serving as a critical
+                description:
+                  The distinctive label assigned to an event, serving as a critical
                   identifier for categorizing and pricing events within the
                   system's backend infrastructure.
                 example: api_call
               timestamp:
                 type: string
-                description: The temporal marker denoting the exact moment of event occurrence.
+                description:
+                  The temporal marker denoting the exact moment of event occurrence.
                   The timestamp is formatted as an ISO 8601 string and is
                   expressed in Coordinated Universal Time (UTC). i.e.
                   YYYY-MM-DDTHH:MM:SS.SSSZ
@@ -3982,12 +4226,14 @@ components:
               customerAlias:
                 type: string
                 minLength: 1
-                description: A pseudonymous or otherwise obfuscated identifier uniquely assigned
+                description:
+                  A pseudonymous or otherwise obfuscated identifier uniquely assigned
                   to each customer.
                 example: customer_12345
               ref:
                 type: string
-                description: A universally unique identifier (UUID) or other form of
+                description:
+                  A universally unique identifier (UUID) or other form of
                   high-entropy string serving as an immutable reference for each
                   event entry.
                 example: 4f6cf35x-2c4y-483z-a0a9-158621f77a21
@@ -3996,7 +4242,8 @@ components:
                 nullable: true
                 additionalProperties:
                   nullable: true
-                description: A schema-less JSON object encapsulating miscellaneous attributes
+                description:
+                  A schema-less JSON object encapsulating miscellaneous attributes
                   and metrics associated with the event.
                 example:
                   key1: processing_duration
@@ -4028,13 +4275,15 @@ components:
       properties:
         name:
           type: string
-          description: The distinctive label assigned to an event, serving as a critical
+          description:
+            The distinctive label assigned to an event, serving as a critical
             identifier for categorizing and pricing events within the system's
             backend infrastructure.
           example: api_call
         timestamp:
           type: string
-          description: The temporal marker denoting the exact moment of event occurrence.
+          description:
+            The temporal marker denoting the exact moment of event occurrence.
             The timestamp is formatted as an ISO 8601 string and is expressed in
             Coordinated Universal Time (UTC). i.e. YYYY-MM-DDTHH:MM:SS.SSSZ
           format: date-time
@@ -4042,7 +4291,8 @@ components:
         customerAlias:
           type: string
           minLength: 1
-          description: A pseudonymous or otherwise obfuscated identifier uniquely assigned
+          description:
+            A pseudonymous or otherwise obfuscated identifier uniquely assigned
             to each customer.
           example: customer_12345
         ref:
@@ -4056,7 +4306,8 @@ components:
           nullable: true
           additionalProperties:
             nullable: true
-          description: A schema-less JSON object encapsulating miscellaneous attributes
+          description:
+            A schema-less JSON object encapsulating miscellaneous attributes
             and metrics associated with the event.
           example:
             key1: processing_duration
@@ -4164,13 +4415,15 @@ components:
             properties:
               name:
                 type: string
-                description: The distinctive label assigned to an event, serving as a critical
+                description:
+                  The distinctive label assigned to an event, serving as a critical
                   identifier for categorizing and pricing events within the
                   system's backend infrastructure.
                 example: api_call
               timestamp:
                 type: string
-                description: The temporal marker denoting the exact moment of event occurrence.
+                description:
+                  The temporal marker denoting the exact moment of event occurrence.
                   The timestamp is formatted as an ISO 8601 string and is
                   expressed in Coordinated Universal Time (UTC). i.e.
                   YYYY-MM-DDTHH:MM:SS.SSSZ
@@ -4179,12 +4432,14 @@ components:
               customerAlias:
                 type: string
                 minLength: 1
-                description: A pseudonymous or otherwise obfuscated identifier uniquely assigned
+                description:
+                  A pseudonymous or otherwise obfuscated identifier uniquely assigned
                   to each customer.
                 example: customer_12345
               ref:
                 type: string
-                description: A universally unique identifier (UUID) or other form of
+                description:
+                  A universally unique identifier (UUID) or other form of
                   high-entropy string serving as an immutable reference for each
                   event entry.
                 example: 4f6cf35x-2c4y-483z-a0a9-158621f77a21
@@ -4193,7 +4448,8 @@ components:
                 nullable: true
                 additionalProperties:
                   nullable: true
-                description: A schema-less JSON object encapsulating miscellaneous attributes
+                description:
+                  A schema-less JSON object encapsulating miscellaneous attributes
                   and metrics associated with the event.
                 example:
                   key1: processing_duration
@@ -4247,13 +4503,15 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Event"
-          description: An array of events that were successfully processed and sent to the
+          description:
+            An array of events that were successfully processed and sent to the
             queue.
         invalidEvents:
           type: array
           items:
             $ref: "#/components/schemas/InvalidEvent"
-          description: An array of events that failed validation and were not sent to the
+          description:
+            An array of events that failed validation and were not sent to the
             queue. Each object contains the event and the error message.
       required:
         - validEvents
@@ -4266,13 +4524,15 @@ components:
           properties:
             name:
               type: string
-              description: The distinctive label assigned to an event, serving as a critical
+              description:
+                The distinctive label assigned to an event, serving as a critical
                 identifier for categorizing and pricing events within the
                 system's backend infrastructure.
               example: api_call
             timestamp:
               type: string
-              description: The temporal marker denoting the exact moment of event occurrence.
+              description:
+                The temporal marker denoting the exact moment of event occurrence.
                 The timestamp is formatted as an ISO 8601 string and is
                 expressed in Coordinated Universal Time (UTC). i.e.
                 YYYY-MM-DDTHH:MM:SS.SSSZ
@@ -4281,12 +4541,14 @@ components:
             customerAlias:
               type: string
               minLength: 1
-              description: A pseudonymous or otherwise obfuscated identifier uniquely assigned
+              description:
+                A pseudonymous or otherwise obfuscated identifier uniquely assigned
                 to each customer.
               example: customer_12345
             ref:
               type: string
-              description: A universally unique identifier (UUID) or other form of
+              description:
+                A universally unique identifier (UUID) or other form of
                 high-entropy string serving as an immutable reference for each
                 event entry.
               example: 4f6cf35x-2c4y-483z-a0a9-158621f77a21
@@ -4295,7 +4557,8 @@ components:
               nullable: true
               additionalProperties:
                 nullable: true
-              description: A schema-less JSON object encapsulating miscellaneous attributes
+              description:
+                A schema-less JSON object encapsulating miscellaneous attributes
                 and metrics associated with the event.
               example:
                 key1: processing_duration
@@ -4327,13 +4590,15 @@ components:
           properties:
             name:
               type: string
-              description: The distinctive label assigned to an event, serving as a critical
+              description:
+                The distinctive label assigned to an event, serving as a critical
                 identifier for categorizing and pricing events within the
                 system's backend infrastructure.
               example: api_call
             timestamp:
               type: string
-              description: The temporal marker denoting the exact moment of event occurrence.
+              description:
+                The temporal marker denoting the exact moment of event occurrence.
                 The timestamp is formatted as an ISO 8601 string and is
                 expressed in Coordinated Universal Time (UTC). i.e.
                 YYYY-MM-DDTHH:MM:SS.SSSZ
@@ -4342,12 +4607,14 @@ components:
             customerAlias:
               type: string
               minLength: 1
-              description: A pseudonymous or otherwise obfuscated identifier uniquely assigned
+              description:
+                A pseudonymous or otherwise obfuscated identifier uniquely assigned
                 to each customer.
               example: customer_12345
             ref:
               type: string
-              description: A universally unique identifier (UUID) or other form of
+              description:
+                A universally unique identifier (UUID) or other form of
                 high-entropy string serving as an immutable reference for each
                 event entry.
               example: 4f6cf35x-2c4y-483z-a0a9-158621f77a21
@@ -4356,7 +4623,8 @@ components:
               nullable: true
               additionalProperties:
                 nullable: true
-              description: A schema-less JSON object encapsulating miscellaneous attributes
+              description:
+                A schema-less JSON object encapsulating miscellaneous attributes
                 and metrics associated with the event.
               example:
                 key1: processing_duration
@@ -4400,6 +4668,7 @@ components:
         - S3
         - Vayu
         - Morning
+        - Anrok
     SyncStatus:
       type: string
       enum:
@@ -4546,7 +4815,8 @@ components:
               nullable: true
               items:
                 $ref: "#/components/schemas/Contact"
-              description: The contacts of the customer. Contact marked as primary is the
+              description:
+                The contacts of the customer. Contact marked as primary is the
                 target for invoice sharing.
             source:
               $ref: "#/components/schemas/CustomerSource"
@@ -4575,6 +4845,11 @@ components:
                 - 60_DAYS
                 - 90_DAYS
               description: The due days of the customer
+            customFields:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomField"
+              description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
             id:
               type: string
             createdAt:
@@ -4675,7 +4950,8 @@ components:
               nullable: true
               items:
                 $ref: "#/components/schemas/Contact"
-              description: The contacts of the customer. Contact marked as primary is the
+              description:
+                The contacts of the customer. Contact marked as primary is the
                 target for invoice sharing.
             source:
               $ref: "#/components/schemas/CustomerSource"
@@ -4704,6 +4980,11 @@ components:
                 - 60_DAYS
                 - 90_DAYS
               description: The due days of the customer
+            customFields:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomField"
+              description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
             id:
               type: string
             createdAt:
@@ -4737,7 +5018,8 @@ components:
             salesForceOpportunityId:
               type: string
               nullable: true
-              description: The id of the sales force opportunity that the contract is
+              description:
+                The id of the sales force opportunity that the contract is
                 associated with
             endDate:
               type: string
@@ -4960,7 +5242,8 @@ components:
                   catalogProductId:
                     type: string
                     nullable: true
-                    description: The id of the a product from the catalog to connect the contract
+                    description:
+                      The id of the a product from the catalog to connect the contract
                       product to
                   productErpId:
                     type: string
@@ -5024,6 +5307,8 @@ components:
                     required:
                       - units
                     description: The commitment of the product
+                  paymentTerm:
+                    $ref: "#/components/schemas/PaymentTerm"
                 required:
                   - displayName
                   - scheduling
@@ -5033,7 +5318,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ProductGroup"
-              description: Product groups are list of products that can be grouped as a single
+              description:
+                Product groups are list of products that can be grouped as a single
                 line item with shared settings like ERP settings, commitment
                 settings, etc.
             accountManager:
@@ -5042,12 +5328,26 @@ components:
               description: The name of the account manager of the contract
             shouldProRateInvoices:
               type: boolean
-              description: Whether to pro rate the invoices for the contract. If not provided,
+              description:
+                Whether to pro rate the invoices for the contract. If not provided,
                 it will default to false
             autoRenewContract:
               type: boolean
-              description: Whether the contract is set to auto renew. If not provided, it will
+              description:
+                Whether the contract is set to auto renew. If not provided, it will
                 be treated as true
+            customFields:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomField"
+              description: Custom fields from CRM systems (Salesforce, HubSpot, etc.)
+            customFieldValues:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomFieldValue"
+              description: The stored custom field values associated with the contract
+            status:
+              $ref: "#/components/schemas/ContractStatus"
             id:
               type: string
             createdAt:
@@ -5072,6 +5372,113 @@ components:
             - description: The product consumption data
       required:
         - productConsumption
+    UsageWindow:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: The start timestamp of the usage window in ISO 8601 format
+        end:
+          type: string
+          format: date-time
+          description: The end timestamp of the usage window in ISO 8601 format
+      required:
+        - start
+        - end
+      description: The time window for which the usage was submitted
+    PartnerSubmissionDetail:
+      type: object
+      properties:
+        receivedAt:
+          type: string
+          description: The timestamp when the submission was received by the partner
+        status:
+          type: string
+          enum:
+            - SUCCESS
+            - ERROR
+          description: The status of the partner submission
+        error:
+          nullable: true
+          description: Error details if the submission failed, null otherwise
+      required:
+        - receivedAt
+        - status
+    CloudUsageResult:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - ACCEPTED
+            - REJECTED
+          description: The status of the cloud usage submission result
+        errorCode:
+          type: string
+          description: Error code if the submission was rejected
+        usageWindow:
+          $ref: "#/components/schemas/UsageWindow"
+        errorMessage:
+          type: string
+          description: Detailed error message if the submission was rejected
+        correlationId:
+          type: string
+          description: Unique identifier for tracing the submission through the system
+        idempotencyKey:
+          type: string
+          description: Key used to ensure the submission is processed exactly once
+        meterDimension:
+          type: string
+          description:
+            The dimension of the meter being reported (e.g., API_CALLS,
+            STORAGE_GB)
+        acceptedQuantity:
+          type: number
+          description: The quantity that was accepted by the cloud provider
+        partnerSubmission:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/PartnerSubmissionDetail"
+          description: Details of submissions to partner systems, keyed by request ID
+        quantitySubmitted:
+          type: number
+          description: The total quantity that was submitted
+        timestampSubmitted:
+          type: string
+          format: date-time
+          description: The timestamp when the usage was submitted
+        awsCustomerIdentifier:
+          type: string
+          description: The AWS customer identifier associated with this usage
+      required:
+        - status
+        - usageWindow
+        - correlationId
+        - idempotencyKey
+        - meterDimension
+        - acceptedQuantity
+        - partnerSubmission
+        - quantitySubmitted
+        - timestampSubmitted
+        - awsCustomerIdentifier
+    SubmitCloudUsageRequest:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/CloudUsageResult"
+          description: Array of usage submission results from the cloud provider
+        productCode:
+          type: string
+          description: The product code identifying the cloud marketplace product
+      required:
+        - results
+        - productCode
+    SubmitCloudUsageResponse:
+      type: object
+      properties: {}
     Limit:
       type: number
       minimum: 1
@@ -5129,6 +5536,7 @@ components:
         - S3
         - Vayu
         - Morning
+        - Anrok
     IntegrationId:
       type: string
     ProductId:
@@ -5896,7 +6304,8 @@ paths:
       tags:
         - events
       operationId: sendEventsDryRun
-      description: "Use this endpoint to send an array of events for processing. Make
+      description:
+        "Use this endpoint to send an array of events for processing. Make
         sure to comply with the request schema for each event. NOTE: this is a
         dry run and will not result in actual storage of the events."
       summary: Submit a batch of events for testing
@@ -5968,7 +6377,8 @@ paths:
       tags:
         - events
       operationId: sendEvents
-      description: Use this endpoint to send an array of events for processing and
+      description:
+        Use this endpoint to send an array of events for processing and
         storage. Make sure to comply with the request schema for each event.
       summary: Submit a batch of events for ingestion
       security:
@@ -6048,7 +6458,8 @@ paths:
       tags:
         - credits
       operationId: listCreditLedgerEntries
-      description: This endpoint is used to retrieve the credit ledger entries for a
+      description:
+        This endpoint is used to retrieve the credit ledger entries for a
         specific customer.
       summary: Retrieve credit ledger entries for customer.
       security:
@@ -6273,7 +6684,8 @@ paths:
       tags:
         - customers
       operationId: getCustomerByIntegrationId
-      description: Use this endpoint to get a specific customer using its integration
+      description:
+        Use this endpoint to get a specific customer using its integration
         provider and identifier.
       summary: Get customer by integration id
       security:
@@ -6307,7 +6719,8 @@ paths:
       tags:
         - contracts
       operationId: getContractByIntegrationId
-      description: Use this endpoint to get a specific contract using its integration
+      description:
+        Use this endpoint to get a specific contract using its integration
         provider and identifier.
       summary: Get contract by integration id
       security:
@@ -6360,6 +6773,28 @@ paths:
           description: Unauthorized
         "404":
           description: Not Found
+        "429":
+          description: Too Many Requests
+        "500":
+          description: Internal Server Error
+  /cloudUsageSubmission:
+    post:
+      tags:
+        - cloud-usage-submission
+      operationId: submitCloudUsage
+      description: Submit cloud usage data
+      summary: Submit cloud usage
+      security:
+        - BearerAuthorizer: []
+      requestBody:
+        $ref: "#/components/requestBodies/SubmitCloudUsageRequest"
+      responses:
+        "200":
+          $ref: "#/components/responses/SubmitCloudUsageResponse"
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
         "429":
           description: Too Many Requests
         "500":
