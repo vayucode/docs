@@ -9,6 +9,15 @@
   },
   "favicon": "/assets/favicon.png",
   "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Website",
+          "icon": "link",
+          "href": "https://withvayu.com/"
+        }
+      ]
+    },
     "tabs": [
       {
         "tab": "Documentation",
@@ -21,7 +30,7 @@
             ]
           },
           {
-            "group": "Product log",
+            "group": "Product Log",
             "pages": [
               "documentation/change-log/changelog"
             ]
@@ -32,6 +41,10 @@
               {
                 "group": "Integrations",
                 "pages": [
+                  "documentation/guides/integrations/rillet",
+                  "documentation/guides/integrations/xero",
+                  "documentation/guides/integrations/salesforce",
+                  "documentation/guides/integrations/quickbookx",
                   "documentation/guides/integrations/netsuite"
                 ]
               },
@@ -44,8 +57,11 @@
                 ]
               },
               {
-                "group": "Plans & pricing",
+                "group": "Plans & Pricing",
                 "pages": [
+                  "documentation/guides/plans-and-pricing/pricing-new-overview",
+                  "documentation/guides/plans-and-pricing/fixed-fees",
+                  "documentation/guides/plans-and-pricing/usage-based-fees",
                   "documentation/guides/plans-and-pricing/create-plan",
                   "documentation/guides/plans-and-pricing/contract-processing",
                   "documentation/guides/plans-and-pricing/plan-templates-and-contracts",
@@ -60,6 +76,14 @@
                   "documentation/guides/invoices/real-time-invoice",
                   "documentation/guides/invoices/billing-and-invoice-automation",
                   "documentation/guides/invoices/customer-portal"
+                ]
+              },
+              {
+                "group": "Users",
+                "pages": [
+                  "documentation/guides/users/user-management",
+                  "documentation/guides/users/adding-users-1",
+                  "documentation/guides/users/adding-users"
                 ]
               }
             ]
@@ -183,16 +207,7 @@
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Website",
-          "href": "https://withvayu.com/",
-          "icon": "link"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/assets/logo/light.svg",

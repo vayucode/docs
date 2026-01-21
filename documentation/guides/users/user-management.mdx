@@ -1,0 +1,54 @@
+---
+title: "User Types & Permissions"
+description: "Learn about user types, permissions, and how to manage users in Vayu"
+---
+
+## User types
+
+Vayu supports three user roles, each with different permission levels:
+
+### Admin & Controller
+
+Admins & Controllers have full access to all features and settings in Vayu. This role is designed for account owners and senior team members who need complete control.
+
+**Key capabilities:**
+
+- Full access to all invoices, customers, plans, and products
+- Configure account settings and integrations
+- Manage all users (invite, update roles, remove)
+- Access all reports and revenue data
+- Full access to measurements, meters, and events
+
+<Note>
+  Only users with Admin role can invite new users and manage existing users.
+</Note>
+
+### Developer
+
+Developers have focused access to technical features needed for integration and data management. This role is designed for engineering teams implementing Vayu.
+
+**Key capabilities:**
+
+- Full access to measurements, meters, and products
+- Read access to events
+- View phase labels and pricing (read-only)
+- Full access to jobs
+- Limited access to other features
+
+## Permission differences
+
+Here's a detailed comparison of permissions across user roles:
+
+| Feature              | Admin       | Controller  | Developer   |
+| -------------------- | ----------- | ----------- | ----------- |
+| **Invoices**         | Full access | Full access | No access   |
+| **Customers**        | Full access | Full access | No access   |
+| **Plans**            | Full access | Full access | No access   |
+| **Products**         | Full access | Full access | Full access |
+| **Meters**           | Full access | Full access | Full access |
+| **Measurements**     | Full access | Full access | Full access |
+| **Events**           | Full access | Full access | Read only   |
+| **Reports**          | Full access | Full access | No access   |
+| **Integrations**     | Full access | Full access | No access   |
+| **Users**            | Full access | Read only   | No access   |
+| **Account settings** | Full access | Full access | No access   |
