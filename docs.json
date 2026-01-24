@@ -153,7 +153,8 @@
                 "group": "Invoices",
                 "pages": [
                   "api-reference/endpoints/invoices/get-invoice",
-                  "api-reference/endpoints/invoices/list-invoices"
+                  "api-reference/endpoints/invoices/list-invoices",
+                  "api-reference/endpoints/invoices/get-invoice-payment-status"
                 ]
               },
               {
