@@ -41,6 +41,7 @@
               {
                 "group": "Integrations",
                 "pages": [
+                  "documentation/guides/integrations/hub-spot",
                   "documentation/guides/integrations/stripe",
                   "documentation/guides/integrations/rillet",
                   "documentation/guides/integrations/xero",
