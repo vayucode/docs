@@ -5,9 +5,33 @@ sidebarTitle: "NetSuite"
 
 # Overview
 
-Vayu specializes in unifying contract commercials and usage data into a single revenue management platform. Oracle’s NetSuite platform offers a powerful way for businesses to handle key financial and operational tasks, including accounting and financial management. Integrating the two platforms ensures that your billing and revenue information is fully up to date and aligned at all times, no matter where you’re accessing it. 
+## **Vayu + NetSuite Integration: Two-Way Billing & Revenue Sync**
 
-Vayu integrates smoothly and swiftly with Netsuite, offering robust two-way synchronization for your billing and revenue workflows. Not only do you achieve data consistency across platforms, you can also seamlessly automate critical finance operations.
+Vayu seamlessly integrates with **NetSuite**, offering robust two-way synchronization for your billing and revenue workflows. This integration ensures data consistency across platforms and automates critical finance operations.
+
+### **What’s Synced**
+
+Vayu enables you to sync customers, sales orders, and invoices **to NetSuite**:
+
+- **Customers - **Create and update customer records in NetSuite from Vayu or ingest existing customer records from NetSuite into Vayu. (The sync respects key NetSuite attributes like subsidiary and account configuration.)
+- **Sales Orders** - Automatically generate Sales Orders in NetSuite based on usage, subscriptions, or events tracked in Vayu. This pulls Sales Orders from NetSuite for reconciliation and reporting in Vayu.
+- **Invoices **- Push invoice data from Vayu and pull from NetSuite:
+  - Push invoices from Vayu to NetSuite as part of your billing cycle.
+  - Pull invoice data from NetSuite for reporting or reconciliation in Vayu.
+
+### **NetSuite Attributes & Setup**
+
+To enable precise syncing, Vayu uses NetSuite attributes defined at the **client/account level**, including subsidiaries, accounts receivable, and product ERP mappings.
+
+- **Subsidiaries – **Ensures transactions are correctly tagged to the appropriate legal entity in NetSuite.
+- **Accounts Receivable – **Sync aligns with the customer’s receivable account setup in NetSuite, ensuring accurate GL posting.
+- **Product ERP Mappings – **Products and pricing in Vayu are matched to NetSuite items using ERP codes, classifications, and other identifiers.
+
+### **Configuration Notes**
+
+- Vayu supports both **push and pull** mechanisms via secure API.
+- Attribute mapping and field-level rules are configurable based on your NetSuite implementation.
+- Sync can be scheduled or triggered in real-time, depending on your workflow needs.
 
 ## Capabilities
 
