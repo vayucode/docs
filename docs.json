@@ -83,7 +83,7 @@
                 ]
               },
               {
-                "group": "Users",
+                "group": "Members",
                 "pages": [
                   "documentation/guides/users/user-management",
                   "documentation/guides/users/adding-users-1",
