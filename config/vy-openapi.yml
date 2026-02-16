@@ -628,6 +628,17 @@ components:
         - Salesforce
         - HubSpot
       description: The source of the customer
+    CustomerCloudProviderSettings:
+      type: object
+      nullable: true
+      properties:
+        cloudProvider:
+          type: string
+          enum:
+            - AWS
+        cloudProviderMarketplaceId:
+          type: string
+      description: Cloud provider settings for the customer
     Address:
       type: object
       nullable: true
@@ -734,6 +745,8 @@ components:
           type: string
           nullable: true
           description: The tax ID of the customer
+        cloudProviderSettings:
+          $ref: "#/components/schemas/CustomerCloudProviderSettings"
         externalId:
           type: string
           description: The external ID of the customer
@@ -806,6 +819,8 @@ components:
               type: string
               nullable: true
               description: The tax ID of the customer
+            cloudProviderSettings:
+              $ref: "#/components/schemas/CustomerCloudProviderSettings"
             externalId:
               type: string
               description: The external ID of the customer
@@ -893,6 +908,8 @@ components:
                 type: string
                 nullable: true
                 description: The tax ID of the customer
+              cloudProviderSettings:
+                $ref: "#/components/schemas/CustomerCloudProviderSettings"
               externalId:
                 type: string
                 description: The external ID of the customer
@@ -986,6 +1003,8 @@ components:
               type: string
               nullable: true
               description: The tax ID of the customer
+            cloudProviderSettings:
+              $ref: "#/components/schemas/CustomerCloudProviderSettings"
             externalId:
               type: string
               description: The external ID of the customer
@@ -1068,6 +1087,8 @@ components:
           type: string
           nullable: true
           description: The tax ID of the customer
+        cloudProviderSettings:
+          $ref: "#/components/schemas/CustomerCloudProviderSettings"
         externalId:
           type: string
           description: The external ID of the customer
@@ -1139,6 +1160,8 @@ components:
               type: string
               nullable: true
               description: The tax ID of the customer
+            cloudProviderSettings:
+              $ref: "#/components/schemas/CustomerCloudProviderSettings"
             externalId:
               type: string
               description: The external ID of the customer
@@ -1224,6 +1247,8 @@ components:
               type: string
               nullable: true
               description: The tax ID of the customer
+            cloudProviderSettings:
+              $ref: "#/components/schemas/CustomerCloudProviderSettings"
             externalId:
               type: string
               description: The external ID of the customer
@@ -1555,6 +1580,19 @@ components:
       description: The payment term of the product. Can be prepayment or postpayment.
         If not provided, the payment term will be determined by the pricing
         model.
+    ProductCloudProviderSettings:
+      type: object
+      nullable: true
+      properties:
+        cloudProvider:
+          type: string
+          enum:
+            - AWS
+        cloudProviderMarketplaceId:
+          type: string
+        dimension:
+          type: string
+      description: Cloud provider settings for the product
     ProductGroup:
       type: object
       properties:
@@ -1854,6 +1892,8 @@ components:
                 description: The commitment of the product
               paymentTerm:
                 $ref: "#/components/schemas/PaymentTerm"
+              cloudProviderSettings:
+                $ref: "#/components/schemas/ProductCloudProviderSettings"
             required:
               - displayName
               - scheduling
@@ -2250,6 +2290,8 @@ components:
                     description: The commitment of the product
                   paymentTerm:
                     $ref: "#/components/schemas/PaymentTerm"
+                  cloudProviderSettings:
+                    $ref: "#/components/schemas/ProductCloudProviderSettings"
                 required:
                   - displayName
                   - scheduling
@@ -2614,6 +2656,8 @@ components:
                     description: The commitment of the product
                   paymentTerm:
                     $ref: "#/components/schemas/PaymentTerm"
+                  cloudProviderSettings:
+                    $ref: "#/components/schemas/ProductCloudProviderSettings"
                 required:
                   - displayName
                   - scheduling
@@ -2983,6 +3027,8 @@ components:
                       description: The commitment of the product
                     paymentTerm:
                       $ref: "#/components/schemas/PaymentTerm"
+                    cloudProviderSettings:
+                      $ref: "#/components/schemas/ProductCloudProviderSettings"
                   required:
                     - displayName
                     - scheduling
@@ -3352,6 +3398,8 @@ components:
                 description: The commitment of the product
               paymentTerm:
                 $ref: "#/components/schemas/PaymentTerm"
+              cloudProviderSettings:
+                $ref: "#/components/schemas/ProductCloudProviderSettings"
             required:
               - displayName
               - scheduling
@@ -3703,6 +3751,8 @@ components:
                     description: The commitment of the product
                   paymentTerm:
                     $ref: "#/components/schemas/PaymentTerm"
+                  cloudProviderSettings:
+                    $ref: "#/components/schemas/ProductCloudProviderSettings"
                 required:
                   - displayName
                   - scheduling
@@ -4997,6 +5047,8 @@ components:
               type: string
               nullable: true
               description: The tax ID of the customer
+            cloudProviderSettings:
+              $ref: "#/components/schemas/CustomerCloudProviderSettings"
             externalId:
               type: string
               description: The external ID of the customer
@@ -5146,6 +5198,8 @@ components:
               type: string
               nullable: true
               description: The tax ID of the customer
+            cloudProviderSettings:
+              $ref: "#/components/schemas/CustomerCloudProviderSettings"
             externalId:
               type: string
               description: The external ID of the customer
@@ -5505,6 +5559,8 @@ components:
                     description: The commitment of the product
                   paymentTerm:
                     $ref: "#/components/schemas/PaymentTerm"
+                  cloudProviderSettings:
+                    $ref: "#/components/schemas/ProductCloudProviderSettings"
                 required:
                   - displayName
                   - scheduling
@@ -6745,8 +6801,8 @@ paths:
       operationId: deductCredits
       description: >-
         This endpoint is used to deduct credits from the specified customer
-        account.
-            Submit the credit amount and customer ID in the request body to deduct the credits.
+        account. 
+            Submit the credit amount and customer ID in the request body to deduct the credits. 
             The deducted credits will be subtracted from the customer's account.
       summary: Deduct credits from customer credit ledger
       security:
@@ -7047,4 +7103,3 @@ paths:
           description: Too Many Requests
         "500":
           description: Internal Server Error
-
