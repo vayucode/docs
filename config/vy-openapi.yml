@@ -638,6 +638,8 @@ components:
             - AWS
         cloudProviderMarketplaceId:
           type: string
+        marketplaceAccountId:
+          type: string
       description: Cloud provider settings for the customer
     Address:
       type: object
@@ -6801,8 +6803,8 @@ paths:
       operationId: deductCredits
       description: >-
         This endpoint is used to deduct credits from the specified customer
-        account.
-            Submit the credit amount and customer ID in the request body to deduct the credits.
+        account. 
+            Submit the credit amount and customer ID in the request body to deduct the credits. 
             The deducted credits will be subtracted from the customer's account.
       summary: Deduct credits from customer credit ledger
       security:
@@ -7103,4 +7105,3 @@ paths:
           description: Too Many Requests
         "500":
           description: Internal Server Error
-
