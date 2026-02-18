@@ -39,6 +39,15 @@
             "group": "Guides",
             "pages": [
               {
+                "group": "Settings",
+                "pages": [
+                  "general",
+                  "documentation/guides/users/user-management",
+                  "entities",
+                  "invoice-preferences"
+                ]
+              },
+              {
                 "group": "Integrations",
                 "pages": [
                   "documentation/guides/integrations/anrok",
@@ -80,14 +89,6 @@
                   "documentation/guides/invoices/real-time-invoice",
                   "documentation/guides/invoices/billing-and-invoice-automation",
                   "documentation/guides/invoices/customer-portal"
-                ]
-              },
-              {
-                "group": "Members",
-                "pages": [
-                  "documentation/guides/users/user-management",
-                  "documentation/guides/users/adding-users-1",
-                  "documentation/guides/users/adding-users"
                 ]
               }
             ]

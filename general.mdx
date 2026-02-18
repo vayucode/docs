@@ -1,0 +1,185 @@
+---
+title: "Settings"
+---
+
+<Frame>
+  ![Image](/images/image-9.png)
+</Frame>
+
+## General
+
+This is where you can enter your company’s main details:
+
+- Company name
+- Main contact
+- Upload a company logo (PNG format)
+- Full address
+- Tax ID
+- Bank information
+  - Bank name
+  - Bank address
+  - IBAN (routing) number
+  - Swift code
+  - Account number
+  - ABA
+
+Once done, hit the blue **Save** button in the upper righthand corner of the page.
+
+## Member Types & Permissions
+
+Vayu supports three member (user) roles, each with different permission levels:
+
+### Admin & Controller
+
+Admins & Controllers have full access to all features and settings in Vayu. This role is designed for account owners and senior team members who need complete control.
+
+**Key capabilities:**
+
+- Full access to all invoices, customers, plans, and products
+- Configure account settings and integrations
+- Manage all members (invite, update roles, remove)
+- Access all reports and revenue data
+- Full access to measurements, meters, and events
+
+<Note>
+  Only members with Admin role can invite new members and manage existing members.
+</Note>
+
+#### Developer
+
+Developers have focused access to technical features needed for integration and data management. This role is designed for engineering teams implementing Vayu.
+
+**Key capabilities:**
+
+- Full access to measurements, meters, and products
+- Read access to events
+- View phase labels and pricing (read-only)
+- Full access to jobs
+- Limited access to other features
+
+### Permission differences
+
+Here's a detailed comparison of permissions across member roles:
+
+| Feature              | Admin       | Controller  | Developer   |
+| -------------------- | ----------- | ----------- | ----------- |
+| **Invoices**         | Full access | Full access | No access   |
+| **Customers**        | Full access | Full access | No access   |
+| **Plans**            | Full access | Full access | No access   |
+| **Products**         | Full access | Full access | Full access |
+| **Meters**           | Full access | Full access | Full access |
+| **Measurements**     | Full access | Full access | Full access |
+| **Events**           | Full access | Full access | Read only   |
+| **Reports**          | Full access | Full access | No access   |
+| **Integrations**     | Full access | Full access | No access   |
+| **Members (users)**  | Full access | Read only   | No access   |
+| **Account settings** | Full access | Full access | No access   |
+
+### Adding Members
+
+1. Navigate to **Settings** in the sidebar
+2. Select the **Members** tab
+3. Click **Invite new member**
+4. Enter the member's email address
+5. Select the appropriate role (Admin, Controller, or Developer)
+6. Click **Send invitation**
+
+The member (user) will receive an email invitation with a link to create their account. The invitation link is valid for a limited time.
+
+### Pending invitations
+
+You can view and manage pending invitations in the **Invitations** section on the Members tab:
+
+- **View status**: See all pending invitations
+- **Resend invitation**: Send the invitation email again
+- **Cancel invitation**: Revoke an invitation before it's accepted
+
+Invitations expire after a set period and will need to be resent if not accepted in time.
+
+### Removing Members
+
+1. Go to **Settings** \> **Members**
+2. Find the member in the members table
+3. Click the remove icon (trash) next to their name
+4. Confirm the removal
+
+<Warning>
+  Removing a member immediately revokes their access to your Vayu account. This action cannot be undone.
+</Warning>
+
+### Updating Member Roles
+
+To change a member's role:
+
+1. Go to **Settings** \> **Members**
+2. Find the member in the members table
+3. Click the role dropdown next to their name
+4. Select the new role
+
+The role change takes effect immediately.
+
+## **Entities**
+
+The Entities page mainly manages subsidiaries. 
+
+When you enter, you will see the Subsidiaries Management section where you can + Create New entries. When you press the + Create New button, you’ll be presented with a window to fill in essential data such as the company name, tax ID, and address information.
+
+![Image](/images/image-8.png)
+
+Hit Next to enter financial information such as the bank name, account number, IBAN (routing number), Swift code (if relevant) and ABA.
+
+Finally, hit Create.
+
+Once entered, subsidiaries will be listed with the date the entry was created and the tax ID.
+
+### Sync with ERP
+
+You can sync Vayu-entered subsidiaries with those listed in an integrated ERP such as NetSuite.
+
+Choose from a dropdown list of subsidiaries from either side of the integration, and the two entities will sync.
+
+## **Invoice Preferences**
+
+Invoice preferences control how invoices are generated, displayed, and sent to customers. These settings apply globally across your workspace.
+
+#### **☐ Hide zero amount line items**
+
+Removes invoice line items with a total amount of zero, helping keep invoices clean and easier to read.
+
+#### **☐ Hide price breakdown in invoice PDF**
+
+Hides the price calculation columns (such as quantity and unit price) and displays only the total amount per line item in the invoice PDF.
+
+#### **☐ Show consumption breakdown of related entities**
+
+Controls whether usage is shown only as an aggregated total or broken down by related child entities when parent–child customers are used.
+
+#### **☐ Add payment wallet info on invoice**
+
+Includes payment wallet details on invoices. This may be relevant for customers that accept alternative payment methods such as cryptocurrency.
+
+#### **☐ Set issue date and due date upon approval**
+
+Defines how the invoice issue date is determined:
+
+- Use the approval date as issue date, **_or_**
+- Use the expected issue date for the billing period, even if the invoice is approved later.
+
+#### **☐ Automatically send approved invoices**
+
+Automatically emails invoices to the configured billing contact as soon as they are approved.
+
+#### **☐ Deduct credits from following invoice**
+
+Controls how customer credits are applied:
+
+- When enabled, credits are automatically deducted from the next issued invoice.
+- When disabled, credits can be applied manually to an invoice of your choice.
+
+#### **☐ Include customer portal link**
+
+Adds a link to the [<u>customer portal</u>](https://guide.withvayu.com/documentation/guides/invoices/customer-portal#customer-portal) in invoices, allowing customers to view invoice status and related usage information.
+
+#### **Billing email and BCC**
+
+Configures the sender address for invoice emails (billing email) and optional BCC recipients (invoicing bcc address) who should receive a copy of every invoice.

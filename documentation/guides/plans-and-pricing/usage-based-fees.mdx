@@ -1,8 +1,6 @@
 ---
-title: "Usage Based Fees"
+title: "Usage-Based Fees"
 ---
-
-**Usage Fees**
 
 Usage-Based Fees cover metered usage, meter resets, and commitments or overages. Vayu offers several usage-based fee options; tier-based pricing, volume-based pricing, tiered subscriptions, per-unit pricing, and revenue sharing.
 
@@ -33,6 +31,8 @@ In this example, tiered charges would be calculated as such when consuming 9,000
   You can have different usage metering and billing intervals. For example, you can meter monthly _but_ charge for overage _quarterly._
 </Note>
 
+---
+
 ## **Volume Pricing**
 
 With volume-based pricing, the unit price is defined based on aggregated usage, with customers paying the base fee of their current tier. Discounts to a certain volume of usage will apply retroactively once that threshold is reached.
@@ -50,6 +50,8 @@ In this example, volume charges would be calculated as such when consuming 9,000
 | Above 6,000               | **_9,000_** | ✖ | \$0.03             | 〓 | **_\$270.00_** |
 
 Usage accumulation is ‘lifetime’ from the contract start date. The charges are periodic and are based on the accumulative volume up until that point.
+
+---
 
 ## **Per Unit Pricing**
 
@@ -70,6 +72,8 @@ To adjust a per-unit plan, click **Modify**, and the left-side menu will show yo
 
   **Base amounts** are minimum thresholds to charge regardless of customer usage. They allow you to set a minimum amount to be charged in cases of zero consumption. This is only applicable for metered or usage-based products.
 </Note>
+
+---
 
 ## **Tiered Subscription**
 
@@ -97,11 +101,15 @@ You can add the following enhanced pricing features to tier subscriptions:
 - **Auto-Upgrade** – When a customer crosses a usage tier into a new tier, that customer is automatically upgraded to the new tier permanently
 - **Prepay** – Collecting payment at the start of a chosen period for the upcoming service
 
+---
+
 ## **Revenue Share**
 
 Revenue Sharing is a usage model that charges a percentage of consumed volume for the billing period. It is similar to the volume tier, but in this case the unit price of the revenue share itself is the percentage of the sum of transactions. 
 
-Similar to standard volume tiers, but the unit price is a percentage of a sum (e.g., total transactions). Customers only pay the percentage in their current tier. Optionally configure a unit cap that applies to each percentage charge (e.g. 0.2% of transaction volume, capped at \$5 per transaction). For percentage-based volume pricing, you can optionally set a minimum and a maximum fee threshold. For example, charge 0.5% of every payment event with a \$1 minimum and a \$10 cap per payment.
+Similar to standard volume tiers, but the unit price is a percentage of a sum (e.g., total transactions). Customers only pay the percentage in their current tier. Optionally configure a unit cap that applies to each percentage charge (e.g. 0.2% of transaction volume, capped at \$5 per transaction).
+
+For percentage-based volume pricing, you can optionally set a minimum and a maximum fee threshold. For example, charge 0.5% of every payment event with a \$1 minimum and a \$10 cap per payment.
 
 To edit a Revenue Sharing plan, hit **Modify** and you can edit the following variables:
 
@@ -112,9 +120,11 @@ To edit a Revenue Sharing plan, hit **Modify** and you can edit the following va
 
 ![Revenue Share](/images/RevenueShare.gif)
 
+---
+
 ## **Grouped Products (Bundle)**
 
-**Grouped products** let you take _multiple metered products_ and treat them as if they draw from the same commitment or base amount. In other words, multiple products consume from a shared usage bucket. This can include separate pricing tables for each product.
+Grouped products let you take _multiple metered products_ and treat them as if they draw from the same commitment or base amount. In other words, multiple products consume from a shared usage bucket. This can include separate pricing tables for each product.
 
 For example, you may purchase a certain number of SMS messages (Product A) or a certain number of WhatsApp messages (Product B) from a provider. 
 
@@ -126,10 +136,16 @@ If offered as grouped products, an allotment of 2,000 means any combination of S
 
 Any overage consumption will be charged separately according to the pricing of the individual product.
 
-## Matrix Pricing 
+---
 
-Matrix pricing is a pricing approach where unit prices are defined in a grid based on two key dimensions (such as usage amount, region, instance type, customer segment, etc.). For each combination of the two dimension values, there’s a specific rate. This lets you charge different prices for the same metric depending on where and how it’s used, without creating separate products for each variation.
+## **Matrix Pricing**
 
-## **SQL Pricing**
+Matrix pricing is a pricing approach where unit prices are defined in a grid based on two key dimensions (such as usage amount, region, instance type, customer segment, etc.). For each combination of the two dimension values, there’s a specific rate. 
 
-SQL Pricing (also called SQL Metering) is an advanced metering mechanism that allows pricing logic to be expressed using SQL-like conditions, enabling calculations that cannot be expressed using standard field-based or rule-based metering alone. It functions as an additional layer of complexity on top of existing metering.
+This lets you charge different prices for the same metric depending on where and how it’s used, without creating separate products for each variation.
+
+---
+
+## **SQL Metering**
+
+SQL Metering is an advanced metering mechanism that allows pricing logic to be expressed using SQL-like conditions, enabling calculations that cannot be expressed using standard field-based or rule-based metering alone. It functions as an additional layer of complexity on top of existing metering.
