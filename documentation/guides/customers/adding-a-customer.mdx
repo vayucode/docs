@@ -2,12 +2,60 @@
 title: "Adding a Customer"
 ---
 
-#### Customers can be added in one of three ways:
+# **Add Customer**
 
-> 1. Imported via CSV file 
-> 2. Salesforce or Hubspot integration
-> 3. Adding manually - as described below
+Customers can be added in one of three ways:
 
-- To initiate the customer creation process, start by selecting **Customers** on the main menu and then click **\+ Customer** in the upper right. 
-- Next, add all required information, including Customer name, address, and contact details. 
-- Once completed, simply click the **Save** button to finalize the process.
+1. Imported via CSV file
+2. Salesforce or Hubspot integration
+3. Adding manually - as described below
+
+Click **\+ Customer** to create a new customer profile.
+
+The Add Customer page is divided into structured configuration sections. Each section captures a different category of account information.
+
+## **Company Details**
+
+### **General Information**
+
+The General Information section captures the legal and identifying information of the customer, including Name, Legal Name, and Tax ID. These fields define how the customer is referenced throughout the system and on billing documents.
+
+### **Address**
+
+The Address section stores geographic and mailing information, including Country or Region, State, City, Street Address, and Postal Code. This information may affect taxation, invoice formatting, and reporting.
+
+## **Contacts**
+
+The Contacts section allows you to associate one or more contacts with the customer account.
+
+Each contact record includes identifying and communication details such as Contact Name, Title, Phone Number, and Email. You may designate whether the contact should receive invoices by selecting the **Send Invoice** option.
+
+Additional actions allow you to add new contacts, manage existing ones, or remove contact records.
+
+## **Configuration**
+
+The Configuration section defines system identifiers and billing-related behaviors.
+
+### **External & Integration Identifiers**
+
+Fields such as External ID, CRM ID, NS Customer ID, and QB ERP ID are used to synchronize customer records with external systems and accounting platforms. These identifiers allow mapping between Vayu and integrated systems.
+
+### **Account Configuration**
+
+Within this section, you assign the customer to a **Subsidiary**, define the default **Overage behavior**, and select a **Customer Type**. These values influence how billing and contracts are applied to the account.
+
+## **Invoices**
+
+The Invoices section controls billing configuration.
+
+Here, you define the account Currency, Tax rate method, Invoice Due Date terms, and whether invoices require **Manual Review** before issuance. These settings directly affect invoice generation and approval workflows.
+
+## **Payments**
+
+The Payments section determines how customer payments are handled.
+
+You can configure a Primary and Secondary Payment Provider, associate a Wallet if applicable, and enable or disable **Automatically charge payment**. This toggle determines whether invoices are automatically collected based on stored payment methods.
+
+## **Aliases**
+
+Aliases allow you to define alternate names or references for the customer. These may be used for searchability, integrations, or reporting consistency.

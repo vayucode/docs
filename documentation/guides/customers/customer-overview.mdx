@@ -1,6 +1,65 @@
 ---
-title: 'Customer Overview'
+title: "Customer Overview"
 ---
-This section holds all customer information including their current state, balance overview, issued and overdue invoices, and more.
 
-To see an **overview** of your customer go to the **Customers** tab on the main menu and select the customer you wish to review.
+# **Customers**
+
+The **Customers** page organizes all customer profiles in one place and provides a consolidated operational view of customer status, billing configuration, and account metadata. From this page, you can search, filter, review, and manage customer accounts across your environment.
+
+## **Customer Status Overview**
+
+<Frame>
+  
+</Frame>
+
+At the top of the page, a status summary bar displays the number of customers in each state: **Active**, **Inactive**, **Churned**, and **Trial**.
+
+This summary reflects the current distribution of accounts and updates dynamically based on applied filters. It provides a high-level operational snapshot without needing to inspect individual records.
+
+## **Search and Actions**
+
+The control bar allows you to quickly locate and manage customers.
+
+The **Global Search** field lets you search by name, email, or other indexed fields. Results update automatically based on matching records.
+
+The **Filters** button opens the structured filter builder, allowing more granular control over the displayed results.
+
+The **Settings (gear icon)** controls table configuration, while the **Export / Download** option allows you to export customer data.
+
+To create a new customer, click **\+ Customer**.
+
+## **Filtering Customers**
+
+You can filter customer data in a few different ways. That includes using multiple filters or combining conditions.
+
+You can define conditions using a structured rule format with fields, operators or values. You can set the operators to "contains," "equals," or "is any of" and relate it to a dropdown will let you select from number of fields:
+
+The available filter fields include:
+
+- Status
+- Parent Customer
+- Address
+- Country
+- State
+- City
+- Postal Code
+- Manual Review
+- Subsidiary
+
+Multiple filter conditions can be combined to narrow the result set. Filters can be removed individually or cleared entirely.
+
+## **Customers Table**
+
+Below the filter controls, the main customer table displays all customer records that match the current filter state.
+
+Each row represents a single customer profile and includes operational and billing metadata.
+
+### **Table Columns**
+
+The table includes fields such as Status, Customer name, Legal Name, number of Contracts, Subsidiary, Created Date, Address details, Invoice Due configuration, Manual Review state, and Parent Customer relationships. A contextual action menu is available at the end of each row for additional operations.
+
+### **Table Behavior**
+
+Columns can be sorted to reorganize the dataset. The table supports horizontal scrolling when additional columns are displayed.
+
+Pagination controls appear at the bottom of the table, where you can define the number of rows per page and navigate between result sets. The current record range (for example, 1–50 of 222) is displayed for reference.
