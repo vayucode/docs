@@ -2,48 +2,42 @@
 title: "Invoice Preferences"
 ---
 
-## **Invoice Preferences**
+Invoice preferences control how invoices are generated, what details appear on them, and how they are delivered to customers. These settings apply across your workspace.
 
-Invoice preferences control how invoices are generated, displayed, and sent to customers. These settings apply globally across your workspace.
+## Customize Invoice Content and Delivery
 
-### **☐ Hide zero amount line items**
+You can use invoice preferences to control both presentation and workflow.
 
-Removes invoice line items with a total amount of zero, helping keep invoices clean and easier to read.
+### Line Item Visibility
 
-### **☐ Hide price breakdown in invoice PDF**
+Choose whether to display line items with a zero total. Hiding them can make invoices easier to scan and reduce visual clutter.
 
-Hides the price calculation columns (such as quantity and unit price) and displays only the total amount per line item in the invoice PDF.
+The invoice PDF can also be simplified by showing only the total for each line item instead of the full pricing breakdown, such as quantity and unit price.
 
-### **☐ Show consumption breakdown of related entities**
+### Usage Breakdown
 
-Controls whether usage is shown only as an aggregated total or broken down by related child entities when parent–child customers are used.
+For parent-child customer structures, you can decide whether usage appears as a single aggregated total or is broken down by related child entities.
 
-### **☐ Add payment wallet info on invoice**
+### Payment Details
 
-Includes payment wallet details on invoices. This may be relevant for customers that accept alternative payment methods such as cryptocurrency.
+You can include payment wallet information on invoices when needed, which may be useful for customers that accept alternative payment methods such as cryptocurrency.
 
-### **☐ Set issue date and due date upon approval**
+### Invoice Timing
 
-Defines how the invoice issue date is determined:
+You can control how issue and due dates are set after approval. Vayu can either use the approval date as the issue date or keep the expected issue date for the billing period, even when approval happens later.
 
-- Use the approval date as issue date, **_or_**
-- Use the expected issue date for the billing period, even if the invoice is approved later.
+### Sending Behavior
 
-### **☐ Automatically send approved invoices**
+Approved invoices can be sent automatically to the configured billing contact as soon as they are approved.
 
-Automatically emails invoices to the configured billing contact as soon as they are approved.
+### Credit Application
 
-### **☐ Deduct credits from following invoice**
+Customer credits can be applied automatically to the next issued invoice, or left for manual application on a specific invoice.
 
-Controls how customer credits are applied:
+### Customer Access
 
-- When enabled, credits are automatically deducted from the next issued invoice.
-- When disabled, credits can be applied manually to an invoice of your choice.
+You can include a link to the customer portal in the invoice so customers can check invoice status and view related usage information.
 
-### **☐ Include customer portal link**
+## Billing Email and BCC
 
-Adds a link to the [<u>customer portal</u>](https://guide.withvayu.com/documentation/guides/invoices/customer-portal#customer-portal) in invoices, allowing customers to view invoice status and related usage information.
-
-### **Billing email and BCC**
-
-Configures the sender address for invoice emails (billing email) and optional BCC recipients (invoicing bcc address) who should receive a copy of every invoice.
+You can also configure the billing email used to send invoices, along with optional BCC recipients who should receive a copy of every invoice.
