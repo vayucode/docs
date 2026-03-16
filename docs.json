@@ -63,8 +63,8 @@
               {
                 "group": "Customers",
                 "pages": [
-                  "documentation/guides/customers/adding-a-customer",
                   "documentation/guides/customers/customer-overview",
+                  "documentation/guides/customers/adding-a-customer",
                   "documentation/guides/customers/subsidiaries-and-related-entities"
                 ]
               },
@@ -75,7 +75,13 @@
                   "documentation/guides/plans-and-pricing/fixed-fees",
                   "documentation/guides/plans-and-pricing/usage-based-fees",
                   "documentation/guides/plans-and-pricing/create-plan",
-                  "documentation/guides/plans-and-pricing/contract-processing",
+                  {
+                    "group": "Contracts",
+                    "pages": [
+                      "documentation/guides/plans-and-pricing/contract-processing",
+                      "documentation/guides/plans-and-pricing/phases"
+                    ]
+                  },
                   "documentation/guides/plans-and-pricing/plan-templates-and-contracts",
                   "documentation/guides/plans-and-pricing/pricing-and-product-line-items",
                   "documentation/guides/plans-and-pricing/base-amount-and-commitment",
@@ -90,6 +96,10 @@
                   "documentation/guides/invoices/billing-and-invoice-automation",
                   "documentation/guides/invoices/customer-portal"
                 ]
+              },
+              {
+                "group": "Misc",
+                "pages": []
               }
             ]
           }
