@@ -1,0 +1,184 @@
+---
+title: "One-off invoices"
+description: "Create standalone invoices outside of regular billing cycles for ad-hoc charges, adjustments, or special circumstances"
+---
+
+One-off invoices allow you to bill customers for charges that fall outside of your regular billing cycles. These standalone invoices are useful for ad-hoc services, manual adjustments, implementation fees, or any other charges that don't fit into your standard contract-based billing.
+
+## When to use one-off invoices
+
+Use one-off invoices for:
+
+- **Ad-hoc services** – One-time professional services, consulting, or support charges
+- **Manual adjustments** – Billing corrections or credits that need to be issued separately
+- **Implementation fees** – Setup or onboarding charges billed independently from the main contract
+- **Special circumstances** – Custom charges that don't align with your regular billing schedule
+- **Out-of-cycle charges** – Charges that need to be billed immediately rather than waiting for the next billing period
+
+<Note>
+  One-off invoices are separate from One-Time Fees within contracts. One-Time Fees are part of a contract's pricing structure, while one-off invoices are standalone billing documents created outside of any contract.
+</Note>
+
+## One-off invoices vs. One-Time Fees
+
+Understanding the difference between these two concepts is important:
+
+| Feature | One-off invoice | One-Time Fee |
+|---------|----------------|--------------|
+| **Scope** | Standalone invoice | Part of a contract |
+| **Timing** | Created manually as needed | Scheduled within contract terms |
+| **Use case** | Ad-hoc charges outside contracts | Planned fees like setup or onboarding |
+| **Billing cycle** | Independent of billing cycles | Follows contract billing schedule |
+| **Contract requirement** | No contract needed | Requires an active contract |
+
+## Creating a one-off invoice
+
+To create a one-off invoice:
+
+1. Navigate to **Invoices** from the main menu
+2. Click **Create Invoice** in the upper right corner
+3. Select the customer you want to bill
+4. Choose **One-off Invoice** as the invoice type
+5. Add line items with descriptions and amounts
+6. Set the invoice due date
+7. Review and approve the invoice
+8. Send or sync the invoice to your ERP system
+
+### Line item configuration
+
+When adding line items to a one-off invoice, you can specify:
+
+- **Description** – Clear explanation of what the charge is for
+- **Amount** – The charge amount in the customer's currency
+- **Quantity** – Number of units (if applicable)
+- **Tax** – Tax rate to apply to this line item
+- **Discount** – Fixed amount or percentage discount
+
+### Invoice settings
+
+Configure these settings for your one-off invoice:
+
+- **Currency** – Defaults to the customer's currency but can be overridden
+- **Due date** – When payment is expected (defaults to customer's payment terms)
+- **Invoice date** – The date the invoice is issued
+- **Tax treatment** – How tax should be calculated and applied
+- **Payment terms** – Net 30, Net 60, or custom terms
+
+## Approving and sending one-off invoices
+
+Once you've created a one-off invoice:
+
+1. **Review** – Verify all line items, amounts, and customer details are correct
+2. **Approve** – Click **Approve** to finalize the invoice (this locks it from further editing)
+3. **Send** – Email the invoice directly to the customer or download the PDF
+4. **Sync** – Push the invoice to your connected ERP system (Stripe, NetSuite, QuickBooks, etc.)
+
+<Note>
+  Once approved, one-off invoices cannot be edited. If you need to make changes, you'll need to void the invoice and create a new one.
+</Note>
+
+## Managing one-off invoices
+
+### Viewing one-off invoices
+
+One-off invoices appear in your main invoice list alongside contract-based invoices. You can filter to show only one-off invoices:
+
+1. Go to **Invoices**
+2. Click **Filters**
+3. Select **Invoice Type: One-off**
+
+### Tracking payment status
+
+Monitor payment status for one-off invoices:
+
+- **Draft** – Invoice created but not yet approved
+- **Pending** – Invoice approved and sent, awaiting payment
+- **Paid** – Payment received and recorded
+- **Overdue** – Payment not received by due date
+- **Void** – Invoice cancelled
+
+### Voiding a one-off invoice
+
+If you need to cancel a one-off invoice:
+
+1. Open the invoice from the invoice list
+2. Click **Actions** → **Void Invoice**
+3. Add a reason for voiding (optional but recommended)
+4. Confirm the action
+
+Voided invoices remain in your records but are marked as cancelled and won't be included in revenue calculations.
+
+## Integration with ERP systems
+
+One-off invoices sync to your connected ERP systems just like contract-based invoices:
+
+### Stripe
+
+One-off invoices are created as Stripe invoices with all line items, tax, and payment terms preserved. The invoice includes a clickable reference linking back to Vayu.
+
+### NetSuite
+
+One-off invoices inherit GL codes and subsidiary attributes from the customer configuration. They appear as standard invoices in NetSuite with all line items and tax details.
+
+### QuickBooks
+
+One-off invoices sync to QuickBooks with your configured invoice numbering scheme and include all line items, tax calculations, and payment terms.
+
+### Xero
+
+One-off invoices are created in Xero with proper account codes and tax rates based on your integration settings.
+
+## API access
+
+You can create and manage one-off invoices programmatically using the Vayu API. See the [API Reference](/api-reference/endpoints/invoices/list-invoices) for details on invoice endpoints.
+
+## Best practices
+
+- **Clear descriptions** – Use detailed line item descriptions so customers understand what they're being charged for
+- **Consistent naming** – Develop a naming convention for one-off invoices (e.g., "Professional Services - [Date]")
+- **Document reasons** – Keep internal notes about why each one-off invoice was created
+- **Review before approval** – Double-check all amounts and details since approved invoices cannot be edited
+- **Track separately** – Use filters and reports to monitor one-off invoice revenue separately from contract-based revenue
+- **Set proper due dates** – Ensure due dates align with your payment terms and customer agreements
+
+## Common use cases
+
+### Professional services
+
+Bill for consulting hours or project work that falls outside the scope of a customer's regular contract:
+
+```
+Line Item: Professional Services - Q1 2024 Strategy Consultation
+Description: 10 hours of strategic planning and implementation guidance
+Amount: $2,500
+```
+
+### Implementation fees
+
+Charge for setup and onboarding work before a contract begins:
+
+```
+Line Item: Platform Implementation
+Description: Initial setup, data migration, and team training
+Amount: $5,000
+```
+
+### Billing adjustments
+
+Issue credits or additional charges to correct previous billing errors:
+
+```
+Line Item: Billing Adjustment - January 2024
+Description: Credit for overcharged usage in January billing period
+Amount: -$150
+```
+
+### Custom development
+
+Bill for custom feature development or integrations:
+
+```
+Line Item: Custom Integration Development
+Description: Development of custom Salesforce integration
+Amount: $8,000
+```
