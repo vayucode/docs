@@ -1,0 +1,86 @@
+---
+title: Spend thresholds
+description: Set minimum spending commitments and track customer progress toward contractual obligations
+---
+
+## Overview
+
+Use spend thresholds to define minimum spending commitments that customers must meet during their contract period. Spend thresholds ensure customers fulfill their contractual obligations and provide visibility into commitment progress throughout the billing cycle.
+
+## How spend thresholds work
+
+A spend threshold represents the minimum dollar amount a customer has committed to spend during a specific time period. Unlike unit-based commitments that track consumption quantities, spend thresholds track the total monetary value across all usage and charges.
+
+### Key characteristics
+
+- **Amount-based** - Measured in currency (USD) rather than units
+- **Time-bound** - Can be set for the entire contract lifetime or reset periodically
+- **Aggregated** - Tracks total spending across all products and line items
+- **Enforceable** - Can trigger overage charges or true-ups when thresholds are crossed
+
+## Setting up spend thresholds
+
+To configure a spend threshold on a contract:
+
+1. Navigate to **Plans & Pricing**
+2. Create or edit a plan
+3. Go to **Add pricing & products**
+4. Select a usage-based product with tiered pricing
+5. Click **+ Set Commitment**
+6. Choose **Amount** as the commitment type
+7. Enter the minimum spend amount in USD
+8. Configure the reset period (if applicable):
+   - Monthly
+   - Bi-monthly
+   - Quarterly
+   - Semi-annually
+   - Annually
+   - Lifetime (no reset)
+
+## Spend threshold vs. unit commitment
+
+| Feature | Spend threshold | Unit commitment |
+|---------|----------------|-----------------|
+| Measurement | Dollar amount (USD) | Quantity of units |
+| Scope | Across all products | Per product line item |
+| Use case | Minimum contract value | Minimum usage volume |
+| Calculation | Sum of all charges | Count of consumed units |
+
+## Tracking progress
+
+Monitor customer progress toward spend thresholds through:
+
+- **Contract dashboard** - View current spend vs. commitment
+- **Email notifications** - Receive alerts when thresholds are crossed
+- **Invoice details** - See commitment charges and remaining balance
+- **API endpoints** - Programmatically track commitment status
+
+## True-ups and overages
+
+When a billing period ends and the customer hasn't met their spend threshold:
+
+- A **true-up charge** is added to the invoice
+- The true-up amount equals the difference between actual spend and the committed threshold
+- This ensures the customer pays the minimum committed amount
+
+If the customer exceeds the threshold, no additional commitment charges apply - they simply pay for actual usage.
+
+## Common use cases
+
+Spend thresholds are useful for:
+
+- **Enterprise agreements** - Guarantee minimum annual contract values
+- **Volume discounts** - Offer better pricing in exchange for spending commitments
+- **Capacity reservations** - Ensure customers commit to minimum infrastructure spend
+- **Partnership agreements** - Formalize minimum purchase obligations
+- **Predictable revenue** - Create baseline revenue guarantees
+
+## Email notifications
+
+The system automatically sends email alerts when:
+
+- A customer crosses their spend threshold
+- A billing period ends with unmet commitments
+- True-up charges are calculated
+
+Configure notification recipients in your account settings.
