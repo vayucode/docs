@@ -1,0 +1,118 @@
+---
+title: "Snowflake"
+---
+
+<Frame>
+  ![Snowflake](/images/Snowflake.png)
+</Frame>
+
+The Snowflake integration enables Vayu to ingest structured usage data stored in Snowflake for billing and revenue operations.
+
+Snowflake acts as the customer’s data warehouse and source of truth for usage events. Vayu connects to Snowflake or receives usage data from Snowflake via API in order to calculate usage-based charges.
+
+This integration replaces the legacy ERP Imports workflow.
+
+In this setup, Snowflake acts as the system where usage events are stored, while Vayu acts as the billing layer that reads, accepts, and processes that usage data. This integration replaces the legacy ERP Imports workflow.
+
+In practical terms, the integration is designed for teams that already collect usage data in a Snowflake data warehouse and want to use that data for billing and revenue operations. Rather than forcing teams to move their operational usage data into a separate system first, Vayu works with Snowflake as the source of truth and supports multiple ingestion paths depending on how much control the customer wants over timing, transformation, and delivery.
+
+This page explains how the Snowflake integration works, what data Vayu expects, and how to prepare a Snowflake environment for ingestion. It is useful both for teams that want Vayu to pull usage from Snowflake directly and for teams that prefer to push usage records into Vayu through the API.
+
+## How the Snowflake integration works
+
+Snowflake is commonly used to store structured operational and analytical data, including product usage events, transaction logs, and billing-related measurements. The Snowflake integration allows Vayu to use that data as the basis for billing calculations without requiring Snowflake to stop serving as the customer’s warehouse of record.
+
+Vayu supports two ingestion models for Snowflake data. In the pull model, Vayu connects to Snowflake and reads usage records from a configured table or view. In the push model, the customer sends usage records from Snowflake to Vayu by calling the Usage Ingestion API.
+
+Both models support the same general goal, but they reflect different operational preferences. The pull model is better when Vayu should retrieve data on a recurring basis from a controlled location in Snowflake. The push model is better when the customer wants tighter control over when data is transformed, packaged, and delivered.
+
+## Pull Model
+
+In the pull model, usage events remain in Snowflake and Vayu connects to Snowflake using the credentials and access that were configured for the integration. There is no developer involvement at all. Vayu then reads from a designated table or view at scheduled intervals and processes the retrieved usage for billing.
+
+This model works well when Snowflake already serves as the central warehouse for metering data and the customer wants Vayu to ingest from a stable, prepared source. It is also useful when the customer prefers a simpler operational pattern in which Vayu is responsible for retrieving usage once the Snowflake dataset is ready.
+
+To use the pull model, start by identifying the Snowflake table or view that should serve as the billing source
+
+Make sure that the dataset contains one row per usage event or usage record, depending on how your metering pipeline is modeled.
+
+Confirm that the columns and data types remain consistent over time so that Vayu can ingest the data reliably.
+
+Then create or assign a Snowflake user or service account that Vayu can use for access.
+
+Grant **USAGE** on the relevant database and schema.
+
+Grant **SELECT** on the table or view that Vayu will query.
+
+Keep the permissions as narrow as possible so that the integration follows the principle of least privilege.
+
+## Push Model
+
+In the push model, Snowflake still remains the source of truth for the stored usage data, but the customer takes responsibility for sending records into Vayu through the Usage Ingestion API. 
+
+This usually happens through scheduled jobs, stored procedures, pipelines, or another customer-controlled orchestration layer.
+
+This model is useful when the customer wants precise control over when usage is sent, how it is transformed before delivery, or how records are grouped and submitted. 
+
+It is often the better choice when the billing pipeline is already part of a broader internal workflow and the customer wants Vayu to receive usage only after internal validation or enrichment has been completed.
+
+To use the push model, begin with the Snowflake dataset that contains the usage records Vayu should receive.
+
+Prepare the logic that extracts the required records from Snowflake.
+
+Transform the data into the format expected by the Usage Ingestion API if any formatting or field mapping is needed.
+
+Then configure your pipeline, procedure, or scheduled process to send those usage records to Vayu’s ingestion endpoint.
+
+Monitor the delivery flow so that failed submissions, schema mismatches, or missing fields can be caught before they affect billing.
+
+## Data Requirements
+
+For either ingestion model, Snowflake must contain structured usage records that match the schema Vayu expects. The exact source can be a table or a view, but the data should be stable, consistently typed, and suitable for repeated ingestion.
+
+At a minimum, each usage record should identify the customer or account, identify the metric or event being measured, include the usage quantity, and include a timestamp. Depending on the billing model, customers may also include related entity identifiers, contract references, or custom metadata that help enrich the billing context.
+
+Because Vayu uses this data for billing calculations, consistency matters as much as completeness. A table or view with inconsistent data types, missing identifiers, or irregular timestamp formats may ingest unpredictably or require additional transformation before it can be used safely.
+
+## Prepare the Snowflake source
+
+Before enabling the integration, prepare a Snowflake table or view specifically for billing ingestion if possible. A dedicated ingestion view is often the cleaner option because it lets the customer normalize source data, reduce noise, and expose only the fields Vayu needs.
+
+The source should contain one row per usage record and should use stable column names and data types. If the original usage pipeline includes multiple upstream datasets or transformations, it is usually better to consolidate that logic before Vayu reads the data rather than expecting the billing integration to interpret inconsistent inputs.
+
+Start by creating or identifying the Snowflake table or view that should act as the usage source.
+
+Check that it contains the required billing fields.
+
+Verify that each record is structured in a consistent format.
+
+If the raw source data is more complex, create a dedicated view for Vayu so that field mapping and transformations are handled in Snowflake rather than during billing ingestion.
+
+## Grant access for the pull model
+
+If you plan to use the pull model, Vayu must be able to connect to Snowflake and read from the selected source. This requires a Snowflake identity with the correct access to the target database, schema, and table or view.
+
+In most cases, a service account is the safest approach because it gives the integration a dedicated identity that can be managed separately from individual user accounts. That also makes auditing and permission control easier over time.
+
+Create or assign the Snowflake user or service account that Vayu will use.
+
+Grant **USAGE** on the target database and schema.
+
+Grant **SELECT** on the usage table or view.
+
+Review the permissions once they are in place and remove anything that is broader than the integration actually needs.
+
+## Choose the right ingestion model
+
+The pull model is usually the simpler option when the customer already has a clean Snowflake source and wants Vayu to retrieve data automatically. It reduces the amount of customer-managed orchestration because the customer mainly needs to maintain the source dataset and access configuration.
+
+The push model is usually the better option when the customer wants more control over timing, transformation, and submission behavior. It is especially helpful when the billing ingestion step is part of a larger internal pipeline or when usage records need to be validated or reshaped before they are sent to Vayu.
+
+## Next steps
+
+Once the Snowflake source is prepared, the next step is to configure the integration in Vayu according to the ingestion model you plan to use. 
+
+- For pull-based setups, that means connecting Vayu to Snowflake and pointing it to the correct table or view. 
+- For push-based setups, that means preparing the process that sends usage records to the Usage Ingestion API.
+
+After the connection and source setup are complete, validate the ingestion flow with sample usage data before relying on it for production billing. That makes it easier to catch schema mismatches, missing fields, or permission issues before they affect invoices or revenue reporting.

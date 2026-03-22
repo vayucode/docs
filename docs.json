@@ -95,6 +95,7 @@
                 "group": "Integrations",
                 "pages": [
                   "documentation/guides/integrations/anrok",
+                  "documentation/guides/integrations/snowflake",
                   "documentation/guides/integrations/hubspot",
                   "documentation/guides/integrations/stripe",
                   "documentation/guides/integrations/rillet",

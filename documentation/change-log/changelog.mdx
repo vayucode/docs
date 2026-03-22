@@ -6,12 +6,33 @@ icon: "clock"
 
 # Change Log
 
+<Update label="March 5, 2026" tags={["Revenue"]}>
+  # Revenue Waterfall Report
+
+  <Frame>
+    ![Image](/images/image-13.png)
+  </Frame>
+
+  We have introduced a redesigned revenue waterfall experience with improved navigation, clearer hierarchy, and more accurate revenue breakdowns across time.
+</Update>
+
+<Update label="February 26, 2026" tags={["Billing & Invoicing"]}>
+  # Scheduling Snowflake, ERP Imports & Export
+
+  <Frame>
+    ![Image](/images/image-12.png)
+  </Frame>
+
+  We have introduced the ability to set unique, ongoing schedules for Snowflake and ERP import and export sync jobs, giving you more flexible and controlled data synchronization.1
+</Update>
+
 <Update label="February 19, 2026" tags={["Billing & Invoicing"]}>
   # Extract From makes PDF data uploads easy
 
   <Frame>
     ![Image](/images/image-9.png)
   </Frame>
+
   Extract From allows you to upload a contract PDF and automatically extract structured contract data into Vayu. The system parses the uploaded document and prepares the extracted information for use within the contract workflow.
 
   To use this feature:
@@ -23,8 +44,8 @@ icon: "clock"
   Upload the document to begin extraction.
 </Update>
 
-<Update label="February 8, 2026" tags={["Alerts & Notifications", "Usage Metering", "Integrations", "Billing & Invoicing"]}>
-  # Anrok Integration Live + New Invoice Features
+<Update label="February 8, 2026" tags={["Alerts & Notifications","Usage Metering","Integrations","Billing & Invoicing"]}>
+  # Anrok Integration Live \+ New Invoice Features
 
   Vayu’s new integration with [Anrok](/documentation/guides/integrations/anrok) is live. This will allow you to manage taxes from inside Vayu.
 
@@ -41,7 +62,7 @@ icon: "clock"
   Dynamic Invoice Highlights introduce status chips such as Overdue, In Review, and Pending, all of which are clickable for filtering. Additionally, invoice data now recalculates as you change filters like Issue Date (for example, if you add a month).
 </Update>
 
-<Update label="December 20, 2025" tags={["Alerts & Notifications", "Usage Metering", "Integrations", "Billing & Invoicing"]}>
+<Update label="December 20, 2025" tags={["Alerts & Notifications","Usage Metering","Integrations","Billing & Invoicing"]}>
   # Sync Invoices as Sales Orders in NetSuite
 
   You can now sync your Vayu invoices as Sales Orders in [NetSuite](/documentation/guides/integrations/netsuite), including data such as the PO number.
@@ -76,7 +97,7 @@ icon: "clock"
   - **Cloning Contracts:** Users can now duplicate previous contracts with pre-filled fields, including the customer and required start date. This will speed up new contract creation.
 </Update>
 
-<Update label="November 16, 2025" tags={["Alerts & Notifications", "Usage Metering", "Integrations", "Billing & Invoicing"]}>
+<Update label="November 16, 2025" tags={["Alerts & Notifications","Usage Metering","Integrations","Billing & Invoicing"]}>
   # Tier Usage Notification
 
   We have updated Vayu to send an in-app alert when usage passes the last tier. This will let users know to follow up and adjust settings later.
@@ -90,7 +111,7 @@ icon: "clock"
   - Aggregated invoices will default to "In Review."
 </Update>
 
-<Update label="November 11, 2025" tags={["Reporting", "UI"]}>
+<Update label="November 11, 2025" tags={["Reporting","UI"]}>
   # **MRR Report**
 
   Vayu has improved its recurring revenue reporting. These reports are viewable in the app, can be downloaded in CSV form and are available by account or customer level. \
@@ -106,7 +127,7 @@ icon: "clock"
   You will now see better customer-to-contact linking and data consistency in the Vayu UI.
 </Update>
 
-<Update label="September 23, 2025" tags={["UI", "API", "Reporting", "Billing & Invoicing", "Contracts"]}>
+<Update label="September 23, 2025" tags={["UI","API","Reporting","Billing & Invoicing","Contracts"]}>
   This release focused heavily on invoice management, especially currencies and line item editing. Bug fixes and feature enhancements also included a focus on accurate PDF generation.
 
   # **Currencies: Contract and Invoice-Level**
@@ -121,7 +142,7 @@ icon: "clock"
   - **Dynamic Editing:** Improved line item editing and dynamic currency fields for invoices (UI and API)
 </Update>
 
-<Update label="September 16, 2025" tags={["UI", "Contracts"]}>
+<Update label="September 16, 2025" tags={["UI","Contracts"]}>
   # **Editable Usage Line Items**
 
   Users can now edit usage product line items the same as they can for fixed fee line items.
@@ -142,7 +163,7 @@ icon: "clock"
   - **Monitoring:** Vayu now has more enhanced audit logging and better logging for invoice calculations.
 </Update>
 
-<Update label="September 3, 2025" tags={["Contracts", "API", "Integrations"]}>
+<Update label="September 3, 2025" tags={["Contracts","API","Integrations"]}>
   # **Multi-Currency Contract Management**
 
   Vayu customers can now have multiple contracts with different currencies. This means you can set a specific currency other than default for each contract.
@@ -154,7 +175,7 @@ icon: "clock"
   We have added a schema with dynamic paths for catalog products, including create, get, lists, and update.
 </Update>
 
-<Update label="August 26, 2025" tags={["Contracts", "API", "Integrations"]}>
+<Update label="August 26, 2025" tags={["Contracts","API","Integrations"]}>
   # **Hubspot Integration**
 
   You can now link products to Hubspot, including support for contract creation, plan creation, revision, and deleting.
@@ -166,7 +187,7 @@ icon: "clock"
   - Clearly labeled Refund operations, changed from "**Invoice**"
 </Update>
 
-<Update label="August 19, 2025" tags={["Contracts", "API", "Integrations"]}>
+<Update label="August 19, 2025" tags={["Contracts","API","Integrations"]}>
   # **Contract Overview Page**
 
   This creates a navigable hub for managing contracts.
@@ -180,7 +201,7 @@ icon: "clock"
   ![Contract Overview Gi](/images/ContractOverview.gif)
 </Update>
 
-<Update label="August 12, 2025" tags={["Contracts", "API", "Integrations"]}>
+<Update label="August 12, 2025" tags={["Contracts","API","Integrations"]}>
   # **Introducing Phases**
 
   ![Phases Gi](/images/Phases.gif)
@@ -189,10 +210,10 @@ icon: "clock"
 
   Simply go to **Customers**, then the **Contract** page, and finally press the gray **\+ Add Phase** button to the right of the page. From there, a window will open letting you define the start date of the new phase. Add a label, then hit the dark blue button **Go to plan builder \>**.
 
-  Check out the video below for a short, full tutorial: https://www.linkedin.com/feed/update/urn:li:activity:7382059848361738240/
+  Check out the video below for a short, full tutorial: [https://www.linkedin.com/feed/update/urn:li:activity:7382059848361738240/](https://www.linkedin.com/feed/update/urn:li:activity:7382059848361738240/)
 </Update>
 
-<Update label="June 17, 2025" tags={["UI", "Billing & Invoicing"]}>
+<Update label="June 17, 2025" tags={["UI","Billing & Invoicing"]}>
   # **NetSuite Integration**
 
   ![Netsuite Integration1 Gi](/images/NetsuiteIntegration1.gif)
@@ -214,7 +235,7 @@ icon: "clock"
   ![image.png](/images/image.png)
 </Update>
 
-<Update label="June 10, 2025" tags={["UI", "Billing & Invoicing"]}>
+<Update label="June 10, 2025" tags={["UI","Billing & Invoicing"]}>
   # **Enhanced Dashboard**
 
   ![Dashboard Pn](/images/dashboard.png)
@@ -226,7 +247,7 @@ icon: "clock"
   - Suggested reports list includes new report sections, including Customer section
 </Update>
 
-<Update label="March 25, 2025" tags={["Security", "Alerts & Notifications"]}>
+<Update label="March 25, 2025" tags={["Security","Alerts & Notifications"]}>
   # **Notifications**
 
   Vayu has created or enhanced notification options, including a new option for Slack and improved email alerts.
@@ -244,6 +265,7 @@ icon: "clock"
   <Frame>
     ![](/assets/images/customer-overview/customer-overview.png)
   </Frame>
+
   The **Customer Overview Page** provides a consolidated view of a customer's **financial status, revenue insights, and key metrics**, streamlining workflows for tracking billing, managing contracts, and analyzing revenue
 </Update>
 
