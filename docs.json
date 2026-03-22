@@ -48,19 +48,6 @@
                 ]
               },
               {
-                "group": "Integrations",
-                "pages": [
-                  "documentation/guides/integrations/anrok",
-                  "documentation/guides/integrations/hubspot",
-                  "documentation/guides/integrations/stripe",
-                  "documentation/guides/integrations/rillet",
-                  "documentation/guides/integrations/xero",
-                  "documentation/guides/integrations/salesforce",
-                  "documentation/guides/integrations/quickbookx",
-                  "documentation/guides/integrations/netsuite"
-                ]
-              },
-              {
                 "group": "Customers",
                 "pages": [
                   "documentation/guides/customers/customer-overview",
@@ -98,8 +85,28 @@
                 ]
               },
               {
-                "group": "Misc",
-                "pages": []
+                "group": "Data Metering",
+                "pages": [
+                  "usage",
+                  "untitled-page"
+                ]
+              },
+              {
+                "group": "Integrations",
+                "pages": [
+                  "documentation/guides/integrations/anrok",
+                  "documentation/guides/integrations/hubspot",
+                  "documentation/guides/integrations/stripe",
+                  "documentation/guides/integrations/rillet",
+                  "documentation/guides/integrations/xero",
+                  "documentation/guides/integrations/salesforce",
+                  "documentation/guides/integrations/quickbookx",
+                  "documentation/guides/integrations/netsuite",
+                  {
+                    "group": "Misc",
+                    "pages": []
+                  }
+                ]
               }
             ]
           }
