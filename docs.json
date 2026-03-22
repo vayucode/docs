@@ -95,18 +95,13 @@
                 "group": "Integrations",
                 "pages": [
                   "documentation/guides/integrations/anrok",
-                  "documentation/guides/integrations/snowflake",
                   "documentation/guides/integrations/hubspot",
                   "documentation/guides/integrations/stripe",
                   "documentation/guides/integrations/rillet",
                   "documentation/guides/integrations/xero",
                   "documentation/guides/integrations/salesforce",
                   "documentation/guides/integrations/quickbookx",
-                  "documentation/guides/integrations/netsuite",
-                  {
-                    "group": "Misc",
-                    "pages": []
-                  }
+                  "documentation/guides/integrations/netsuite"
                 ]
               }
             ]
