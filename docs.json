@@ -101,7 +101,8 @@
                   "documentation/guides/integrations/xero",
                   "documentation/guides/integrations/salesforce",
                   "documentation/guides/integrations/quickbookx",
-                  "documentation/guides/integrations/netsuite"
+                  "documentation/guides/integrations/netsuite",
+                  "documentation/guides/integrations/snowflake"
                 ]
               }
             ]
