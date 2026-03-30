@@ -104,13 +104,6 @@
                   "documentation/guides/integrations/netsuite",
                   "documentation/guides/integrations/snowflake"
                 ]
-              },
-              {
-                "group": "AI",
-                "pages": [
-                  "documentation/guides/ai/ai-insights",
-                  "documentation/guides/ai/pdf-extraction"
-                ]
               }
             ]
           }
