@@ -1,0 +1,96 @@
+---
+title: "Usage & Data"
+---
+
+## **Usage & Data Reports**
+
+Usage & Data reports provide visibility into how customers consume your product and how that consumption maps to billing. These reports help you identify usage patterns, detect billing issues, and ensure that all usage is properly charged.
+
+### **Commitment vs. usage**
+
+The Commitment vs. usage report compares actual usage against contractual commitments. This report is essential for identifying underutilization, tracking overages, and ensuring customers are meeting their minimum purchase obligations.
+
+The report displays:
+
+- Customer name and contract details
+- Committed units or amount per billing period
+- Actual usage consumed
+- Remaining commitment balance
+- Overage units and charges
+- Commitment reset schedule (monthly, quarterly, annually)
+
+Use this report to monitor whether customers are on track to meet their commitments, identify customers who may need to adjust their contract terms, and detect overages that will result in additional charges.
+
+Commitments can be configured at the product level and may reset on a defined schedule. When usage exceeds the commitment, overage charges are calculated according to the contract's overage strategy (bill at standard rate, ignore, or custom pricing).
+
+The report updates in real-time as usage events are ingested and processed. You can view commitment tracking at the customer level or drill down to specific products and billing periods.
+
+### **Uncharged usage**
+
+The Uncharged usage report detects usage events that have not yet been billed. This report helps prevent revenue leakage by surfacing usage that should have been invoiced but was not included in the billing cycle.
+
+The report shows:
+
+- Customer name and product
+- Usage event details (timestamp, quantity, event type)
+- Expected charge amount
+- Reason usage was not billed (missing product mapping, anonymous customer, billing cycle timing)
+- Date usage was recorded
+
+Use this report to identify and resolve billing gaps before the next invoice cycle. Common causes of uncharged usage include:
+
+- Usage events from anonymous customers not yet linked to a contract
+- Products without pricing configuration
+- Usage recorded after the billing cycle closed
+- Failed event ingestion or processing errors
+
+Once you resolve the underlying issue, uncharged usage can be included in the next billing cycle or added to an existing invoice as a line item adjustment.
+
+### **Anonymous customers**
+
+The Anonymous customers report identifies new or unassigned customers that were imported or created without full attribution. These customers typically result from usage events that arrive before a contract is created or from data imports that lack complete customer information.
+
+The report displays:
+
+- Anonymous customer identifier
+- Usage events associated with the customer
+- Date first usage was recorded
+- Potential matches to existing customers
+- Total unbilled usage amount
+
+Use this report to link anonymous customers to existing contracts or create new customer records with proper attribution. Once linked, all historical usage is associated with the correct customer and can be billed accordingly.
+
+Anonymous customers are created automatically when usage events arrive with an identifier that does not match an existing customer. This ensures that no usage data is lost, even when customer setup is incomplete.
+
+### **Usage by product**
+
+The Usage by product report breaks down usage across different products or pricing components. This report helps you understand which products are driving consumption and revenue.
+
+The report shows:
+
+- Product name and pricing model
+- Total usage across all customers
+- Usage by customer
+- Revenue generated from usage
+- Billing period and date range
+
+Use this report to analyze product adoption, identify high-value products, and track usage trends over time. The report supports filtering by date range, customer, and product to enable detailed analysis.
+
+Usage is aggregated from metered events ingested through the Vayu API or imported from external systems. The report reflects processed usage that has been matched to pricing rules and prepared for billing.
+
+### **Usage report**
+
+The Usage report provides a detailed, granular breakdown of usage activity. This report shows individual usage events and their associated charges, making it the most detailed view of consumption data.
+
+The report displays:
+
+- Customer name and contract
+- Product and pricing component
+- Event timestamp and quantity
+- Unit price and calculated charge
+- Billing period assignment
+- Event metadata and custom attributes
+
+Use this report to audit usage data, investigate billing questions, and verify that usage is being recorded and charged correctly. The report supports export to CSV for further analysis or reconciliation with external systems.
+
+Usage events are ingested in real-time and processed according to the contract's pricing rules. The report shows both billed and unbilled usage, allowing you to track consumption throughout the billing cycle.

@@ -1,0 +1,80 @@
+---
+title: "Accounting"
+---
+
+## **Accounting Reports**
+
+Accounting reports are designed to support financial reporting and reconciliation workflows. These reports provide the data needed to close books, recognize revenue, and maintain compliance with accounting standards.
+
+### **Month-end report**
+
+The Month-end report provides the data needed to close books efficiently at the end of a reporting period. This report consolidates invoice, revenue, and payment data into a format designed for accounting workflows.
+
+The report includes:
+
+- All invoices issued during the period
+- Revenue recognized during the period
+- Payment activity and outstanding balances
+- Adjustments, credits, and refunds
+- Tax collected and remitted
+- Reconciliation data for ERP sync
+
+Use this report to prepare journal entries, verify revenue recognition, and ensure that all billing activity is properly recorded in your accounting system. The report is generated automatically at the end of each month and can be exported to CSV or synced directly to NetSuite, QuickBooks, or Rillet.
+
+The Month-end report reflects approved invoices only. Draft invoices are not included until they complete the approval workflow and are locked for editing. This ensures that the report matches the data synced to your ERP system.
+
+### **Recurring revenue report**
+
+The Recurring revenue report tracks trends in recurring revenue over time. This report calculates MRR (Monthly Recurring Revenue) and ARR (Annual Recurring Revenue) at both the customer and account levels.
+
+The report displays:
+
+- MRR and ARR by customer
+- Revenue by product or contract
+- Contract phases and their impact on recurring revenue
+- Custom fields for additional segmentation
+- Historical trends and period-over-period changes
+
+Use this report to monitor recurring revenue growth, identify churn or expansion, and report on key revenue metrics. The report supports custom fields, allowing you to segment revenue by region, sales team, or other business dimensions.
+
+Recurring revenue is calculated based on active contracts and their billing schedules. The report includes only recurring charges (subscriptions, fixed fees) and excludes one-time charges and usage-based fees. Contract phases are reflected in the calculation, so revenue changes when contracts renew or terms are modified.
+
+The report is available in the Vayu UI and can be downloaded as CSV. Historical MRR data is retained, allowing you to view trends over time and compare current performance to past periods.
+
+### **Revenue report**
+
+The Revenue report analyzes recognized revenue across customers and time periods. This report is designed to support revenue recognition workflows and financial reporting requirements.
+
+The report shows:
+
+- Revenue recognized by period
+- Revenue by customer and contract
+- Breakdown by product or revenue stream
+- Deferred revenue and recognition schedule
+- Adjustments and credits applied
+
+Use this report to verify revenue recognition, prepare financial statements, and ensure compliance with accounting standards (ASC 606, IFRS 15). The report integrates with Rillet for automated revenue recognition workflows.
+
+Revenue is recognized according to the contract's billing schedule and revenue recognition rules. For usage-based products, revenue is recognized when usage is billed. For subscription products, revenue may be recognized ratably over the subscription period.
+
+The report updates as invoices are approved and synced to your accounting system. It reflects the current state of recognized and deferred revenue, providing a complete view of your revenue position.
+
+### **Contracts report**
+
+The Contracts report provides a list of contracts along with estimated bookings and financial commitments. This report helps you track contract value, renewal dates, and revenue projections.
+
+The report displays:
+
+- Customer name and contract details
+- Start date, end date, and signature date
+- Contract status (active, inactive, terminated)
+- Total contract value (TCV) and annual contract value (ACV)
+- Products and pricing included in the contract
+- Estimated bookings by period
+- Auto-renewal settings
+
+Use this report to monitor contract lifecycle, track upcoming renewals, and forecast future revenue. The report includes both active and inactive contracts, allowing you to see the full pipeline of committed revenue.
+
+Contract data syncs from CRM systems (Salesforce, HubSpot) when deals are marked Closed-Won. The report reflects the commercial terms defined in Vayu, including pricing tiers, commitments, and billing schedules.
+
+Contracts with future start dates are labeled as "Inactive" and will automatically transition to active status when the start date is reached. Terminated contracts are retained in the report for historical reference but do not generate new invoices.
