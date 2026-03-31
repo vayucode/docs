@@ -1,0 +1,90 @@
+---
+title: "Pricing Events (Measurements)"
+description: "Ingest and track usage measurements for usage-based billing"
+---
+
+Pricing events, also called measurements, are the raw usage data points you send to Vayu to power usage-based billing. Each event represents a billable action or consumption that occurred in your product.
+
+## What are Pricing Events?
+
+Pricing events are individual records of customer usage that include:
+
+- **Event name** - The type of usage being measured (e.g., "api_call", "storage_gb", "seats")
+- **Customer identifier** - Links the event to a specific customer
+- **Timestamp** - When the usage occurred
+- **Quantity** - The amount of usage (e.g., 1 API call, 50 GB storage)
+- **Metadata** - Additional context like region, product tier, or feature flags
+
+## Sending pricing events
+
+You can ingest pricing events through multiple methods:
+
+### API ingestion
+
+Send events directly to Vayu's ingestion API:
+
+```json
+POST /events
+{
+  "eventName": "api_call",
+  "customerId": "customer_123",
+  "timestamp": "2024-03-17T10:00:00Z",
+  "quantity": 1,
+  "metadata": {
+    "endpoint": "/users",
+    "method": "GET"
+  }
+}
+```
+
+### **Batch ingestion**
+
+For high-volume scenarios, send events in batches to reduce API overhead.
+
+### **Data warehouse integration**
+
+Connect your data warehouse to automatically sync usage data to Vayu on a scheduled basis.
+
+## **Event processing**
+
+Once ingested, pricing events flow through Vayu's processing pipeline:
+
+1. **Validation** - Events are checked for required fields and data integrity
+2. **Enrichment** - Customer and product data is attached to each event
+3. **Aggregation** - Events are grouped and summed according to your pricing configuration
+4. **Rating** - Aggregated usage is converted to billable amounts based on pricing tiers
+5. **Invoicing** - Rated usage appears on customer invoices
+
+## **Event requirements**
+
+Each pricing event must include:
+
+- **Unique event ID** - Prevents duplicate processing (idempotency)
+- **Customer identifier** - Maps to a customer in Vayu
+- **Event name** - Matches a configured pricing metric
+- **Timestamp** - Must be within the acceptable time window
+- **Quantity** - Numeric value representing the usage amount
+
+<Note>
+  **Best Practices**
+
+  When sending pricing events:
+
+  - **Send events in real-time** - Minimize delay between usage and event ingestion
+  - **Use idempotency keys** - Prevent duplicate charges from retry logic
+  - **Include rich metadata** - Enable detailed usage analysis and debugging
+  - **Batch when appropriate** - Balance real-time visibility with API efficiency
+  - **Monitor ingestion** - Track event delivery and processing errors
+  - **Test thoroughly** - Verify events are correctly mapped to pricing metrics
+</Note>
+
+## **Viewing Pricing Events**
+
+You can view ingested pricing events in the Vayu dashboard:
+
+1. Navigate to **Usage Data**
+2. Select **Events** or **Measurements**
+3. Filter by customer, date range, or event type
+4. Review event details and processing status
+
+This visibility helps you troubleshoot billing issues and verify usage data accuracy.

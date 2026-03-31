@@ -1,0 +1,109 @@
+---
+title: "Search Events"
+description: "Query and filter usage events to analyze customer activity and troubleshoot billing"
+---
+
+## Overview
+
+Use event search to query and filter usage events recorded in Vayu. This allows you to analyze customer activity, verify metered usage, and troubleshoot billing discrepancies.
+
+## Searching events through the UI
+
+To view events in the Vayu interface:
+
+1. Navigate to **Usage** in the left-hand navigation
+2. Click **Events**
+3. View the latest 100 events recorded in the system
+
+The events list displays:
+
+- Event name
+- Timestamp
+- Customer alias
+- Event reference ID
+- Event data and properties
+
+## Searching events through the API
+
+For more advanced filtering and larger result sets, use the API to query events.
+
+### Query events endpoint
+
+````text
+GET /events
+
+### Query parameters Filter events using these parameters: - `startTime` - Beginning of timestamp range (ISO 8601 format) - `endTime` - End of timestamp range (ISO 8601 format) - `eventName` - Filter by specific event name (optional) - `limit` - Maximum number of results to return (default: 10) - `cursor` - Pagination cursor for retrieving additional results ### Example request ```bash GET /events?startTime=2023-11-01T00:00:00Z&endTime=2023-11-30T23:59:59Z&eventName=api_call&limit=100
+````
+
+### **Example response**
+
+```text
+{
+  "events": [
+    {
+      "name": "api_call",
+      "timestamp": "2023-09-13T18:25:43.511Z",
+      "customerAlias": "customer_12345",
+      "ref": "4f6cf35x-2c4y-483z-a0a9-158621f77a21",
+      "data": {
+        "key1": "processing_duration",
+        "key2": "api_url"
+      },
+      "id": "<string>",
+      "createdAt": "2023-11-07T05:31:56Z",
+      "updatedAt": "2023-11-07T05:31:56Z"
+    }
+  ]
+}
+```
+
+## **Common search scenarios**
+
+### **Find events for a specific customer**
+
+Query events by customer alias and time period to see all activity for that customer:
+
+`GET /events?startTime=2023-11-01T00:00:00Z&endTime=2023-11-30T23:59:59Z&customerAlias=customer_12345`
+
+### **Verify usage for billing period**
+
+Search events within a billing period to verify metered usage before invoice generation:
+
+`GET /events?startTime=2023-10-01T00:00:00Z&endTime=2023-10-31T23:59:59Z&eventName=compute_hours`
+
+### **Troubleshoot missing charges**
+
+Query events by event name to identify if usage was recorded but not billed:
+
+`GET /events?eventName=storage_gb&startTime=2023-11-01T00:00:00Z&endTime=2023-11-30T23:59:59Z`
+
+### **Analyze usage patterns**
+
+Retrieve large datasets to analyze usage trends and patterns:
+
+`GET /events?startTime=2023-01-01T00:00:00Z&endTime=2023-12-31T23:59:59Z&limit=1000`
+
+## **Event availability**
+
+Events are immediately available after submission:
+
+- **Real-time visibility** - Events appear instantly in both UI and API
+- **No processing delay** - Query events as soon as they're recorded
+- **Immediate analysis** - Monitor and act on incoming data in real-time
+
+## **Pagination**
+
+For large result sets, use cursor-based pagination:
+
+1. Make initial request with `limit` parameter
+2. Response includes a `cursor` value
+3. Use cursor in next request to retrieve additional results
+4. Continue until no more results are returned
+
+## **Best practices**
+
+- **Use time ranges** - Always specify startTime and endTime to limit result sets
+- **Filter by event name** - Narrow results to specific event types when possible
+- **Set appropriate limits** - Balance between result size and number of API calls
+- **Store cursors** - Save pagination cursors to resume queries
+- **Monitor in real-time** - Use event search for live monitoring and alerting

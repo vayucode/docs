@@ -1,0 +1,119 @@
+---
+title: "Invoice PDF"
+description: "Generate, customize, and share PDF invoices with customers"
+---
+
+## Overview
+
+Invoice PDFs provide a finalized, shareable format for customer invoices. Unlike the dynamic view that shows detailed usage calculations, the PDF represents the official invoice document for sharing, sending, and record keeping.
+
+## Dynamic view vs. PDF view
+
+Vayu provides two ways to view invoices:
+
+### Dynamic view
+
+The dynamic view displays:
+
+- How the invoice was calculated
+- Usage consumption for each product over the invoice period
+- Usage accumulation throughout the billing period
+- Detailed charge breakdowns
+- Usage growth patterns and spikes
+
+Use the dynamic view to understand billing calculations and analyze customer consumption patterns.
+
+### PDF view
+
+The PDF view provides:
+
+- Finalized invoice format for official records
+- Clean, professional layout for customer sharing
+- Printable and archivable document
+- Optional clickable links (such as "Pay Now" buttons)
+- Simplified line item display options
+
+Use the PDF view for customer communication, payment collection, and accounting records.
+
+## Generating invoice PDFs
+
+Invoice PDFs are automatically generated when an invoice is finalized. You can:
+
+1. Navigate to **Invoices**
+2. Select an invoice
+3. Select **Show Invoice**
+3. Click **View PDF** or **Download PDF**
+4. Share the PDF directly with customers or download for your records
+
+## Customizing PDF appearance
+
+Configure PDF formatting in **Invoice Preferences**:
+
+1. **Line Item Visibility** — Decide whether or not to **Show zero-value line items** (displaying all line items, even those with zero totals), or **Hide zero-value line items** (removing items with no charges).
+
+<Note>
+  Hiding zero-value items reduces visual clutter and makes invoices easier to scan.
+</Note>
+
+2. **Line Item Detail Level** — Choose the level of detail for each line item, either with a **Full breakdown** (quantity, unit price, and total for each item), or **Total only** (only the total amount for each line item).
+3. **Branding and Formatting** — Customize the PDF to match your brand's logo, info, color scheme, styling, custom footer text, instructions, and payment terms.
+
+## Accessing PDFs via API
+
+Retrieve invoice PDFs programmatically using the API:
+
+```bash
+GET /invoices/{invoiceId}/payment-status
+```
+
+The response includes an `invoicePdfUrl` field with a direct link to the PDF:
+
+```json
+{
+  "invoiceId": "inv_123",
+  "billingStatus": "Paid",
+  "amountDue": 0,
+  "amountPaid": 5000,
+  "total": 5000,
+  "dueDate": "2024-01-31T00:00:00Z",
+  "paidAt": "2024-01-28T15:30:00Z",
+  "invoicePdfUrl": "https://example.com/invoices/inv_123.pdf"
+}
+```
+
+## **Interactive PDF features**
+
+Digital PDFs can include clickable elements:
+
+- **Pay Now links** - Direct customers to payment portals
+- **Contact information** - Clickable email addresses and phone numbers
+- **Support links** - Quick access to help resources
+- **Customer portal** - Link to view invoice details online
+
+These interactive elements improve the customer payment experience while maintaining a professional invoice format.
+
+## **PDF storage and retrieval**
+
+Invoice PDFs are:
+
+- **Automatically stored** - Generated and saved when invoices are finalized
+- **Permanently accessible** - Available for historical invoices
+- **Version controlled** - Original PDFs preserved even if invoice data changes
+- **Securely hosted** - Protected with authentication and access controls
+
+## **Sharing invoice PDFs**
+
+Send PDFs to customers through:
+
+- **Email** - Attach PDF to invoice notification emails
+- **Customer portal** - Make PDFs available for customer download
+- **Direct download** - Generate download links for specific invoices
+- **ERP sync** - Include PDF URLs when syncing to accounting systems
+
+## **Best practices**
+
+- **Review before sending** - Always preview the PDF to ensure accuracy before sharing with customers
+- **Customize appropriately** - Balance detail with clarity based on your customer needs
+- **Maintain consistency** - Use the same PDF format across all invoices for professional appearance
+- **Archive systematically** - Store PDFs according to your record retention policies
+- **Test interactive elements** - Verify that clickable links work correctly in the PDF
