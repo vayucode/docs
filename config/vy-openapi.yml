@@ -406,149 +406,6 @@ components:
             $ref: "#/components/schemas/SubmitCloudUsageResponse"
   parameters: {}
   schemas:
-    ValidationErrorResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - invalid_request_error
-        code:
-          type: string
-          description: Specific machine-readable error code
-        message:
-          type: string
-          description: Human-readable error explanation
-        param:
-          type: string
-          description: Single parameter that failed validation
-        params:
-          type: array
-          items:
-            type: object
-            properties:
-              param:
-                type: string
-                description: The parameter that failed validation
-              message:
-                type: string
-                description: Why validation failed for this parameter
-            required:
-              - param
-              - message
-          description: Multiple parameters that failed validation
-      required:
-        - type
-        - code
-        - message
-    UnauthorizedErrorResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - authentication_error
-        code:
-          type: string
-          enum:
-            - authentication_failed
-        message:
-          type: string
-          description: Human-readable error explanation
-      required:
-        - type
-        - code
-        - message
-    RateLimitErrorResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - rate_limit_error
-        code:
-          type: string
-          enum:
-            - rate_limit_exceeded
-        message:
-          type: string
-          description: Human-readable error explanation
-      required:
-        - type
-        - code
-        - message
-    InternalServerErrorResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - api_error
-        code:
-          type: string
-          enum:
-            - internal_error
-        message:
-          type: string
-          description: Human-readable error explanation
-      required:
-        - type
-        - code
-        - message
-    NotFoundErrorResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - invalid_request_error
-        code:
-          type: string
-          enum:
-            - resource_not_found
-        message:
-          type: string
-          description: Human-readable error explanation
-      required:
-        - type
-        - code
-        - message
-    RequestTooLongErrorResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - invalid_request_error
-        code:
-          type: string
-          enum:
-            - request_too_large
-        message:
-          type: string
-          description: Human-readable error explanation
-      required:
-        - type
-        - code
-        - message
-    ConflictErrorResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - invalid_request_error
-        code:
-          type: string
-          enum:
-            - resource_already_exists
-        message:
-          type: string
-          description: Human-readable error explanation
-      required:
-        - type
-        - code
-        - message
     CreateCatalogProductRequest:
       type: object
       properties:
@@ -2562,6 +2419,9 @@ components:
               description: The stored custom field values associated with the contract
             status:
               $ref: "#/components/schemas/ContractStatus"
+            purchaseOrder:
+              type: string
+              description: The purchase order number of the contract
             id:
               type: string
             createdAt:
@@ -2936,6 +2796,9 @@ components:
               description: The stored custom field values associated with the contract
             status:
               $ref: "#/components/schemas/ContractStatus"
+            purchaseOrder:
+              type: string
+              description: The purchase order number of the contract
             id:
               type: string
             createdAt:
@@ -3310,6 +3173,9 @@ components:
           description: The stored custom field values associated with the contract
         status:
           $ref: "#/components/schemas/ContractStatus"
+        purchaseOrder:
+          type: string
+          description: The purchase order number of the contract
       required:
         - startDate
         - customerId
@@ -3671,6 +3537,9 @@ components:
               description: The stored custom field values associated with the contract
             status:
               $ref: "#/components/schemas/ContractStatus"
+            purchaseOrder:
+              type: string
+              description: The purchase order number of the contract
             id:
               type: string
             createdAt:
@@ -4418,6 +4287,7 @@ components:
                 properties:
                   value:
                     type: number
+                    nullable: true
                   instanceValue:
                     nullable: true
                 required:
@@ -4494,9 +4364,16 @@ components:
               - id
               - createdAt
               - updatedAt
-          description: An array of events matching the query criteria
+        total:
+          type: number
+        hasMore:
+          type: boolean
+        nextCursor:
+          type: string
       required:
         - events
+        - total
+        - hasMore
     SendEventsRequest:
       type: object
       properties:
@@ -5419,6 +5296,9 @@ components:
               description: The stored custom field values associated with the contract
             status:
               $ref: "#/components/schemas/ContractStatus"
+            purchaseOrder:
+              type: string
+              description: The purchase order number of the contract
             id:
               type: string
             createdAt:
@@ -5793,6 +5673,9 @@ components:
                 description: The stored custom field values associated with the contract
               status:
                 $ref: "#/components/schemas/ContractStatus"
+              purchaseOrder:
+                type: string
+                description: The purchase order number of the contract
               id:
                 type: string
               createdAt:
@@ -6006,7 +5889,7 @@ components:
           description: Unique identifier for tracing the submission through the system
         idempotencyKey:
           type: string
-          pattern: ^vayu-\S{24}-\S{24}-\S{24}-\S{24}$
+          pattern: ^vayu-\S{24}-\S{24}-\S{24}-\S{24}-\d{13}$
           description: Key used to ensure the submission is processed exactly once
         meterDimension:
           type: string
@@ -6095,6 +5978,9 @@ components:
     EventName:
       type: string
       minLength: 1
+    CustomerAlias:
+      type: string
+      minLength: 1
     RefId:
       type: string
     ExternalId:
@@ -6140,28 +6026,12 @@ paths:
           $ref: "#/components/responses/CreateCatalogProductResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     get:
       tags:
         - catalog-products
@@ -6186,28 +6056,12 @@ paths:
           $ref: "#/components/responses/ListCatalogProductsResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /catalogProducts/{catalogProductId}:
     get:
       tags:
@@ -6228,34 +6082,14 @@ paths:
           $ref: "#/components/responses/GetCatalogProductResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     put:
       tags:
         - catalog-products
@@ -6277,34 +6111,14 @@ paths:
           $ref: "#/components/responses/UpdateCatalogProductResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - catalog-products
@@ -6324,34 +6138,14 @@ paths:
           $ref: "#/components/responses/DeleteCatalogProductResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers:
     post:
       tags:
@@ -6368,28 +6162,12 @@ paths:
           $ref: "#/components/responses/CreateCustomerResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     get:
       tags:
         - customers
@@ -6414,28 +6192,12 @@ paths:
           $ref: "#/components/responses/ListCustomersResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers/{customerId}:
     get:
       tags:
@@ -6456,34 +6218,14 @@ paths:
           $ref: "#/components/responses/GetCustomerResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     put:
       tags:
         - customers
@@ -6505,34 +6247,14 @@ paths:
           $ref: "#/components/responses/UpdateCustomerResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - customers
@@ -6552,34 +6274,14 @@ paths:
           $ref: "#/components/responses/DeleteCustomerResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /meters/{meterId}:
     get:
       tags:
@@ -6600,34 +6302,14 @@ paths:
           $ref: "#/components/responses/GetMeterResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     put:
       tags:
         - meters
@@ -6649,34 +6331,14 @@ paths:
           $ref: "#/components/responses/UpdateMeterResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - meters
@@ -6696,34 +6358,14 @@ paths:
           $ref: "#/components/responses/DeleteMeterResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /meters:
     get:
       tags:
@@ -6749,28 +6391,12 @@ paths:
           $ref: "#/components/responses/ListMetersResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /contracts/{contractId}:
     get:
       tags:
@@ -6791,34 +6417,14 @@ paths:
           $ref: "#/components/responses/GetContractResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - contracts
@@ -6838,34 +6444,14 @@ paths:
           $ref: "#/components/responses/DeleteContractResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /contracts:
     post:
       tags:
@@ -6882,28 +6468,12 @@ paths:
           $ref: "#/components/responses/CreateContractResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     get:
       tags:
         - contracts
@@ -6934,28 +6504,12 @@ paths:
           $ref: "#/components/responses/ListContractsResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /measurements:
     post:
       tags:
@@ -6972,28 +6526,12 @@ paths:
           $ref: "#/components/responses/CreateMeasurementResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     get:
       tags:
         - measurements
@@ -7018,28 +6556,12 @@ paths:
           $ref: "#/components/responses/ListMeasurementsResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /measurements/{measurementId}:
     get:
       tags:
@@ -7060,34 +6582,14 @@ paths:
           $ref: "#/components/responses/GetMeasurementResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - measurements
@@ -7107,34 +6609,14 @@ paths:
           $ref: "#/components/responses/DeleteMeasurementResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /invoices/{invoiceId}:
     get:
       tags:
@@ -7155,34 +6637,14 @@ paths:
           $ref: "#/components/responses/GetInvoiceResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customer-relations:
     post:
       tags:
@@ -7199,28 +6661,12 @@ paths:
           $ref: "#/components/responses/CreateCustomerRelationResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customer-relations/{customerRelationId}:
     get:
       tags:
@@ -7241,34 +6687,14 @@ paths:
           $ref: "#/components/responses/GetCustomerRelationResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /login:
     post:
       tags:
@@ -7286,28 +6712,12 @@ paths:
           $ref: "#/components/responses/LoginResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /events/delete-by-refs:
     post:
       tags:
@@ -7324,34 +6734,14 @@ paths:
           $ref: "#/components/responses/DeleteEventsByRefsResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /events/dry-run:
     post:
       tags:
@@ -7370,34 +6760,14 @@ paths:
           $ref: "#/components/responses/EventsDryRunResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "413":
           description: Request Entity Too Large
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RequestTooLongErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /events:
     get:
       tags:
@@ -7425,6 +6795,11 @@ paths:
           in: query
           name: eventName
         - schema:
+            $ref: "#/components/schemas/CustomerAlias"
+          required: false
+          in: query
+          name: customerAlias
+        - schema:
             $ref: "#/components/schemas/Limit"
           required: false
           in: query
@@ -7439,28 +6814,12 @@ paths:
           $ref: "#/components/responses/QueryEventsResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     post:
       tags:
         - events
@@ -7477,34 +6836,14 @@ paths:
           $ref: "#/components/responses/SendEventsResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "413":
           description: Request Entity Too Large
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RequestTooLongErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /events/{refId}:
     get:
       tags:
@@ -7525,34 +6864,14 @@ paths:
           $ref: "#/components/responses/GetEventResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - events
@@ -7572,34 +6891,14 @@ paths:
           $ref: "#/components/responses/DeleteEventResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /credits:
     get:
       tags:
@@ -7631,28 +6930,12 @@ paths:
           $ref: "#/components/responses/ListCreditLedgerEntriesResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /credits/grant:
     post:
       tags:
@@ -7672,28 +6955,12 @@ paths:
           $ref: "#/components/responses/RequestSuccess"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /credits/deduct:
     post:
       tags:
@@ -7714,28 +6981,12 @@ paths:
           $ref: "#/components/responses/RequestSuccess"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /webhook:
     post:
       tags:
@@ -7753,34 +7004,14 @@ paths:
           $ref: "#/components/responses/RequestSuccess"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "413":
           description: Request Entity Too Large
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RequestTooLongErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers/externalId/{externalId}:
     get:
       tags:
@@ -7801,34 +7032,14 @@ paths:
           $ref: "#/components/responses/GetCustomerResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers/name/{name}:
     get:
       tags:
@@ -7849,34 +7060,14 @@ paths:
           $ref: "#/components/responses/GetCustomerByNameResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers/products-consumptions/{customerId}:
     get:
       tags:
@@ -7897,34 +7088,14 @@ paths:
           $ref: "#/components/responses/GetCustomerProductsConsumptionsResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers/products-consumptions/alias/{alias}:
     get:
       tags:
@@ -7945,34 +7116,14 @@ paths:
           $ref: "#/components/responses/GetCustomerProductsConsumptionsByAliasResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers/integration/{integrationType}/{integrationId}:
     get:
       tags:
@@ -7999,34 +7150,14 @@ paths:
           $ref: "#/components/responses/GetCustomerByIntegrationIdResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /contracts/integration/{integrationType}/{integrationId}:
     get:
       tags:
@@ -8053,34 +7184,14 @@ paths:
           $ref: "#/components/responses/GetContractByIntegrationIdResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /invoices/{invoiceId}/payment-status:
     get:
       tags:
@@ -8103,28 +7214,12 @@ paths:
           $ref: "#/components/responses/InvoicePaymentStatusResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /invoices:
     get:
       tags:
@@ -8156,28 +7251,12 @@ paths:
           $ref: "#/components/responses/ListInvoicesResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /product-consumption/{productId}:
     get:
       tags:
@@ -8198,34 +7277,14 @@ paths:
           $ref: "#/components/responses/GetProductConsumptionResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
   /cloudUsageSubmission:
     post:
       tags:
@@ -8242,25 +7301,9 @@ paths:
           $ref: "#/components/responses/SubmitCloudUsageResponse"
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerErrorResponse"
