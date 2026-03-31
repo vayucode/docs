@@ -1,0 +1,97 @@
+---
+title: "Credit ledger"
+description: "Track and audit all credit transactions for a customer"
+---
+
+## Overview
+
+The credit ledger provides a complete audit trail of all credit activity for a customer. It records every grant, deduction, and application of credits, maintaining a running balance that shows the customer's available credit at any point in time.
+
+## Accessing the credit ledger
+
+To view a customer's credit ledger:
+
+1. Navigate to **Customers**
+2. Select the customer
+3. Go to the **Credits** tab
+
+The ledger displays all credit transactions in chronological order, showing the most recent activity first.
+
+## Transaction types
+
+The credit ledger tracks three types of transactions:
+
+### Grant transactions
+
+Credits added to the customer's account. These can come from:
+
+- Manual grants through the UI
+- API-based credit grants
+- Promotional credits
+- Service credits for issue resolution
+
+### Deduction transactions
+
+Credits removed from the customer's account. These include:
+
+- Manual deductions through the API
+- Administrative adjustments
+- Expired credits (if applicable)
+
+### Application transactions
+
+Credits applied to reduce invoice amounts. These show:
+
+- The invoice that received the credit
+- The amount applied
+- The remaining balance after application
+
+## Ledger information
+
+Each ledger entry includes:
+
+- **Transaction type** - Grant, deduct, or application
+- **Amount** - The credit value for this transaction
+- **Running balance** - Available credit after this transaction
+- **Timestamp** - When the transaction occurred
+- **Associated invoice** - For application transactions, which invoice was credited
+- **Notes** - Optional description or reason for the transaction
+- **Created by** - User or system that initiated the transaction
+
+## Viewing credit history via API
+
+You can retrieve a customer's credit ledger programmatically using the `/credits` endpoint:
+
+```bash
+GET /credits?customerId=customer_123
+```
+
+The API returns the complete transaction history with all ledger details.
+
+## **Auditing and compliance**
+
+The credit ledger serves as an immutable audit trail for:
+
+- **Financial reconciliation** - Match credit activity to accounting records
+- **Customer inquiries** - Provide transparent history of credit usage
+- **Dispute resolution** - Reference exact dates and amounts of credit transactions
+- **Compliance reporting** - Track promotional credits or service level agreements
+
+## **Filtering and search**
+
+Use the ledger interface to:
+
+- Filter by transaction type (grants, deductions, applications)
+- Search by date range
+- View transactions for specific invoices
+- Export ledger data for reporting
+
+## **Balance calculation**
+
+The running balance updates with each transaction:
+
+- **Grants** increase the balance
+- **Deductions** decrease the balance
+- **Applications** decrease the balance and link to an invoice
+
+The current balance represents the total credits available for the customer to use on future invoices.

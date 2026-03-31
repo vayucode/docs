@@ -1,0 +1,41 @@
+---
+title: "Credits"
+description: "Manage customer credit balances and apply them to invoices"
+---
+
+## Overview
+
+Credits allow you to maintain a running balance for each customer that can be applied to reduce invoice amounts. Instead of issuing refunds or adjusting invoices directly, you can grant credits to a customer’s account and let those credits be applied over time.
+
+This approach provides flexibility for handling prepayments, refunds, promotional offers, and billing adjustments, while keeping a clear and auditable record of all changes through the customer’s credit ledger.
+
+## How credits work
+
+Each customer has a credit ledger that tracks every credit-related transaction. When credits are granted, deducted, or applied to invoices, those actions are recorded as entries in the ledger, along with the resulting balance.
+
+The ledger includes:
+
+- **Grant entries** – Credits added to the customer’s account  
+- **Deduction entries** – Credits removed from the customer’s account  
+- **Application entries** – Credits applied to specific invoices  
+- **Running balance** – The available credit balance after each transaction  
+
+This structure ensures that every change to a customer’s balance is traceable and tied to a specific action or invoice.
+
+## Granting credits
+
+You can grant credits to a customer either through the Vayu interface or programmatically through the API.
+
+### Through the UI
+
+Navigate to **Customers**, select the relevant customer, and open the **Credits** tab. From there, click **Grant Credits**, enter the amount, and optionally include a note explaining the reason for the credit. Once confirmed, the credits are added to the customer’s balance and recorded in the ledger.
+
+### Through the API
+
+Use the `POST /credits/grant` endpoint to add credits programmatically:
+
+```json
+{
+  "creditAmount": 500,
+  "customerId": "customer_123"
+}
