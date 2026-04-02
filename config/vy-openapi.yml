@@ -1717,8 +1717,7 @@ components:
                           - MONTH
                           - YEAR
                         default: MONTH
-                        description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                          to MONTH."
+                        description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                       value:
                         type: integer
                         minimum: 0
@@ -1805,8 +1804,7 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                              to MONTH."
+                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
@@ -1816,8 +1814,9 @@ components:
                         required:
                           - unit
                           - value
-                        description: Recurring billing cadence for the subscription (e.g. monthly,
-                          quarterly)
+                        description: The frequency at which the subscription charge recurs. When the
+                          billing interval spans multiple cadence periods, the
+                          invoice amount is multiplied accordingly.
                     required:
                       - type
                       - price
@@ -1876,8 +1875,7 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                              to MONTH."
+                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
@@ -1887,12 +1885,16 @@ components:
                         required:
                           - unit
                           - value
-                        description: Recurring billing cadence for subscription-based tiered pricing
+                        description: The frequency at which the tiered charge recurs. When the billing
+                          interval spans multiple cadence periods, the invoice
+                          amount is multiplied accordingly.
                       autoUpgrade:
                         type: boolean
                         nullable: true
-                        description: When true, automatically moves the customer to the next tier when
-                          usage exceeds the current tier limit
+                        description: When true, the customer is locked into the highest tier reached
+                          during the period and will not drop back to a lower
+                          tier until the next billing period or contract
+                          renewal.
                       prorate:
                         type: boolean
                         nullable: true
@@ -1901,12 +1903,18 @@ components:
                       isRevShare:
                         type: boolean
                         nullable: true
-                        description: When true, the pricing model represents a revenue share arrangement
+                        description: When true, the pricing model represents a revenue share
+                          arrangement. Tier rates are displayed as percentages
+                          in the UI rather than currency amounts, though the
+                          underlying rate value remains a decimal fraction and
+                          calculations are unaffected.
                       baseAmount:
                         type: number
                         nullable: true
                         minimum: 0
-                        description: Fixed base amount charged in addition to tier-based usage charges
+                        description: Minimum charge for the billing period. If the usage-based cost
+                          exceeds this amount, the higher usage cost is charged
+                          instead.
                       usageReset:
                         $ref: "#/components/schemas/ExternalUsageReset"
                     required:
@@ -1939,7 +1947,9 @@ components:
                         type: number
                         nullable: true
                         minimum: 0
-                        description: Fixed base amount charged in addition to usage-based charges
+                        description: Minimum charge for the billing period. If the usage-based cost
+                          exceeds this amount, the higher usage cost is charged
+                          instead.
                     required:
                       - type
                       - price
@@ -1995,8 +2005,7 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                              to MONTH."
+                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
@@ -2071,8 +2080,7 @@ components:
                         - MONTH
                         - YEAR
                       default: MONTH
-                      description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                        to MONTH."
+                      description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                     value:
                       type: integer
                       minimum: 0
@@ -2186,8 +2194,7 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                              to MONTH."
+                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
@@ -2274,8 +2281,7 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                  to MONTH."
+                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
@@ -2285,8 +2291,9 @@ components:
                             required:
                               - unit
                               - value
-                            description: Recurring billing cadence for the subscription (e.g. monthly,
-                              quarterly)
+                            description: The frequency at which the subscription charge recurs. When the
+                              billing interval spans multiple cadence periods,
+                              the invoice amount is multiplied accordingly.
                         required:
                           - type
                           - price
@@ -2345,8 +2352,7 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                  to MONTH."
+                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
@@ -2356,12 +2362,16 @@ components:
                             required:
                               - unit
                               - value
-                            description: Recurring billing cadence for subscription-based tiered pricing
+                            description: The frequency at which the tiered charge recurs. When the billing
+                              interval spans multiple cadence periods, the
+                              invoice amount is multiplied accordingly.
                           autoUpgrade:
                             type: boolean
                             nullable: true
-                            description: When true, automatically moves the customer to the next tier when
-                              usage exceeds the current tier limit
+                            description: When true, the customer is locked into the highest tier reached
+                              during the period and will not drop back to a
+                              lower tier until the next billing period or
+                              contract renewal.
                           prorate:
                             type: boolean
                             nullable: true
@@ -2370,12 +2380,19 @@ components:
                           isRevShare:
                             type: boolean
                             nullable: true
-                            description: When true, the pricing model represents a revenue share arrangement
+                            description: When true, the pricing model represents a revenue share
+                              arrangement. Tier rates are displayed as
+                              percentages in the UI rather than currency
+                              amounts, though the underlying rate value remains
+                              a decimal fraction and calculations are
+                              unaffected.
                           baseAmount:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Fixed base amount charged in addition to tier-based usage charges
+                            description: Minimum charge for the billing period. If the usage-based cost
+                              exceeds this amount, the higher usage cost is
+                              charged instead.
                           usageReset:
                             $ref: "#/components/schemas/ExternalUsageReset"
                         required:
@@ -2408,7 +2425,9 @@ components:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Fixed base amount charged in addition to usage-based charges
+                            description: Minimum charge for the billing period. If the usage-based cost
+                              exceeds this amount, the higher usage cost is
+                              charged instead.
                         required:
                           - type
                           - price
@@ -2464,8 +2483,7 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                  to MONTH."
+                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
@@ -2618,8 +2636,7 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                              to MONTH."
+                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
@@ -2706,8 +2723,7 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                  to MONTH."
+                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
@@ -2717,8 +2733,9 @@ components:
                             required:
                               - unit
                               - value
-                            description: Recurring billing cadence for the subscription (e.g. monthly,
-                              quarterly)
+                            description: The frequency at which the subscription charge recurs. When the
+                              billing interval spans multiple cadence periods,
+                              the invoice amount is multiplied accordingly.
                         required:
                           - type
                           - price
@@ -2777,8 +2794,7 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                  to MONTH."
+                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
@@ -2788,12 +2804,16 @@ components:
                             required:
                               - unit
                               - value
-                            description: Recurring billing cadence for subscription-based tiered pricing
+                            description: The frequency at which the tiered charge recurs. When the billing
+                              interval spans multiple cadence periods, the
+                              invoice amount is multiplied accordingly.
                           autoUpgrade:
                             type: boolean
                             nullable: true
-                            description: When true, automatically moves the customer to the next tier when
-                              usage exceeds the current tier limit
+                            description: When true, the customer is locked into the highest tier reached
+                              during the period and will not drop back to a
+                              lower tier until the next billing period or
+                              contract renewal.
                           prorate:
                             type: boolean
                             nullable: true
@@ -2802,12 +2822,19 @@ components:
                           isRevShare:
                             type: boolean
                             nullable: true
-                            description: When true, the pricing model represents a revenue share arrangement
+                            description: When true, the pricing model represents a revenue share
+                              arrangement. Tier rates are displayed as
+                              percentages in the UI rather than currency
+                              amounts, though the underlying rate value remains
+                              a decimal fraction and calculations are
+                              unaffected.
                           baseAmount:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Fixed base amount charged in addition to tier-based usage charges
+                            description: Minimum charge for the billing period. If the usage-based cost
+                              exceeds this amount, the higher usage cost is
+                              charged instead.
                           usageReset:
                             $ref: "#/components/schemas/ExternalUsageReset"
                         required:
@@ -2840,7 +2867,9 @@ components:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Fixed base amount charged in addition to usage-based charges
+                            description: Minimum charge for the billing period. If the usage-based cost
+                              exceeds this amount, the higher usage cost is
+                              charged instead.
                         required:
                           - type
                           - price
@@ -2896,8 +2925,7 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                  to MONTH."
+                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
@@ -3050,8 +3078,7 @@ components:
                           - MONTH
                           - YEAR
                         default: MONTH
-                        description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                          to MONTH."
+                        description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                       value:
                         type: integer
                         minimum: 0
@@ -3138,8 +3165,7 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                              to MONTH."
+                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
@@ -3149,8 +3175,9 @@ components:
                         required:
                           - unit
                           - value
-                        description: Recurring billing cadence for the subscription (e.g. monthly,
-                          quarterly)
+                        description: The frequency at which the subscription charge recurs. When the
+                          billing interval spans multiple cadence periods, the
+                          invoice amount is multiplied accordingly.
                     required:
                       - type
                       - price
@@ -3209,8 +3236,7 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                              to MONTH."
+                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
@@ -3220,12 +3246,16 @@ components:
                         required:
                           - unit
                           - value
-                        description: Recurring billing cadence for subscription-based tiered pricing
+                        description: The frequency at which the tiered charge recurs. When the billing
+                          interval spans multiple cadence periods, the invoice
+                          amount is multiplied accordingly.
                       autoUpgrade:
                         type: boolean
                         nullable: true
-                        description: When true, automatically moves the customer to the next tier when
-                          usage exceeds the current tier limit
+                        description: When true, the customer is locked into the highest tier reached
+                          during the period and will not drop back to a lower
+                          tier until the next billing period or contract
+                          renewal.
                       prorate:
                         type: boolean
                         nullable: true
@@ -3234,12 +3264,18 @@ components:
                       isRevShare:
                         type: boolean
                         nullable: true
-                        description: When true, the pricing model represents a revenue share arrangement
+                        description: When true, the pricing model represents a revenue share
+                          arrangement. Tier rates are displayed as percentages
+                          in the UI rather than currency amounts, though the
+                          underlying rate value remains a decimal fraction and
+                          calculations are unaffected.
                       baseAmount:
                         type: number
                         nullable: true
                         minimum: 0
-                        description: Fixed base amount charged in addition to tier-based usage charges
+                        description: Minimum charge for the billing period. If the usage-based cost
+                          exceeds this amount, the higher usage cost is charged
+                          instead.
                       usageReset:
                         $ref: "#/components/schemas/ExternalUsageReset"
                     required:
@@ -3272,7 +3308,9 @@ components:
                         type: number
                         nullable: true
                         minimum: 0
-                        description: Fixed base amount charged in addition to usage-based charges
+                        description: Minimum charge for the billing period. If the usage-based cost
+                          exceeds this amount, the higher usage cost is charged
+                          instead.
                     required:
                       - type
                       - price
@@ -3328,8 +3366,7 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                              to MONTH."
+                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
@@ -3469,8 +3506,7 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                              to MONTH."
+                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
@@ -3557,8 +3593,7 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                  to MONTH."
+                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
@@ -3568,8 +3603,9 @@ components:
                             required:
                               - unit
                               - value
-                            description: Recurring billing cadence for the subscription (e.g. monthly,
-                              quarterly)
+                            description: The frequency at which the subscription charge recurs. When the
+                              billing interval spans multiple cadence periods,
+                              the invoice amount is multiplied accordingly.
                         required:
                           - type
                           - price
@@ -3628,8 +3664,7 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                  to MONTH."
+                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
@@ -3639,12 +3674,16 @@ components:
                             required:
                               - unit
                               - value
-                            description: Recurring billing cadence for subscription-based tiered pricing
+                            description: The frequency at which the tiered charge recurs. When the billing
+                              interval spans multiple cadence periods, the
+                              invoice amount is multiplied accordingly.
                           autoUpgrade:
                             type: boolean
                             nullable: true
-                            description: When true, automatically moves the customer to the next tier when
-                              usage exceeds the current tier limit
+                            description: When true, the customer is locked into the highest tier reached
+                              during the period and will not drop back to a
+                              lower tier until the next billing period or
+                              contract renewal.
                           prorate:
                             type: boolean
                             nullable: true
@@ -3653,12 +3692,19 @@ components:
                           isRevShare:
                             type: boolean
                             nullable: true
-                            description: When true, the pricing model represents a revenue share arrangement
+                            description: When true, the pricing model represents a revenue share
+                              arrangement. Tier rates are displayed as
+                              percentages in the UI rather than currency
+                              amounts, though the underlying rate value remains
+                              a decimal fraction and calculations are
+                              unaffected.
                           baseAmount:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Fixed base amount charged in addition to tier-based usage charges
+                            description: Minimum charge for the billing period. If the usage-based cost
+                              exceeds this amount, the higher usage cost is
+                              charged instead.
                           usageReset:
                             $ref: "#/components/schemas/ExternalUsageReset"
                         required:
@@ -3691,7 +3737,9 @@ components:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Fixed base amount charged in addition to usage-based charges
+                            description: Minimum charge for the billing period. If the usage-based cost
+                              exceeds this amount, the higher usage cost is
+                              charged instead.
                         required:
                           - type
                           - price
@@ -3747,8 +3795,7 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                  to MONTH."
+                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
@@ -5286,8 +5333,7 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                              to MONTH."
+                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
@@ -5374,8 +5420,7 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                  to MONTH."
+                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
@@ -5385,8 +5430,9 @@ components:
                             required:
                               - unit
                               - value
-                            description: Recurring billing cadence for the subscription (e.g. monthly,
-                              quarterly)
+                            description: The frequency at which the subscription charge recurs. When the
+                              billing interval spans multiple cadence periods,
+                              the invoice amount is multiplied accordingly.
                         required:
                           - type
                           - price
@@ -5445,8 +5491,7 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                  to MONTH."
+                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
@@ -5456,12 +5501,16 @@ components:
                             required:
                               - unit
                               - value
-                            description: Recurring billing cadence for subscription-based tiered pricing
+                            description: The frequency at which the tiered charge recurs. When the billing
+                              interval spans multiple cadence periods, the
+                              invoice amount is multiplied accordingly.
                           autoUpgrade:
                             type: boolean
                             nullable: true
-                            description: When true, automatically moves the customer to the next tier when
-                              usage exceeds the current tier limit
+                            description: When true, the customer is locked into the highest tier reached
+                              during the period and will not drop back to a
+                              lower tier until the next billing period or
+                              contract renewal.
                           prorate:
                             type: boolean
                             nullable: true
@@ -5470,12 +5519,19 @@ components:
                           isRevShare:
                             type: boolean
                             nullable: true
-                            description: When true, the pricing model represents a revenue share arrangement
+                            description: When true, the pricing model represents a revenue share
+                              arrangement. Tier rates are displayed as
+                              percentages in the UI rather than currency
+                              amounts, though the underlying rate value remains
+                              a decimal fraction and calculations are
+                              unaffected.
                           baseAmount:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Fixed base amount charged in addition to tier-based usage charges
+                            description: Minimum charge for the billing period. If the usage-based cost
+                              exceeds this amount, the higher usage cost is
+                              charged instead.
                           usageReset:
                             $ref: "#/components/schemas/ExternalUsageReset"
                         required:
@@ -5508,7 +5564,9 @@ components:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Fixed base amount charged in addition to usage-based charges
+                            description: Minimum charge for the billing period. If the usage-based cost
+                              exceeds this amount, the higher usage cost is
+                              charged instead.
                         required:
                           - type
                           - price
@@ -5564,8 +5622,7 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                  to MONTH."
+                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
@@ -5718,8 +5775,7 @@ components:
                                 - MONTH
                                 - YEAR
                               default: MONTH
-                              description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                to MONTH."
+                              description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                             value:
                               type: integer
                               minimum: 0
@@ -5806,8 +5862,7 @@ components:
                                     - MONTH
                                     - YEAR
                                   default: MONTH
-                                  description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                    to MONTH."
+                                  description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                                 value:
                                   type: integer
                                   minimum: 0
@@ -5817,8 +5872,9 @@ components:
                               required:
                                 - unit
                                 - value
-                              description: Recurring billing cadence for the subscription (e.g. monthly,
-                                quarterly)
+                              description: The frequency at which the subscription charge recurs. When the
+                                billing interval spans multiple cadence periods,
+                                the invoice amount is multiplied accordingly.
                           required:
                             - type
                             - price
@@ -5877,8 +5933,7 @@ components:
                                     - MONTH
                                     - YEAR
                                   default: MONTH
-                                  description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                    to MONTH."
+                                  description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                                 value:
                                   type: integer
                                   minimum: 0
@@ -5888,12 +5943,16 @@ components:
                               required:
                                 - unit
                                 - value
-                              description: Recurring billing cadence for subscription-based tiered pricing
+                              description: The frequency at which the tiered charge recurs. When the billing
+                                interval spans multiple cadence periods, the
+                                invoice amount is multiplied accordingly.
                             autoUpgrade:
                               type: boolean
                               nullable: true
-                              description: When true, automatically moves the customer to the next tier when
-                                usage exceeds the current tier limit
+                              description: When true, the customer is locked into the highest tier reached
+                                during the period and will not drop back to a
+                                lower tier until the next billing period or
+                                contract renewal.
                             prorate:
                               type: boolean
                               nullable: true
@@ -5902,12 +5961,19 @@ components:
                             isRevShare:
                               type: boolean
                               nullable: true
-                              description: When true, the pricing model represents a revenue share arrangement
+                              description: When true, the pricing model represents a revenue share
+                                arrangement. Tier rates are displayed as
+                                percentages in the UI rather than currency
+                                amounts, though the underlying rate value
+                                remains a decimal fraction and calculations are
+                                unaffected.
                             baseAmount:
                               type: number
                               nullable: true
                               minimum: 0
-                              description: Fixed base amount charged in addition to tier-based usage charges
+                              description: Minimum charge for the billing period. If the usage-based cost
+                                exceeds this amount, the higher usage cost is
+                                charged instead.
                             usageReset:
                               $ref: "#/components/schemas/ExternalUsageReset"
                           required:
@@ -5940,7 +6006,9 @@ components:
                               type: number
                               nullable: true
                               minimum: 0
-                              description: Fixed base amount charged in addition to usage-based charges
+                              description: Minimum charge for the billing period. If the usage-based cost
+                                exceeds this amount, the higher usage cost is
+                                charged instead.
                           required:
                             - type
                             - price
@@ -5996,8 +6064,7 @@ components:
                                     - MONTH
                                     - YEAR
                                   default: MONTH
-                                  description: "The unit of the duration. One of: DAY, WEEK, MONTH, YEAR. Defaults
-                                    to MONTH."
+                                  description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                                 value:
                                   type: integer
                                   minimum: 0
