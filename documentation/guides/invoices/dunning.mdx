@@ -1,0 +1,136 @@
+---
+title: "Dunning and Payment Reminders"
+description: "Automate payment reminders and manage collections for overdue invoices"
+---
+
+## Overview
+
+Dunning and payment reminders allow you to automate how your system follows up on unpaid invoices. Instead of relying on manual outreach, Vayu tracks invoice status and sends timely reminders to customers as payments become due or overdue.
+
+This automation helps maintain consistent communication, improves collection rates, and reduces the operational burden on your team. At the same time, it gives you control over how and when reminders are sent, how messaging escalates, and how payment collection is handled for overdue accounts.
+
+## How Dunning Works
+
+Dunning is the communication layer of your collections process. It monitors invoice status and triggers reminders based on timing and payment state.
+
+As invoices move through their lifecycle:
+
+1. An invoice approaches its due date or becomes overdue
+2. The system sends reminders based on your configured schedule
+3. Reminder frequency and tone escalate over time
+4. The process continues until the invoice is paid or reaches a final state
+
+This ensures that customers are consistently notified without requiring manual follow-up.
+
+## Configuring Reminder Schedules
+
+To configure your reminder workflow, navigate to **Settings** and open your billing preferences.
+
+From there, define when reminders should be sent across the invoice lifecycle. A complete schedule typically includes:
+
+- **Pre-due reminders** – Notifications sent before the invoice due date
+- **Due date reminders** – Sent on the day payment is expected
+- **Overdue reminders** – Sent at intervals after the due date (for example, 7, 14, or 30 days overdue)
+
+You can adjust the timing and number of reminders to match your billing policies and customer expectations.
+
+## Reminder Stages and Tone
+
+Beyond timing, dunning workflows are typically structured around stages that reflect increasing urgency.
+
+A common progression includes:
+
+### Friendly Reminder
+
+Sent shortly before or after the due date. The tone is polite and assumes the customer may have overlooked the payment.
+
+### Follow-up Reminder
+
+Sent if payment is still outstanding. The message becomes more direct while remaining professional.
+
+### Final Notice
+
+Sent as a last attempt before escalation. Clearly communicates urgency and potential consequences of non-payment.
+
+### Escalation
+
+Actions taken after all reminders fail, such as restricting access, applying penalties, or escalating internally.
+
+This staged approach helps maintain good customer relationships while still enforcing payment expectations.
+
+## Customizing Reminder Emails
+
+Each stage in your reminder workflow can be customized to reflect your messaging and brand.
+
+Reminder emails typically include:
+
+- Invoice details such as amount due, invoice number, and due date
+- Clear payment instructions or a link to pay
+- Contact information for billing questions
+- Messaging tone appropriate to the stage of escalation
+- Branding elements such as your company name and visual identity
+
+Customizing these templates ensures that communication remains consistent and aligned with your business.
+
+## Excluding Customers From Dunning
+
+In some cases, automated reminders are not appropriate. You can exclude specific customers from dunning to handle them manually.
+
+To do this, open the customer profile, navigate to their settings, and enable **Exclude from dunning**.
+
+This is commonly used for customers with special payment arrangements, accounts under dispute, or high-value relationships that require personalized handling.
+
+## Payment Collection and Automation
+
+Dunning focuses on communication, but payment collection determines how invoices are actually paid.
+
+If customers have a payment method on file, you can enable automatic payment collection. When enabled, the system attempts to charge the stored payment method when invoices are issued or become due.
+
+You can also configure retry behavior for failed payments, allowing the system to automatically attempt collection again before escalating through the dunning workflow.
+
+This reduces the need for reminders in many cases and can significantly improve collection efficiency.
+
+## Monitoring Overdue Invoices and Performance
+
+To track how your dunning strategy is performing, you can monitor overdue invoices and collection metrics across the system.
+
+Common approaches include:
+
+- Viewing overdue invoices directly in the invoice dashboard
+- Reviewing customer-level balances and aging information
+- Generating reports on accounts receivable aging
+- Tracking metrics such as days sales outstanding (DSO) and collection success rates
+
+These insights help you refine reminder timing, messaging, and escalation policies over time.
+
+## Integration With Payment Providers
+
+Dunning and payment collection workflows integrate with your connected payment systems.
+
+For example:
+
+- Payment providers such as Stripe can automatically attempt to charge stored payment methods and update invoice status
+- Accounting systems can reflect payment status changes such as Paid or Overdue
+- Customer-facing portals allow customers to view invoices and complete payments directly
+
+These integrations ensure that reminders, payments, and financial records stay in sync across systems.
+
+## Best Practices
+
+A well-designed dunning workflow balances persistence with professionalism.
+
+- Start with friendly, helpful reminders before escalating tone
+- Keep messaging clear and include direct payment options
+- Escalate gradually based on how overdue the invoice is
+- Apply rules consistently while allowing for exceptions when needed
+- Monitor results and adjust timing or messaging based on effectiveness
+
+A consistent and thoughtful approach improves both collection rates and customer experience.
+
+## Service Restrictions and Escalation
+
+For severely overdue invoices, you can define escalation actions that go beyond reminders.
+
+These may include restricting access to services, preventing additional usage, or requiring payment before reactivation.
+
+If you use these measures, clearly communicate them in your final reminder so customers understand the consequences in advance.

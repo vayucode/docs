@@ -1,0 +1,162 @@
+---
+title: "One-Off Invoices"
+description: "Create standalone invoices outside of regular billing cycles for ad-hoc charges, adjustments, or special circumstances"
+---
+
+One-Off Invoices allow you to bill customers for charges that fall outside of your regular billing cycles. These standalone invoices are useful for ad-hoc services, manual adjustments, implementation fees, or any other charges that don't fit into your standard contract-based billing.
+
+Unlike contract-based invoices, One-Off Invoices are manually created and are not tied to usage data or metered events. Charges are entered directly, allowing you to invoice immediately without waiting for billing cycle closure.
+
+## When to use One-Off Invoices
+
+Use One-Off Invoices for:
+
+- **Ad-hoc services** – One-time professional services, consulting, or support charges
+- **Manual adjustments** – Billing corrections or credits that need to be issued separately
+- **Implementation fees** – Setup or onboarding charges billed independently from the main contract
+- **Special circumstances** – Custom charges that don't align with your regular billing schedule
+- **Out-of-cycle charges** – Charges that need to be billed immediately rather than waiting for the next billing period
+- **Mid-cycle adjustments** – Usage overages or added resources that need to be billed before the next cycle
+- **Refunds or credits** – Adjustments to previously issued invoices handled outside the standard billing flow
+
+<Note>
+  One-Off Invoices are separate from One-Time Fees within contracts. One-Time Fees are part of a contract's pricing structure, while One-Off Invoices are standalone billing documents created outside of any contract.
+</Note>
+
+## One-Off Invoices vs. One-Time Fees
+
+Understanding the difference between these two concepts is important:
+
+| Feature                  | One-Off Invoices                 | One-Time Fee                          |
+| ------------------------ | -------------------------------- | ------------------------------------- |
+| **Scope**                | Standalone invoice               | Part of a contract                    |
+| **Timing**               | Created manually as needed       | Scheduled within contract terms       |
+| **Use case**             | Ad-hoc charges outside contracts | Planned fees like setup or onboarding |
+| **Billing cycle**        | Independent of billing cycles    | Follows contract billing schedule     |
+| **Contract requirement** | No contract needed               | Requires an active contract           |
+
+## Creating a One-Off Invoices
+
+To create a One-Off Invoices:
+
+You can create a One-Off Invoices from either the global invoice view or directly from a specific customer.
+
+**Option 1: From the Home page**
+
+1. Navigate to **Home** from the main menu
+2. Click **Create Invoice** in the upper menu
+3. Select the customer you want to bill
+5. Add line items with descriptions and amounts
+6. Set the invoice due date
+7. Review and approve the invoice by clicking **Save Settings & Continue**
+8. Send or sync the invoice to your ERP system
+
+**Option 2: From the Customer page**
+
+1. Navigate to **Customers**
+2. Select the relevant customer
+3. Open the **Invoices** tab
+4. Click **Create One-Off Invoices**
+5. Add line items and complete the invoice details
+6. Review, approve, and send
+
+### Line item configuration
+
+When adding line items to a One-Off Invoices, you can specify:
+
+- **Description** – Clear explanation of what the charge is for
+- **Amount** – The charge amount in the customer's currency
+- **Quantity** – Number of units (if applicable)
+- **Tax** – Tax rate to apply to this line item
+- **Discount** – Fixed amount or percentage discount
+
+### Invoice settings
+
+Configure these settings for your One-Off Invoices:
+
+- **Currency** – Defaults to the customer's currency but can be overridden
+- **Due date** – When payment is expected (defaults to customer's payment terms)
+- **Invoice date** – The date the invoice is issued
+- **Tax treatment** – How tax should be calculated and applied
+- **Payment terms** – Net 30, Net 60, or custom terms
+
+## Approving and sending One-Off Invoices
+
+Once you've created a One-Off Invoices:
+
+1. **Review** – Verify all line items, amounts, and customer details are correct
+2. **Approve** – Click **Approve** to finalize the invoice (this locks it from further editing)
+3. **Send** – Email the invoice directly to the customer or download the PDF
+4. **Sync** – Push the invoice to your connected ERP system (Stripe, NetSuite, QuickBooks, etc.)
+
+Invoices can be shared with customers through direct email or made available via the customer portal, and can be viewed in both dynamic and PDF formats.
+
+<Note>
+  Once approved, One-Off Invoices cannot be edited. If you need to make changes, you'll need to void the invoice and create a new one.
+</Note>
+
+## Managing One-Off Invoices
+
+### Viewing One-Off Invoices
+
+One-Off Invoices appear in your main invoice list alongside contract-based invoices. You can filter to show only One-Off Invoices:
+
+1. Go to **Invoices**
+2. Click **Filters**
+3. Select **Invoice Type: One-Off**
+
+### Tracking payment status
+
+Monitor payment status for One-Off Invoices:
+
+- **Draft** – Invoice created but not yet approved
+- **Pending** – Invoice approved and sent, awaiting payment
+- **Paid** – Payment received and recorded
+- **Overdue** – Payment not received by due date
+- **Void** – Invoice cancelled
+
+### Voiding a One-Off Invoices
+
+If you need to cancel a One-Off Invoices:
+
+1. Open the invoice from the invoice list
+2. Click **Actions** → **Void Invoice**
+3. Add a reason for voiding (optional but recommended)
+4. Confirm the action
+
+Voided invoices remain in your records but are marked as cancelled and won't be included in revenue calculations.
+
+## Integration with ERP systems
+
+One-Off Invoices sync to your connected ERP systems just like contract-based invoices:
+
+### Stripe
+
+One-Off Invoices are created as [Stripe](https://guide.withvayu.com/documentation/guides/integrations/stripe) invoices with all line items, tax, and payment terms preserved. The invoice includes a clickable reference linking back to Vayu.
+
+### NetSuite
+
+One-Off Invoices inherit GL codes and subsidiary attributes from the customer configuration. They appear as standard invoices in [NetSuite](https://guide.withvayu.com/documentation/guides/integrations/netsuite) with all line items and tax details.
+
+### QuickBooks
+
+One-Off Invoices sync to [QuickBooks](https://guide.withvayu.com/documentation/guides/integrations/quickbooksx) with your configured invoice numbering scheme and include all line items, tax calculations, and payment terms.
+
+### Xero
+
+One-Off Invoices are created in [Xero](https://guide.withvayu.com/documentation/guides/integrations/xero) with proper account codes and tax rates based on your integration settings.
+
+## API access
+
+You can create and manage One-Off Invoices programmatically using the Vayu API. See the [API Reference](https://guide.withvayu.com/api-reference/endpoints/invoices/list-invoices) for details on invoice endpoints.
+
+<Note>
+  **Best Practices**
+
+  - **Clear descriptions** – Use detailed line item descriptions so customers understand what they're being charged for
+  - **Consistent naming** – Develop a naming convention for One-Off Invoices (e.g., "Professional Services - [Date]")
+  - **Document reasons** – Keep internal notes about why each One-Off Invoices was created
+  - **Review before approval** – Double-check all amounts and details since approved invoices cannot be edited
+  - **Track separately** – Use filters and reports to monitor One-Off Invoices revenue separately from contract-based revenue
+  - **Set proper due dates** – Ensure due dates align with your payment terms and customer agreements
+</Note>

@@ -52,15 +52,29 @@
                 "pages": [
                   "documentation/guides/customers/customer-overview",
                   "documentation/guides/customers/adding-a-customer",
-                  "documentation/guides/customers/subsidiaries-and-related-entities"
+                  "documentation/guides/customers/subsidiaries-and-related-entities",
+                  "documentation/guides/customers/export",
+                  "documentation/guides/customers/port",
+                  "documentation/guides/customers/managing-customers"
                 ]
               },
               {
                 "group": "Plans & Pricing",
                 "pages": [
                   "documentation/guides/plans-and-pricing/pricing-new-overview",
-                  "documentation/guides/plans-and-pricing/fixed-fees",
-                  "documentation/guides/plans-and-pricing/usage-based-fees",
+                  {
+                    "group": "Fixed Fees",
+                    "pages": [
+                      "documentation/guides/plans-and-pricing/fixed-fees"
+                    ]
+                  },
+                  {
+                    "group": "Usage-Based Fees",
+                    "pages": [
+                      "documentation/guides/plans-and-pricing/usage-based-fees",
+                      "documentation/guides/plans-and-pricing/matrix-pricing"
+                    ]
+                  },
                   "documentation/guides/plans-and-pricing/create-plan",
                   {
                     "group": "Contracts",
@@ -81,14 +95,34 @@
                   "documentation/guides/invoices/invoices-overview",
                   "documentation/guides/invoices/real-time-invoice",
                   "documentation/guides/invoices/billing-and-invoice-automation",
-                  "documentation/guides/invoices/customer-portal"
+                  "documentation/guides/invoices/customer-portal",
+                  "documentation/guides/invoices/dunning",
+                  "documentation/guides/invoices/untitled-page",
+                  "documentation/guides/invoices/title-exporting-invoices-you-can-export-invoice-data-from-multiple-locations-depending-on-your-workflow-needs-from-monthly-closure-to-export-finalized-monthly-invoices-1-navigate-to-invoices-monthly-closure-2-select-the-billing-cycle-you-want-to-export-3-review-and-approve-invoices-for-the-period-4-click-export-to-csv-once-invoices-are-approved-they-become-locked-for-editing-and-ready-for-export-this-ensures-data-integrity-when-syncing-to-your-erp-system-or-maintaining-financial-records-from-real-time-invoices-to-export-current-consumption-data-before-the-billing-cycle-closes-1-navigate-to-invoices-real-time-2-view-current-consumption-for-any-customer-3-click-export-to-download-invoice-data-real-time-exports-allow-you-to-analyze-current-usage-before-month-end-make-commitment-and-credit-follow-up-decisions-identify-potential-overages-early-engage-with-customer-service-and-sales-teams-before-invoice-issuance-download-export-or-sync-current-invoice-summaries-invoice-export-contents-invoice-exports-include-customer-information-invoice-period-and-dates-line-items-with-product-details-usage-consumption-data-pricing-calculations-tiered-volume-per-unit-revenue-share-commitment-tracking-credit-applications-total-amounts-and-payment-status",
+                  "documentation/guides/invoices/untitled-page-3",
+                  {
+                    "group": "Credits",
+                    "pages": [
+                      "documentation/guides/invoices/untitled-page-2",
+                      "documentation/guides/invoices/untitled-page-1"
+                    ]
+                  },
+                  "documentation/guides/invoices/mark",
+                  "documentation/guides/invoices/untitled-page-4"
                 ]
               },
               {
                 "group": "Data Metering",
                 "pages": [
                   "usage",
-                  "untitled-page"
+                  {
+                    "group": "Events",
+                    "pages": [
+                      "events-2",
+                      "untitled-page",
+                      "s"
+                    ]
+                  }
                 ]
               },
               {
@@ -103,6 +137,13 @@
                   "documentation/guides/integrations/quickbookx",
                   "documentation/guides/integrations/netsuite",
                   "documentation/guides/integrations/snowflake"
+                ]
+              },
+              {
+                "group": "Reports",
+                "pages": [
+                  "file",
+                  "title-exporting-reports-exporting-reports-recurring-revenue-reports-to-export-mrr-monthly-recurring-revenue-or-arr-annual-recurring-revenue-reports-1-navigate-to-reports-on-the-left-side-menu-2-click-the-menu-on-the-right-3-select-recurring-revenue-reports-4-choose-between-account-level-view-aggregated-revenue-by-account-customer-level-view-revenue-broken-down-by-individual-customer-5-click-download-to-export-as-csv-whats-included-in-mrr-reports-mrr-reports-include-recurring-revenue-by-customer-or-account-custom-fields-as-additional-columns-contract-phase-information-historical-mrr-data-for-trend-analysis-arr-calculations-and-metrics-these-reports-are-viewable-in-the-vayu-ui-and-can-be-downloaded-for-external-analysis-or-integration-with-financial-reporting-tools-dashboard-and-revenue-reports-the-vayu-dashboard-displays-comprehensive-revenue-data-including-real-time-arr-graph-on-the-homepage-revenue-chart-data-suggested-reports-organized-by-section-customer-specific-revenue-metrics-you-can-export-data-from-these-views-for-deeper-analysis-or-to-share-with-stakeholders"
                 ]
               }
             ]

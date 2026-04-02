@@ -51,7 +51,6 @@ Click on **Modify** when creating the subscription plan so you can edit any defa
   - **Product Description** – A custom line-item description shown on the invoice to clarify what the fee is for.
   - **Add Discount** – Apply a discount to the subscription using a specified fixed amount or percentage (%). You can set how many recurring charges the discount applies to, or apply it to every subscription charge for the full duration of the subscription.
   - **Add Seats** – Adding seats will multiply the price according to the number of seats added. So, if the subscription price is \$100 per month, and you add five seats, the monthly price will be \$500. The number of seats can be adjusted throughout the contract’s lifecycle.
-
     ![Add Seats](/images/AddSeats.gif)
 - **Schedule**
   - **Period / Billing Interval** – Period defines the time unit the subscription price applies to (e.g., a monthly price, quarterly price). Billing Interval defines how often Vayu generates the charge/invoice line for the subscription.\
@@ -83,7 +82,6 @@ You can also add a Discount, or adjust payment terms (issuing a separate invoice
   - **Add Discount** – Apply a discount to the subscription using a specified fixed amount or percentage (%). You can set how many recurring charges the discount applies to, or apply it to every subscription charge for the full duration of the subscription.
 - **Schedule**
   - **Define Installments** – Split this item’s total into multiple scheduled payments. Click on **Set advanced installments** to open the window below:
-
     ![Screenshot2025 12 30at10 08 31](/images/Screenshot2025-12-30at10.08.31.png)
   - **Custom Start Date** – Control _when_ this one-time fee is billed by setting a specific charge date for the fee instance (By default, the fee is billed on the contract start date).
 - **Payment**
@@ -110,3 +108,68 @@ Commission adds an extra percentage on top of the final invoice total. It’s ty
 
 - **Pricing Settings**
   - **Product Description** – A custom line-item description shown on the invoice to clarify what the fee is for.
+
+## **Seat-Based Billing**
+
+Use seat-based billing to charge customers based on the number of users, licenses, or seats they provision in your product. This pricing model is common for SaaS applications where each user requires their own access.
+
+Seat-based billing multiplies a base subscription price by the number of seats provisioned:
+
+**Formula**: `Subscription Price × Number of Seats = Total Charge`
+
+For example:
+
+- Base subscription: \$100/month
+- Number of seats: 5
+- Monthly charge: \$500
+
+**To add seats to a subscription product:**
+
+1. Navigate to **Products** and select your subscription product
+2. Click **Modify** when creating or editing the subscription plan
+3. Under **Pricing Settings**, select **Add Seats**
+4. Enter the number of seats
+5. The price will automatically multiply according to the seat count
+
+### Pricing settings with seats
+
+When configuring a seat-based subscription, you can also set:
+
+- **Product Description** - Custom line-item description for the invoice
+- **Add Discount** - Apply fixed amount or percentage discount
+- **Schedule Period / Billing Interval** - Define billing frequency
+- **Contract Upfront** - Charge for entire contract term upfront
+- **Custom Start Date** - Set when billing begins
+- **Issue as Separate Invoice** - Bill seats on their own invoice
+
+### Adjusting seats during the contract
+
+The number of seats can be adjusted throughout the contract's lifecycle:
+
+- **Adding seats** - Increases the monthly charge proportionally
+- **Removing seats** - Decreases the monthly charge proportionally
+- **Mid-cycle changes** - Pro-rated charges apply based on when the change occurs
+
+Changes to seat count take effect immediately and are reflected in the next invoice.
+
+<Note>
+  Common Use Cases
+
+  Seat-based billing is ideal for:
+
+  - **Team collaboration tools** - Slack, Microsoft Teams, Asana
+  - **Project management software** - Jira, Monday.com, Basecamp
+  - **CRM platforms** - Salesforce, HubSpot
+  - **Design tools** - Figma, Adobe Creative Cloud
+  - **Development tools** - GitHub, GitLab, CircleCI
+  - **HR and payroll systems** - Gusto, BambooHR
+</Note>
+
+### Seat-Based vs. Usage-Based Pricing
+
+| Seat-Based | Usage-Based |
+| --- | --- |
+| Fixed per user | Variable based on consumption |
+| Predictable costs | Costs fluctuate with usage |
+| Easy to understand | Requires usage tracking |
+| Scales with team size | Scales with activity level |
