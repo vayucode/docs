@@ -119,8 +119,8 @@
                     "group": "Events",
                     "pages": [
                       "events-2",
-                      "untitled-page",
-                      "s"
+                      "s",
+                      "price-events-2"
                     ]
                   }
                 ]
@@ -144,6 +144,13 @@
                 "pages": [
                   "file",
                   "title-exporting-reports-exporting-reports-recurring-revenue-reports-to-export-mrr-monthly-recurring-revenue-or-arr-annual-recurring-revenue-reports-1-navigate-to-reports-on-the-left-side-menu-2-click-the-menu-on-the-right-3-select-recurring-revenue-reports-4-choose-between-account-level-view-aggregated-revenue-by-account-customer-level-view-revenue-broken-down-by-individual-customer-5-click-download-to-export-as-csv-whats-included-in-mrr-reports-mrr-reports-include-recurring-revenue-by-customer-or-account-custom-fields-as-additional-columns-contract-phase-information-historical-mrr-data-for-trend-analysis-arr-calculations-and-metrics-these-reports-are-viewable-in-the-vayu-ui-and-can-be-downloaded-for-external-analysis-or-integration-with-financial-reporting-tools-dashboard-and-revenue-reports-the-vayu-dashboard-displays-comprehensive-revenue-data-including-real-time-arr-graph-on-the-homepage-revenue-chart-data-suggested-reports-organized-by-section-customer-specific-revenue-metrics-you-can-export-data-from-these-views-for-deeper-analysis-or-to-share-with-stakeholders"
+                ]
+              },
+              {
+                "group": "AI",
+                "pages": [
+                  "ff",
+                  "ki"
                 ]
               }
             ]
