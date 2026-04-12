@@ -6,6 +6,87 @@ Vayu supports a full integration with Xero, including: exporting approved invoic
 
 ![XER Ointegration4](/images/XEROintegration4.png)
 
-<Note>
-  _Get in touch with our team to learn more about integrating with Vayu and Xero._
-</Note>
+# **Xero**
+
+Vayu centralizes contract, usage, and pricing data into a single billing system. Xero provides the accounting layer where financial records are stored, categorized, and reported.
+
+When connected, Vayu sends finalized invoices directly to Xero. Each invoice is exported with its full structure, including usage-based and fixed charges as separate line items. This allows finance teams to review, reconcile, and report on revenue inside Xero without needing to reconstruct how an invoice was calculated.
+
+## **What’s Synced**
+
+Vayu syncs billing data to Xero as part of the invoicing workflow.
+
+Customers are created or matched in Xero so invoices are always associated with a valid contact. Approved invoices are exported with all line items preserved, including quantities, descriptions, and totals. Products defined in Vayu can be mapped to Xero items so invoice lines are categorized correctly for reporting.
+
+## **Xero Attributes & Setup**
+
+Accurate syncing depends on how records are structured in Xero.
+
+Each invoice must be associated with a contact, so customer records in Vayu are either linked to existing contacts or created during sync. Products can be mapped to Xero items, which determines how invoice line items are categorized. These mappings ensure that revenue is grouped correctly and remains consistent across reports.
+
+Because invoices are created with full detail, the way products and accounts are configured in Xero will directly affect how financial data appears after sync.
+
+## **Configuration Notes**
+
+Invoice sync is triggered after approval in Vayu. Draft invoices are not exported.
+
+When a record has already been synced, subsequent syncs update the existing record based on its current state rather than creating duplicates. Product and customer mappings determine how data is represented in Xero, so these should be reviewed before syncing at scale.
+
+## **Capabilities**
+
+The integration supports creating and updating customers, invoices, and products in Xero through Vayu. Sync operations are initiated from within Vayu, and each action is tracked so you can confirm whether it completed successfully.
+
+Because billing logic is handled in Vayu, Xero reflects the results of that process rather than driving it.
+
+## **Prerequisites & Permissions**
+
+To get started, you need access to a Xero organization and permission to authorize integrations. In Vayu, you’ll need the ability to manage integrations and access billing data.
+
+Before connecting, make sure your core data is already defined. Customers, products, and invoices should exist in Vayu so they can be synced and mapped correctly.
+
+## **Connection & Setup**
+
+To connect Xero, open the integrations page in Vayu and select Xero. Start the connection flow and complete authentication in Xero, then return to Vayu once authorization is complete.
+
+After the connection is established, Vayu links to your Xero organization and enables syncing.
+
+## **Configurations**
+
+After connecting, review the integration settings to ensure that data flows into Xero as expected.
+
+### **Products**
+
+Products in Vayu can be mapped to items in Xero. This mapping determines how invoice line items are categorized and is important for reporting.
+
+### **Customers**
+
+Customer syncing ensures that invoices are tied to the correct contact. Records can be created automatically in Xero or matched to existing contacts to prevent duplication.
+
+### **Invoices**
+
+Invoices are generated in Vayu based on usage, subscriptions, and pricing rules. Once approved, they are synced to Xero with all line items preserved.
+
+Each component of pricing appears as its own line item, allowing full visibility into how the invoice total was calculated.
+
+## **Field Mappings & Attribution**
+
+When data is synced, Vayu maps billing records into Xero’s invoice structure.
+
+Customers become contacts, and mapped products are used when creating line items. This ensures that invoice data in Xero reflects the same structure defined in Vayu, including the breakdown of usage-based and fixed charges.
+
+## **Reconciliation**
+
+### **How data is used in Xero**
+
+Once invoices are synced, they can be managed directly in Xero for payment tracking and reporting. Finance teams can rely on Xero for downstream accounting workflows while using Vayu to generate and structure billing data.
+
+### **Logs and activity tracking**
+
+Vayu tracks sync activity for each record. You can review whether a sync succeeded, when it occurred, and any details returned during the process.
+
+## **Next steps**
+
+After connecting Xero, sync a small set of customers and invoices and review how they appear in Xero. Confirm that mappings, line item structure, and totals behave as expected before relying on the integration more broadly.
+
+\
+\
