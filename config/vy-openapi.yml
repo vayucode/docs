@@ -406,6 +406,149 @@ components:
             $ref: "#/components/schemas/SubmitCloudUsageResponse"
   parameters: {}
   schemas:
+    ValidationErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - invalid_request_error
+        code:
+          type: string
+          description: Specific machine-readable error code
+        message:
+          type: string
+          description: Human-readable error explanation
+        param:
+          type: string
+          description: Single parameter that failed validation
+        params:
+          type: array
+          items:
+            type: object
+            properties:
+              param:
+                type: string
+                description: The parameter that failed validation
+              message:
+                type: string
+                description: Why validation failed for this parameter
+            required:
+              - param
+              - message
+          description: Multiple parameters that failed validation
+      required:
+        - type
+        - code
+        - message
+    UnauthorizedErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - authentication_error
+        code:
+          type: string
+          enum:
+            - authentication_failed
+        message:
+          type: string
+          description: Human-readable error explanation
+      required:
+        - type
+        - code
+        - message
+    RateLimitErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - rate_limit_error
+        code:
+          type: string
+          enum:
+            - rate_limit_exceeded
+        message:
+          type: string
+          description: Human-readable error explanation
+      required:
+        - type
+        - code
+        - message
+    InternalServerErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - api_error
+        code:
+          type: string
+          enum:
+            - internal_error
+        message:
+          type: string
+          description: Human-readable error explanation
+      required:
+        - type
+        - code
+        - message
+    NotFoundErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - invalid_request_error
+        code:
+          type: string
+          enum:
+            - resource_not_found
+        message:
+          type: string
+          description: Human-readable error explanation
+      required:
+        - type
+        - code
+        - message
+    RequestTooLongErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - invalid_request_error
+        code:
+          type: string
+          enum:
+            - request_too_large
+        message:
+          type: string
+          description: Human-readable error explanation
+      required:
+        - type
+        - code
+        - message
+    ConflictErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - invalid_request_error
+        code:
+          type: string
+          enum:
+            - resource_already_exists
+        message:
+          type: string
+          description: Human-readable error explanation
+      required:
+        - type
+        - code
+        - message
     CreateCatalogProductRequest:
       type: object
       properties:
@@ -610,7 +753,7 @@ components:
           type: string
         email:
           type: string
-          format: email
+          pattern: ^(?!\.)[A-Za-z0-9_!#$%&'*+/=?^`{|}~-]+(?:\.[A-Za-z0-9_!#$%&'*+/=?^`{|}~-]+)*@([A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z]{2,}$
         title:
           type: string
         phone:
@@ -1629,8 +1772,7 @@ components:
     ExternalUsageReset:
       type: integer
       nullable: true
-      description: "Interval in months at which cumulative usage resets for tier
-        calculation. Must be one of: 1, 2, 3, 6, 12"
+      description: "Usage reset is represented in months and must be one of: 1, 2, 3, 6, 12"
     ExternalOverageStrategy:
       type: string
       nullable: true
@@ -1717,13 +1859,10 @@ components:
                           - MONTH
                           - YEAR
                         default: MONTH
-                        description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                       value:
                         type: integer
                         minimum: 0
                         maximum: 1000
-                        description: The numeric length of the duration. Must be a positive integer up
-                          to 1000.
                     required:
                       - unit
                       - value
@@ -1739,11 +1878,9 @@ components:
                         type: string
                         enum:
                           - ONE_TIME
-                        description: Discriminator identifying this as a one-time charge
                       price:
                         type: number
                         minimum: 0
-                        description: Fixed price charged once
                     required:
                       - type
                       - price
@@ -1753,12 +1890,9 @@ components:
                         type: string
                         enum:
                           - CONTRACT_TERMS
-                        description: Discriminator identifying this as contract terms (fixed or
-                          installment) pricing
                       price:
                         type: number
                         minimum: 0
-                        description: Total contract price
                       installments:
                         type: array
                         nullable: true
@@ -1767,17 +1901,13 @@ components:
                           properties:
                             installmentDate:
                               type: string
-                              description: Date on which this installment is due (ISO 8601 date)
                               format: date-time
                             amount:
                               type: number
                               minimum: 0
-                              description: Amount due for this installment
                           required:
                             - installmentDate
                             - amount
-                        description: Optional schedule of installment payments; if omitted the full
-                          price is due at once
                     required:
                       - type
                       - price
@@ -1787,12 +1917,9 @@ components:
                         type: string
                         enum:
                           - SUBSCRIPTION
-                        description: Discriminator identifying this as a flat recurring subscription
-                          charge
                       price:
                         type: number
                         minimum: 0
-                        description: Flat price charged each billing period
                       subscriptionCadence:
                         type: object
                         properties:
@@ -1804,19 +1931,13 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
                             maximum: 1000
-                            description: The numeric length of the duration. Must be a positive integer up
-                              to 1000.
                         required:
                           - unit
                           - value
-                        description: The frequency at which the subscription charge recurs. When the
-                          billing interval spans multiple cadence periods, the
-                          invoice amount is multiplied accordingly.
                     required:
                       - type
                       - price
@@ -1827,7 +1948,6 @@ components:
                         type: string
                         enum:
                           - TIERED
-                        description: Discriminator identifying this as tiered (volume-based) pricing
                       tiers:
                         type: array
                         items:
@@ -1836,33 +1956,24 @@ components:
                             fromInclusive:
                               type: number
                               minimum: 0
-                              description: Start of the tier range (inclusive)
                             toExclusive:
                               type: number
                               nullable: true
                               minimum: 0
-                              description: End of the tier range (exclusive). Omit for the final unbounded
-                                tier
                             rate:
                               type: number
                               nullable: true
                               minimum: 0
-                              description: Per-unit rate charged for usage within this tier
                             flatFee:
                               type: number
                               nullable: true
                               minimum: 0
-                              description: Flat fee charged when usage falls within this tier
                             packageSize:
                               type: number
                               nullable: true
                               minimum: 0
-                              description: Number of units per package; the rate is applied per package rather
-                                than per unit
                           required:
                             - fromInclusive
-                        description: List of pricing tiers defining rate, flat fee, and usage range for
-                          each tier
                       subscriptionCadence:
                         type: object
                         nullable: true
@@ -1875,46 +1986,26 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
                             maximum: 1000
-                            description: The numeric length of the duration. Must be a positive integer up
-                              to 1000.
                         required:
                           - unit
                           - value
-                        description: The frequency at which the tiered charge recurs. When the billing
-                          interval spans multiple cadence periods, the invoice
-                          amount is multiplied accordingly.
                       autoUpgrade:
                         type: boolean
                         nullable: true
-                        description: When true, the customer is locked into the highest tier reached
-                          during the period and will not drop back to a lower
-                          tier until the next billing period or contract
-                          renewal.
                       prorate:
                         type: boolean
                         nullable: true
-                        description: When true, charges are prorated based on the fraction of the
-                          billing period used
                       isRevShare:
                         type: boolean
                         nullable: true
-                        description: When true, the pricing model represents a revenue share
-                          arrangement. Tier rates are displayed as percentages
-                          in the UI rather than currency amounts, though the
-                          underlying rate value remains a decimal fraction and
-                          calculations are unaffected.
                       baseAmount:
                         type: number
                         nullable: true
                         minimum: 0
-                        description: Minimum charge for the billing period. If the usage-based cost
-                          exceeds this amount, the higher usage cost is charged
-                          instead.
                       usageReset:
                         $ref: "#/components/schemas/ExternalUsageReset"
                     required:
@@ -1926,30 +2017,20 @@ components:
                         type: string
                         enum:
                           - PER_UNIT
-                        description: Discriminator identifying this as usage-based per-unit pricing
                       price:
                         type: number
                         minimum: 0
-                        description: Price charged per unit of usage
                       chunkSize:
                         type: number
                         nullable: true
                         minimum: 0
                         exclusiveMinimum: true
-                        description: Number of units per billing chunk; usage is rounded up to the
-                          nearest chunk
                       usageReset:
-                        allOf:
-                          - $ref: "#/components/schemas/ExternalUsageReset"
-                          - description: "Interval in months at which cumulative usage resets. Must be one
-                              of: 1, 2, 3, 6, 12"
+                        $ref: "#/components/schemas/ExternalUsageReset"
                       baseAmount:
                         type: number
                         nullable: true
                         minimum: 0
-                        description: Minimum charge for the billing period. If the usage-based cost
-                          exceeds this amount, the higher usage cost is charged
-                          instead.
                     required:
                       - type
                       - price
@@ -2005,13 +2086,10 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
                             maximum: 1000
-                            description: The numeric length of the duration. Must be a positive integer up
-                              to 1000.
                         required:
                           - unit
                           - value
@@ -2080,13 +2158,10 @@ components:
                         - MONTH
                         - YEAR
                       default: MONTH
-                      description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                     value:
                       type: integer
                       minimum: 0
                       maximum: 1000
-                      description: The numeric length of the duration. Must be a positive integer up
-                        to 1000.
                   required:
                     - unit
                     - value
@@ -2194,13 +2269,10 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
                             maximum: 1000
-                            description: The numeric length of the duration. Must be a positive integer up
-                              to 1000.
                         required:
                           - unit
                           - value
@@ -2216,11 +2288,9 @@ components:
                             type: string
                             enum:
                               - ONE_TIME
-                            description: Discriminator identifying this as a one-time charge
                           price:
                             type: number
                             minimum: 0
-                            description: Fixed price charged once
                         required:
                           - type
                           - price
@@ -2230,12 +2300,9 @@ components:
                             type: string
                             enum:
                               - CONTRACT_TERMS
-                            description: Discriminator identifying this as contract terms (fixed or
-                              installment) pricing
                           price:
                             type: number
                             minimum: 0
-                            description: Total contract price
                           installments:
                             type: array
                             nullable: true
@@ -2244,17 +2311,13 @@ components:
                               properties:
                                 installmentDate:
                                   type: string
-                                  description: Date on which this installment is due (ISO 8601 date)
                                   format: date-time
                                 amount:
                                   type: number
                                   minimum: 0
-                                  description: Amount due for this installment
                               required:
                                 - installmentDate
                                 - amount
-                            description: Optional schedule of installment payments; if omitted the full
-                              price is due at once
                         required:
                           - type
                           - price
@@ -2264,12 +2327,9 @@ components:
                             type: string
                             enum:
                               - SUBSCRIPTION
-                            description: Discriminator identifying this as a flat recurring subscription
-                              charge
                           price:
                             type: number
                             minimum: 0
-                            description: Flat price charged each billing period
                           subscriptionCadence:
                             type: object
                             properties:
@@ -2281,19 +2341,13 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
                                 maximum: 1000
-                                description: The numeric length of the duration. Must be a positive integer up
-                                  to 1000.
                             required:
                               - unit
                               - value
-                            description: The frequency at which the subscription charge recurs. When the
-                              billing interval spans multiple cadence periods,
-                              the invoice amount is multiplied accordingly.
                         required:
                           - type
                           - price
@@ -2304,7 +2358,6 @@ components:
                             type: string
                             enum:
                               - TIERED
-                            description: Discriminator identifying this as tiered (volume-based) pricing
                           tiers:
                             type: array
                             items:
@@ -2313,33 +2366,24 @@ components:
                                 fromInclusive:
                                   type: number
                                   minimum: 0
-                                  description: Start of the tier range (inclusive)
                                 toExclusive:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: End of the tier range (exclusive). Omit for the final unbounded
-                                    tier
                                 rate:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: Per-unit rate charged for usage within this tier
                                 flatFee:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: Flat fee charged when usage falls within this tier
                                 packageSize:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: Number of units per package; the rate is applied per package rather
-                                    than per unit
                               required:
                                 - fromInclusive
-                            description: List of pricing tiers defining rate, flat fee, and usage range for
-                              each tier
                           subscriptionCadence:
                             type: object
                             nullable: true
@@ -2352,47 +2396,26 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
                                 maximum: 1000
-                                description: The numeric length of the duration. Must be a positive integer up
-                                  to 1000.
                             required:
                               - unit
                               - value
-                            description: The frequency at which the tiered charge recurs. When the billing
-                              interval spans multiple cadence periods, the
-                              invoice amount is multiplied accordingly.
                           autoUpgrade:
                             type: boolean
                             nullable: true
-                            description: When true, the customer is locked into the highest tier reached
-                              during the period and will not drop back to a
-                              lower tier until the next billing period or
-                              contract renewal.
                           prorate:
                             type: boolean
                             nullable: true
-                            description: When true, charges are prorated based on the fraction of the
-                              billing period used
                           isRevShare:
                             type: boolean
                             nullable: true
-                            description: When true, the pricing model represents a revenue share
-                              arrangement. Tier rates are displayed as
-                              percentages in the UI rather than currency
-                              amounts, though the underlying rate value remains
-                              a decimal fraction and calculations are
-                              unaffected.
                           baseAmount:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Minimum charge for the billing period. If the usage-based cost
-                              exceeds this amount, the higher usage cost is
-                              charged instead.
                           usageReset:
                             $ref: "#/components/schemas/ExternalUsageReset"
                         required:
@@ -2404,30 +2427,20 @@ components:
                             type: string
                             enum:
                               - PER_UNIT
-                            description: Discriminator identifying this as usage-based per-unit pricing
                           price:
                             type: number
                             minimum: 0
-                            description: Price charged per unit of usage
                           chunkSize:
                             type: number
                             nullable: true
                             minimum: 0
                             exclusiveMinimum: true
-                            description: Number of units per billing chunk; usage is rounded up to the
-                              nearest chunk
                           usageReset:
-                            allOf:
-                              - $ref: "#/components/schemas/ExternalUsageReset"
-                              - description: "Interval in months at which cumulative usage resets. Must be one
-                                  of: 1, 2, 3, 6, 12"
+                            $ref: "#/components/schemas/ExternalUsageReset"
                           baseAmount:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Minimum charge for the billing period. If the usage-based cost
-                              exceeds this amount, the higher usage cost is
-                              charged instead.
                         required:
                           - type
                           - price
@@ -2483,13 +2496,10 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
                                 maximum: 1000
-                                description: The numeric length of the duration. Must be a positive integer up
-                                  to 1000.
                             required:
                               - unit
                               - value
@@ -2636,13 +2646,10 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
                             maximum: 1000
-                            description: The numeric length of the duration. Must be a positive integer up
-                              to 1000.
                         required:
                           - unit
                           - value
@@ -2658,11 +2665,9 @@ components:
                             type: string
                             enum:
                               - ONE_TIME
-                            description: Discriminator identifying this as a one-time charge
                           price:
                             type: number
                             minimum: 0
-                            description: Fixed price charged once
                         required:
                           - type
                           - price
@@ -2672,12 +2677,9 @@ components:
                             type: string
                             enum:
                               - CONTRACT_TERMS
-                            description: Discriminator identifying this as contract terms (fixed or
-                              installment) pricing
                           price:
                             type: number
                             minimum: 0
-                            description: Total contract price
                           installments:
                             type: array
                             nullable: true
@@ -2686,17 +2688,13 @@ components:
                               properties:
                                 installmentDate:
                                   type: string
-                                  description: Date on which this installment is due (ISO 8601 date)
                                   format: date-time
                                 amount:
                                   type: number
                                   minimum: 0
-                                  description: Amount due for this installment
                               required:
                                 - installmentDate
                                 - amount
-                            description: Optional schedule of installment payments; if omitted the full
-                              price is due at once
                         required:
                           - type
                           - price
@@ -2706,12 +2704,9 @@ components:
                             type: string
                             enum:
                               - SUBSCRIPTION
-                            description: Discriminator identifying this as a flat recurring subscription
-                              charge
                           price:
                             type: number
                             minimum: 0
-                            description: Flat price charged each billing period
                           subscriptionCadence:
                             type: object
                             properties:
@@ -2723,19 +2718,13 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
                                 maximum: 1000
-                                description: The numeric length of the duration. Must be a positive integer up
-                                  to 1000.
                             required:
                               - unit
                               - value
-                            description: The frequency at which the subscription charge recurs. When the
-                              billing interval spans multiple cadence periods,
-                              the invoice amount is multiplied accordingly.
                         required:
                           - type
                           - price
@@ -2746,7 +2735,6 @@ components:
                             type: string
                             enum:
                               - TIERED
-                            description: Discriminator identifying this as tiered (volume-based) pricing
                           tiers:
                             type: array
                             items:
@@ -2755,33 +2743,24 @@ components:
                                 fromInclusive:
                                   type: number
                                   minimum: 0
-                                  description: Start of the tier range (inclusive)
                                 toExclusive:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: End of the tier range (exclusive). Omit for the final unbounded
-                                    tier
                                 rate:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: Per-unit rate charged for usage within this tier
                                 flatFee:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: Flat fee charged when usage falls within this tier
                                 packageSize:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: Number of units per package; the rate is applied per package rather
-                                    than per unit
                               required:
                                 - fromInclusive
-                            description: List of pricing tiers defining rate, flat fee, and usage range for
-                              each tier
                           subscriptionCadence:
                             type: object
                             nullable: true
@@ -2794,47 +2773,26 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
                                 maximum: 1000
-                                description: The numeric length of the duration. Must be a positive integer up
-                                  to 1000.
                             required:
                               - unit
                               - value
-                            description: The frequency at which the tiered charge recurs. When the billing
-                              interval spans multiple cadence periods, the
-                              invoice amount is multiplied accordingly.
                           autoUpgrade:
                             type: boolean
                             nullable: true
-                            description: When true, the customer is locked into the highest tier reached
-                              during the period and will not drop back to a
-                              lower tier until the next billing period or
-                              contract renewal.
                           prorate:
                             type: boolean
                             nullable: true
-                            description: When true, charges are prorated based on the fraction of the
-                              billing period used
                           isRevShare:
                             type: boolean
                             nullable: true
-                            description: When true, the pricing model represents a revenue share
-                              arrangement. Tier rates are displayed as
-                              percentages in the UI rather than currency
-                              amounts, though the underlying rate value remains
-                              a decimal fraction and calculations are
-                              unaffected.
                           baseAmount:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Minimum charge for the billing period. If the usage-based cost
-                              exceeds this amount, the higher usage cost is
-                              charged instead.
                           usageReset:
                             $ref: "#/components/schemas/ExternalUsageReset"
                         required:
@@ -2846,30 +2804,20 @@ components:
                             type: string
                             enum:
                               - PER_UNIT
-                            description: Discriminator identifying this as usage-based per-unit pricing
                           price:
                             type: number
                             minimum: 0
-                            description: Price charged per unit of usage
                           chunkSize:
                             type: number
                             nullable: true
                             minimum: 0
                             exclusiveMinimum: true
-                            description: Number of units per billing chunk; usage is rounded up to the
-                              nearest chunk
                           usageReset:
-                            allOf:
-                              - $ref: "#/components/schemas/ExternalUsageReset"
-                              - description: "Interval in months at which cumulative usage resets. Must be one
-                                  of: 1, 2, 3, 6, 12"
+                            $ref: "#/components/schemas/ExternalUsageReset"
                           baseAmount:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Minimum charge for the billing period. If the usage-based cost
-                              exceeds this amount, the higher usage cost is
-                              charged instead.
                         required:
                           - type
                           - price
@@ -2925,13 +2873,10 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
                                 maximum: 1000
-                                description: The numeric length of the duration. Must be a positive integer up
-                                  to 1000.
                             required:
                               - unit
                               - value
@@ -3078,13 +3023,10 @@ components:
                           - MONTH
                           - YEAR
                         default: MONTH
-                        description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                       value:
                         type: integer
                         minimum: 0
                         maximum: 1000
-                        description: The numeric length of the duration. Must be a positive integer up
-                          to 1000.
                     required:
                       - unit
                       - value
@@ -3100,11 +3042,9 @@ components:
                         type: string
                         enum:
                           - ONE_TIME
-                        description: Discriminator identifying this as a one-time charge
                       price:
                         type: number
                         minimum: 0
-                        description: Fixed price charged once
                     required:
                       - type
                       - price
@@ -3114,12 +3054,9 @@ components:
                         type: string
                         enum:
                           - CONTRACT_TERMS
-                        description: Discriminator identifying this as contract terms (fixed or
-                          installment) pricing
                       price:
                         type: number
                         minimum: 0
-                        description: Total contract price
                       installments:
                         type: array
                         nullable: true
@@ -3128,17 +3065,13 @@ components:
                           properties:
                             installmentDate:
                               type: string
-                              description: Date on which this installment is due (ISO 8601 date)
                               format: date-time
                             amount:
                               type: number
                               minimum: 0
-                              description: Amount due for this installment
                           required:
                             - installmentDate
                             - amount
-                        description: Optional schedule of installment payments; if omitted the full
-                          price is due at once
                     required:
                       - type
                       - price
@@ -3148,12 +3081,9 @@ components:
                         type: string
                         enum:
                           - SUBSCRIPTION
-                        description: Discriminator identifying this as a flat recurring subscription
-                          charge
                       price:
                         type: number
                         minimum: 0
-                        description: Flat price charged each billing period
                       subscriptionCadence:
                         type: object
                         properties:
@@ -3165,19 +3095,13 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
                             maximum: 1000
-                            description: The numeric length of the duration. Must be a positive integer up
-                              to 1000.
                         required:
                           - unit
                           - value
-                        description: The frequency at which the subscription charge recurs. When the
-                          billing interval spans multiple cadence periods, the
-                          invoice amount is multiplied accordingly.
                     required:
                       - type
                       - price
@@ -3188,7 +3112,6 @@ components:
                         type: string
                         enum:
                           - TIERED
-                        description: Discriminator identifying this as tiered (volume-based) pricing
                       tiers:
                         type: array
                         items:
@@ -3197,33 +3120,24 @@ components:
                             fromInclusive:
                               type: number
                               minimum: 0
-                              description: Start of the tier range (inclusive)
                             toExclusive:
                               type: number
                               nullable: true
                               minimum: 0
-                              description: End of the tier range (exclusive). Omit for the final unbounded
-                                tier
                             rate:
                               type: number
                               nullable: true
                               minimum: 0
-                              description: Per-unit rate charged for usage within this tier
                             flatFee:
                               type: number
                               nullable: true
                               minimum: 0
-                              description: Flat fee charged when usage falls within this tier
                             packageSize:
                               type: number
                               nullable: true
                               minimum: 0
-                              description: Number of units per package; the rate is applied per package rather
-                                than per unit
                           required:
                             - fromInclusive
-                        description: List of pricing tiers defining rate, flat fee, and usage range for
-                          each tier
                       subscriptionCadence:
                         type: object
                         nullable: true
@@ -3236,46 +3150,26 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
                             maximum: 1000
-                            description: The numeric length of the duration. Must be a positive integer up
-                              to 1000.
                         required:
                           - unit
                           - value
-                        description: The frequency at which the tiered charge recurs. When the billing
-                          interval spans multiple cadence periods, the invoice
-                          amount is multiplied accordingly.
                       autoUpgrade:
                         type: boolean
                         nullable: true
-                        description: When true, the customer is locked into the highest tier reached
-                          during the period and will not drop back to a lower
-                          tier until the next billing period or contract
-                          renewal.
                       prorate:
                         type: boolean
                         nullable: true
-                        description: When true, charges are prorated based on the fraction of the
-                          billing period used
                       isRevShare:
                         type: boolean
                         nullable: true
-                        description: When true, the pricing model represents a revenue share
-                          arrangement. Tier rates are displayed as percentages
-                          in the UI rather than currency amounts, though the
-                          underlying rate value remains a decimal fraction and
-                          calculations are unaffected.
                       baseAmount:
                         type: number
                         nullable: true
                         minimum: 0
-                        description: Minimum charge for the billing period. If the usage-based cost
-                          exceeds this amount, the higher usage cost is charged
-                          instead.
                       usageReset:
                         $ref: "#/components/schemas/ExternalUsageReset"
                     required:
@@ -3287,30 +3181,20 @@ components:
                         type: string
                         enum:
                           - PER_UNIT
-                        description: Discriminator identifying this as usage-based per-unit pricing
                       price:
                         type: number
                         minimum: 0
-                        description: Price charged per unit of usage
                       chunkSize:
                         type: number
                         nullable: true
                         minimum: 0
                         exclusiveMinimum: true
-                        description: Number of units per billing chunk; usage is rounded up to the
-                          nearest chunk
                       usageReset:
-                        allOf:
-                          - $ref: "#/components/schemas/ExternalUsageReset"
-                          - description: "Interval in months at which cumulative usage resets. Must be one
-                              of: 1, 2, 3, 6, 12"
+                        $ref: "#/components/schemas/ExternalUsageReset"
                       baseAmount:
                         type: number
                         nullable: true
                         minimum: 0
-                        description: Minimum charge for the billing period. If the usage-based cost
-                          exceeds this amount, the higher usage cost is charged
-                          instead.
                     required:
                       - type
                       - price
@@ -3366,13 +3250,10 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
                             maximum: 1000
-                            description: The numeric length of the duration. Must be a positive integer up
-                              to 1000.
                         required:
                           - unit
                           - value
@@ -3506,13 +3387,10 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
                             maximum: 1000
-                            description: The numeric length of the duration. Must be a positive integer up
-                              to 1000.
                         required:
                           - unit
                           - value
@@ -3528,11 +3406,9 @@ components:
                             type: string
                             enum:
                               - ONE_TIME
-                            description: Discriminator identifying this as a one-time charge
                           price:
                             type: number
                             minimum: 0
-                            description: Fixed price charged once
                         required:
                           - type
                           - price
@@ -3542,12 +3418,9 @@ components:
                             type: string
                             enum:
                               - CONTRACT_TERMS
-                            description: Discriminator identifying this as contract terms (fixed or
-                              installment) pricing
                           price:
                             type: number
                             minimum: 0
-                            description: Total contract price
                           installments:
                             type: array
                             nullable: true
@@ -3556,17 +3429,13 @@ components:
                               properties:
                                 installmentDate:
                                   type: string
-                                  description: Date on which this installment is due (ISO 8601 date)
                                   format: date-time
                                 amount:
                                   type: number
                                   minimum: 0
-                                  description: Amount due for this installment
                               required:
                                 - installmentDate
                                 - amount
-                            description: Optional schedule of installment payments; if omitted the full
-                              price is due at once
                         required:
                           - type
                           - price
@@ -3576,12 +3445,9 @@ components:
                             type: string
                             enum:
                               - SUBSCRIPTION
-                            description: Discriminator identifying this as a flat recurring subscription
-                              charge
                           price:
                             type: number
                             minimum: 0
-                            description: Flat price charged each billing period
                           subscriptionCadence:
                             type: object
                             properties:
@@ -3593,19 +3459,13 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
                                 maximum: 1000
-                                description: The numeric length of the duration. Must be a positive integer up
-                                  to 1000.
                             required:
                               - unit
                               - value
-                            description: The frequency at which the subscription charge recurs. When the
-                              billing interval spans multiple cadence periods,
-                              the invoice amount is multiplied accordingly.
                         required:
                           - type
                           - price
@@ -3616,7 +3476,6 @@ components:
                             type: string
                             enum:
                               - TIERED
-                            description: Discriminator identifying this as tiered (volume-based) pricing
                           tiers:
                             type: array
                             items:
@@ -3625,33 +3484,24 @@ components:
                                 fromInclusive:
                                   type: number
                                   minimum: 0
-                                  description: Start of the tier range (inclusive)
                                 toExclusive:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: End of the tier range (exclusive). Omit for the final unbounded
-                                    tier
                                 rate:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: Per-unit rate charged for usage within this tier
                                 flatFee:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: Flat fee charged when usage falls within this tier
                                 packageSize:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: Number of units per package; the rate is applied per package rather
-                                    than per unit
                               required:
                                 - fromInclusive
-                            description: List of pricing tiers defining rate, flat fee, and usage range for
-                              each tier
                           subscriptionCadence:
                             type: object
                             nullable: true
@@ -3664,47 +3514,26 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
                                 maximum: 1000
-                                description: The numeric length of the duration. Must be a positive integer up
-                                  to 1000.
                             required:
                               - unit
                               - value
-                            description: The frequency at which the tiered charge recurs. When the billing
-                              interval spans multiple cadence periods, the
-                              invoice amount is multiplied accordingly.
                           autoUpgrade:
                             type: boolean
                             nullable: true
-                            description: When true, the customer is locked into the highest tier reached
-                              during the period and will not drop back to a
-                              lower tier until the next billing period or
-                              contract renewal.
                           prorate:
                             type: boolean
                             nullable: true
-                            description: When true, charges are prorated based on the fraction of the
-                              billing period used
                           isRevShare:
                             type: boolean
                             nullable: true
-                            description: When true, the pricing model represents a revenue share
-                              arrangement. Tier rates are displayed as
-                              percentages in the UI rather than currency
-                              amounts, though the underlying rate value remains
-                              a decimal fraction and calculations are
-                              unaffected.
                           baseAmount:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Minimum charge for the billing period. If the usage-based cost
-                              exceeds this amount, the higher usage cost is
-                              charged instead.
                           usageReset:
                             $ref: "#/components/schemas/ExternalUsageReset"
                         required:
@@ -3716,30 +3545,20 @@ components:
                             type: string
                             enum:
                               - PER_UNIT
-                            description: Discriminator identifying this as usage-based per-unit pricing
                           price:
                             type: number
                             minimum: 0
-                            description: Price charged per unit of usage
                           chunkSize:
                             type: number
                             nullable: true
                             minimum: 0
                             exclusiveMinimum: true
-                            description: Number of units per billing chunk; usage is rounded up to the
-                              nearest chunk
                           usageReset:
-                            allOf:
-                              - $ref: "#/components/schemas/ExternalUsageReset"
-                              - description: "Interval in months at which cumulative usage resets. Must be one
-                                  of: 1, 2, 3, 6, 12"
+                            $ref: "#/components/schemas/ExternalUsageReset"
                           baseAmount:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Minimum charge for the billing period. If the usage-based cost
-                              exceeds this amount, the higher usage cost is
-                              charged instead.
                         required:
                           - type
                           - price
@@ -3795,13 +3614,10 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
                                 maximum: 1000
-                                description: The numeric length of the duration. Must be a positive integer up
-                                  to 1000.
                             required:
                               - unit
                               - value
@@ -4303,7 +4119,6 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/LineItem"
-              description: The line items of the invoice, each representing a product charge
             amount:
               type: number
               description: The total amount of the invoice
@@ -4717,9 +4532,7 @@ components:
       type: object
       properties:
         event:
-          allOf:
-            - $ref: "#/components/schemas/Event"
-            - description: The original event that failed validation.
+          $ref: "#/components/schemas/Event"
         error:
           type: string
           description: The error message indicating the reason the event failed validation.
@@ -5333,13 +5146,10 @@ components:
                               - MONTH
                               - YEAR
                             default: MONTH
-                            description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                           value:
                             type: integer
                             minimum: 0
                             maximum: 1000
-                            description: The numeric length of the duration. Must be a positive integer up
-                              to 1000.
                         required:
                           - unit
                           - value
@@ -5355,11 +5165,9 @@ components:
                             type: string
                             enum:
                               - ONE_TIME
-                            description: Discriminator identifying this as a one-time charge
                           price:
                             type: number
                             minimum: 0
-                            description: Fixed price charged once
                         required:
                           - type
                           - price
@@ -5369,12 +5177,9 @@ components:
                             type: string
                             enum:
                               - CONTRACT_TERMS
-                            description: Discriminator identifying this as contract terms (fixed or
-                              installment) pricing
                           price:
                             type: number
                             minimum: 0
-                            description: Total contract price
                           installments:
                             type: array
                             nullable: true
@@ -5383,17 +5188,13 @@ components:
                               properties:
                                 installmentDate:
                                   type: string
-                                  description: Date on which this installment is due (ISO 8601 date)
                                   format: date-time
                                 amount:
                                   type: number
                                   minimum: 0
-                                  description: Amount due for this installment
                               required:
                                 - installmentDate
                                 - amount
-                            description: Optional schedule of installment payments; if omitted the full
-                              price is due at once
                         required:
                           - type
                           - price
@@ -5403,12 +5204,9 @@ components:
                             type: string
                             enum:
                               - SUBSCRIPTION
-                            description: Discriminator identifying this as a flat recurring subscription
-                              charge
                           price:
                             type: number
                             minimum: 0
-                            description: Flat price charged each billing period
                           subscriptionCadence:
                             type: object
                             properties:
@@ -5420,19 +5218,13 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
                                 maximum: 1000
-                                description: The numeric length of the duration. Must be a positive integer up
-                                  to 1000.
                             required:
                               - unit
                               - value
-                            description: The frequency at which the subscription charge recurs. When the
-                              billing interval spans multiple cadence periods,
-                              the invoice amount is multiplied accordingly.
                         required:
                           - type
                           - price
@@ -5443,7 +5235,6 @@ components:
                             type: string
                             enum:
                               - TIERED
-                            description: Discriminator identifying this as tiered (volume-based) pricing
                           tiers:
                             type: array
                             items:
@@ -5452,33 +5243,24 @@ components:
                                 fromInclusive:
                                   type: number
                                   minimum: 0
-                                  description: Start of the tier range (inclusive)
                                 toExclusive:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: End of the tier range (exclusive). Omit for the final unbounded
-                                    tier
                                 rate:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: Per-unit rate charged for usage within this tier
                                 flatFee:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: Flat fee charged when usage falls within this tier
                                 packageSize:
                                   type: number
                                   nullable: true
                                   minimum: 0
-                                  description: Number of units per package; the rate is applied per package rather
-                                    than per unit
                               required:
                                 - fromInclusive
-                            description: List of pricing tiers defining rate, flat fee, and usage range for
-                              each tier
                           subscriptionCadence:
                             type: object
                             nullable: true
@@ -5491,47 +5273,26 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
                                 maximum: 1000
-                                description: The numeric length of the duration. Must be a positive integer up
-                                  to 1000.
                             required:
                               - unit
                               - value
-                            description: The frequency at which the tiered charge recurs. When the billing
-                              interval spans multiple cadence periods, the
-                              invoice amount is multiplied accordingly.
                           autoUpgrade:
                             type: boolean
                             nullable: true
-                            description: When true, the customer is locked into the highest tier reached
-                              during the period and will not drop back to a
-                              lower tier until the next billing period or
-                              contract renewal.
                           prorate:
                             type: boolean
                             nullable: true
-                            description: When true, charges are prorated based on the fraction of the
-                              billing period used
                           isRevShare:
                             type: boolean
                             nullable: true
-                            description: When true, the pricing model represents a revenue share
-                              arrangement. Tier rates are displayed as
-                              percentages in the UI rather than currency
-                              amounts, though the underlying rate value remains
-                              a decimal fraction and calculations are
-                              unaffected.
                           baseAmount:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Minimum charge for the billing period. If the usage-based cost
-                              exceeds this amount, the higher usage cost is
-                              charged instead.
                           usageReset:
                             $ref: "#/components/schemas/ExternalUsageReset"
                         required:
@@ -5543,30 +5304,20 @@ components:
                             type: string
                             enum:
                               - PER_UNIT
-                            description: Discriminator identifying this as usage-based per-unit pricing
                           price:
                             type: number
                             minimum: 0
-                            description: Price charged per unit of usage
                           chunkSize:
                             type: number
                             nullable: true
                             minimum: 0
                             exclusiveMinimum: true
-                            description: Number of units per billing chunk; usage is rounded up to the
-                              nearest chunk
                           usageReset:
-                            allOf:
-                              - $ref: "#/components/schemas/ExternalUsageReset"
-                              - description: "Interval in months at which cumulative usage resets. Must be one
-                                  of: 1, 2, 3, 6, 12"
+                            $ref: "#/components/schemas/ExternalUsageReset"
                           baseAmount:
                             type: number
                             nullable: true
                             minimum: 0
-                            description: Minimum charge for the billing period. If the usage-based cost
-                              exceeds this amount, the higher usage cost is
-                              charged instead.
                         required:
                           - type
                           - price
@@ -5622,13 +5373,10 @@ components:
                                   - MONTH
                                   - YEAR
                                 default: MONTH
-                                description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                               value:
                                 type: integer
                                 minimum: 0
                                 maximum: 1000
-                                description: The numeric length of the duration. Must be a positive integer up
-                                  to 1000.
                             required:
                               - unit
                               - value
@@ -5775,13 +5523,10 @@ components:
                                 - MONTH
                                 - YEAR
                               default: MONTH
-                              description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                             value:
                               type: integer
                               minimum: 0
                               maximum: 1000
-                              description: The numeric length of the duration. Must be a positive integer up
-                                to 1000.
                           required:
                             - unit
                             - value
@@ -5797,11 +5542,9 @@ components:
                               type: string
                               enum:
                                 - ONE_TIME
-                              description: Discriminator identifying this as a one-time charge
                             price:
                               type: number
                               minimum: 0
-                              description: Fixed price charged once
                           required:
                             - type
                             - price
@@ -5811,12 +5554,9 @@ components:
                               type: string
                               enum:
                                 - CONTRACT_TERMS
-                              description: Discriminator identifying this as contract terms (fixed or
-                                installment) pricing
                             price:
                               type: number
                               minimum: 0
-                              description: Total contract price
                             installments:
                               type: array
                               nullable: true
@@ -5825,17 +5565,13 @@ components:
                                 properties:
                                   installmentDate:
                                     type: string
-                                    description: Date on which this installment is due (ISO 8601 date)
                                     format: date-time
                                   amount:
                                     type: number
                                     minimum: 0
-                                    description: Amount due for this installment
                                 required:
                                   - installmentDate
                                   - amount
-                              description: Optional schedule of installment payments; if omitted the full
-                                price is due at once
                           required:
                             - type
                             - price
@@ -5845,12 +5581,9 @@ components:
                               type: string
                               enum:
                                 - SUBSCRIPTION
-                              description: Discriminator identifying this as a flat recurring subscription
-                                charge
                             price:
                               type: number
                               minimum: 0
-                              description: Flat price charged each billing period
                             subscriptionCadence:
                               type: object
                               properties:
@@ -5862,19 +5595,13 @@ components:
                                     - MONTH
                                     - YEAR
                                   default: MONTH
-                                  description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                                 value:
                                   type: integer
                                   minimum: 0
                                   maximum: 1000
-                                  description: The numeric length of the duration. Must be a positive integer up
-                                    to 1000.
                               required:
                                 - unit
                                 - value
-                              description: The frequency at which the subscription charge recurs. When the
-                                billing interval spans multiple cadence periods,
-                                the invoice amount is multiplied accordingly.
                           required:
                             - type
                             - price
@@ -5885,7 +5612,6 @@ components:
                               type: string
                               enum:
                                 - TIERED
-                              description: Discriminator identifying this as tiered (volume-based) pricing
                             tiers:
                               type: array
                               items:
@@ -5894,33 +5620,24 @@ components:
                                   fromInclusive:
                                     type: number
                                     minimum: 0
-                                    description: Start of the tier range (inclusive)
                                   toExclusive:
                                     type: number
                                     nullable: true
                                     minimum: 0
-                                    description: End of the tier range (exclusive). Omit for the final unbounded
-                                      tier
                                   rate:
                                     type: number
                                     nullable: true
                                     minimum: 0
-                                    description: Per-unit rate charged for usage within this tier
                                   flatFee:
                                     type: number
                                     nullable: true
                                     minimum: 0
-                                    description: Flat fee charged when usage falls within this tier
                                   packageSize:
                                     type: number
                                     nullable: true
                                     minimum: 0
-                                    description: Number of units per package; the rate is applied per package rather
-                                      than per unit
                                 required:
                                   - fromInclusive
-                              description: List of pricing tiers defining rate, flat fee, and usage range for
-                                each tier
                             subscriptionCadence:
                               type: object
                               nullable: true
@@ -5933,47 +5650,26 @@ components:
                                     - MONTH
                                     - YEAR
                                   default: MONTH
-                                  description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                                 value:
                                   type: integer
                                   minimum: 0
                                   maximum: 1000
-                                  description: The numeric length of the duration. Must be a positive integer up
-                                    to 1000.
                               required:
                                 - unit
                                 - value
-                              description: The frequency at which the tiered charge recurs. When the billing
-                                interval spans multiple cadence periods, the
-                                invoice amount is multiplied accordingly.
                             autoUpgrade:
                               type: boolean
                               nullable: true
-                              description: When true, the customer is locked into the highest tier reached
-                                during the period and will not drop back to a
-                                lower tier until the next billing period or
-                                contract renewal.
                             prorate:
                               type: boolean
                               nullable: true
-                              description: When true, charges are prorated based on the fraction of the
-                                billing period used
                             isRevShare:
                               type: boolean
                               nullable: true
-                              description: When true, the pricing model represents a revenue share
-                                arrangement. Tier rates are displayed as
-                                percentages in the UI rather than currency
-                                amounts, though the underlying rate value
-                                remains a decimal fraction and calculations are
-                                unaffected.
                             baseAmount:
                               type: number
                               nullable: true
                               minimum: 0
-                              description: Minimum charge for the billing period. If the usage-based cost
-                                exceeds this amount, the higher usage cost is
-                                charged instead.
                             usageReset:
                               $ref: "#/components/schemas/ExternalUsageReset"
                           required:
@@ -5985,30 +5681,20 @@ components:
                               type: string
                               enum:
                                 - PER_UNIT
-                              description: Discriminator identifying this as usage-based per-unit pricing
                             price:
                               type: number
                               minimum: 0
-                              description: Price charged per unit of usage
                             chunkSize:
                               type: number
                               nullable: true
                               minimum: 0
                               exclusiveMinimum: true
-                              description: Number of units per billing chunk; usage is rounded up to the
-                                nearest chunk
                             usageReset:
-                              allOf:
-                                - $ref: "#/components/schemas/ExternalUsageReset"
-                                - description: "Interval in months at which cumulative usage resets. Must be one
-                                    of: 1, 2, 3, 6, 12"
+                              $ref: "#/components/schemas/ExternalUsageReset"
                             baseAmount:
                               type: number
                               nullable: true
                               minimum: 0
-                              description: Minimum charge for the billing period. If the usage-based cost
-                                exceeds this amount, the higher usage cost is
-                                charged instead.
                           required:
                             - type
                             - price
@@ -6064,13 +5750,10 @@ components:
                                     - MONTH
                                     - YEAR
                                   default: MONTH
-                                  description: "The unit of the duration. One of: MONTH, YEAR. Defaults to MONTH."
                                 value:
                                   type: integer
                                   minimum: 0
                                   maximum: 1000
-                                  description: The numeric length of the duration. Must be a positive integer up
-                                    to 1000.
                               required:
                                 - unit
                                 - value
@@ -6251,7 +5934,6 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/LineItem"
-                description: The line items of the invoice, each representing a product charge
               amount:
                 type: number
                 description: The total amount of the invoice
@@ -6487,12 +6169,28 @@ paths:
           $ref: "#/components/responses/CreateCatalogProductResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     get:
       tags:
         - catalog-products
@@ -6517,12 +6215,28 @@ paths:
           $ref: "#/components/responses/ListCatalogProductsResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /catalogProducts/{catalogProductId}:
     get:
       tags:
@@ -6543,14 +6257,34 @@ paths:
           $ref: "#/components/responses/GetCatalogProductResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     put:
       tags:
         - catalog-products
@@ -6572,14 +6306,34 @@ paths:
           $ref: "#/components/responses/UpdateCatalogProductResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - catalog-products
@@ -6599,14 +6353,34 @@ paths:
           $ref: "#/components/responses/DeleteCatalogProductResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers:
     post:
       tags:
@@ -6623,12 +6397,28 @@ paths:
           $ref: "#/components/responses/CreateCustomerResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     get:
       tags:
         - customers
@@ -6653,12 +6443,28 @@ paths:
           $ref: "#/components/responses/ListCustomersResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers/{customerId}:
     get:
       tags:
@@ -6679,14 +6485,34 @@ paths:
           $ref: "#/components/responses/GetCustomerResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     put:
       tags:
         - customers
@@ -6708,14 +6534,34 @@ paths:
           $ref: "#/components/responses/UpdateCustomerResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - customers
@@ -6735,14 +6581,34 @@ paths:
           $ref: "#/components/responses/DeleteCustomerResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /meters/{meterId}:
     get:
       tags:
@@ -6763,14 +6629,34 @@ paths:
           $ref: "#/components/responses/GetMeterResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     put:
       tags:
         - meters
@@ -6792,14 +6678,34 @@ paths:
           $ref: "#/components/responses/UpdateMeterResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - meters
@@ -6819,14 +6725,34 @@ paths:
           $ref: "#/components/responses/DeleteMeterResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /meters:
     get:
       tags:
@@ -6852,12 +6778,28 @@ paths:
           $ref: "#/components/responses/ListMetersResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /contracts/{contractId}:
     get:
       tags:
@@ -6878,14 +6820,34 @@ paths:
           $ref: "#/components/responses/GetContractResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - contracts
@@ -6905,14 +6867,34 @@ paths:
           $ref: "#/components/responses/DeleteContractResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /contracts:
     post:
       tags:
@@ -6929,12 +6911,28 @@ paths:
           $ref: "#/components/responses/CreateContractResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     get:
       tags:
         - contracts
@@ -6965,12 +6963,28 @@ paths:
           $ref: "#/components/responses/ListContractsResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /measurements:
     post:
       tags:
@@ -6987,12 +7001,28 @@ paths:
           $ref: "#/components/responses/CreateMeasurementResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     get:
       tags:
         - measurements
@@ -7017,12 +7047,28 @@ paths:
           $ref: "#/components/responses/ListMeasurementsResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /measurements/{measurementId}:
     get:
       tags:
@@ -7043,14 +7089,34 @@ paths:
           $ref: "#/components/responses/GetMeasurementResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - measurements
@@ -7070,14 +7136,34 @@ paths:
           $ref: "#/components/responses/DeleteMeasurementResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /invoices/{invoiceId}:
     get:
       tags:
@@ -7098,14 +7184,34 @@ paths:
           $ref: "#/components/responses/GetInvoiceResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customer-relations:
     post:
       tags:
@@ -7122,12 +7228,28 @@ paths:
           $ref: "#/components/responses/CreateCustomerRelationResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customer-relations/{customerRelationId}:
     get:
       tags:
@@ -7148,14 +7270,34 @@ paths:
           $ref: "#/components/responses/GetCustomerRelationResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /login:
     post:
       tags:
@@ -7173,12 +7315,28 @@ paths:
           $ref: "#/components/responses/LoginResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /events/delete-by-refs:
     post:
       tags:
@@ -7195,14 +7353,34 @@ paths:
           $ref: "#/components/responses/DeleteEventsByRefsResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /events/dry-run:
     post:
       tags:
@@ -7221,14 +7399,34 @@ paths:
           $ref: "#/components/responses/EventsDryRunResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "413":
           description: Request Entity Too Large
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestTooLongErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /events:
     get:
       tags:
@@ -7275,12 +7473,28 @@ paths:
           $ref: "#/components/responses/QueryEventsResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     post:
       tags:
         - events
@@ -7297,14 +7511,34 @@ paths:
           $ref: "#/components/responses/SendEventsResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "413":
           description: Request Entity Too Large
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestTooLongErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /events/{refId}:
     get:
       tags:
@@ -7325,14 +7559,34 @@ paths:
           $ref: "#/components/responses/GetEventResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - events
@@ -7352,14 +7606,34 @@ paths:
           $ref: "#/components/responses/DeleteEventResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /credits:
     get:
       tags:
@@ -7391,12 +7665,28 @@ paths:
           $ref: "#/components/responses/ListCreditLedgerEntriesResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /credits/grant:
     post:
       tags:
@@ -7416,12 +7706,28 @@ paths:
           $ref: "#/components/responses/RequestSuccess"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /credits/deduct:
     post:
       tags:
@@ -7442,12 +7748,28 @@ paths:
           $ref: "#/components/responses/RequestSuccess"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /webhook:
     post:
       tags:
@@ -7465,14 +7787,34 @@ paths:
           $ref: "#/components/responses/RequestSuccess"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "413":
           description: Request Entity Too Large
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestTooLongErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers/externalId/{externalId}:
     get:
       tags:
@@ -7493,14 +7835,34 @@ paths:
           $ref: "#/components/responses/GetCustomerResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers/name/{name}:
     get:
       tags:
@@ -7521,14 +7883,34 @@ paths:
           $ref: "#/components/responses/GetCustomerByNameResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers/products-consumptions/{customerId}:
     get:
       tags:
@@ -7549,14 +7931,34 @@ paths:
           $ref: "#/components/responses/GetCustomerProductsConsumptionsResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers/products-consumptions/alias/{alias}:
     get:
       tags:
@@ -7577,14 +7979,34 @@ paths:
           $ref: "#/components/responses/GetCustomerProductsConsumptionsByAliasResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /customers/integration/{integrationType}/{integrationId}:
     get:
       tags:
@@ -7611,14 +8033,34 @@ paths:
           $ref: "#/components/responses/GetCustomerByIntegrationIdResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /contracts/integration/{integrationType}/{integrationId}:
     get:
       tags:
@@ -7645,14 +8087,34 @@ paths:
           $ref: "#/components/responses/GetContractByIntegrationIdResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /invoices/{invoiceId}/payment-status:
     get:
       tags:
@@ -7675,12 +8137,28 @@ paths:
           $ref: "#/components/responses/InvoicePaymentStatusResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /invoices:
     get:
       tags:
@@ -7712,12 +8190,28 @@ paths:
           $ref: "#/components/responses/ListInvoicesResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /product-consumption/{productId}:
     get:
       tags:
@@ -7738,14 +8232,34 @@ paths:
           $ref: "#/components/responses/GetProductConsumptionResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "404":
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   /cloudUsageSubmission:
     post:
       tags:
@@ -7762,9 +8276,25 @@ paths:
           $ref: "#/components/responses/SubmitCloudUsageResponse"
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedErrorResponse"
         "429":
           description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RateLimitErrorResponse"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
