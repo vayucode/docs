@@ -44,4 +44,23 @@ When making direct API calls without the SDK:
   ```
 - When using the API for login, you can read about the login request payload in the [login endpoint documentation](/api-reference/endpoints/auth/login-by-obtaining-a-new-access-token)
 
-Make sure to keep your client ID and API token secure and never expose them in client-side code. 
+Make sure to keep your client ID and API token secure and never expose them in client-side code.
+
+## Full curl example
+
+```bash
+# Step 1 — Exchange your API token for a short-lived access token
+ACCESS_TOKEN=$(curl -s -X POST "https://api.withvayu.com/v1/auth/login" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $VAYU_CLIENT_ID" \
+  -d "{\"token\": \"$VAYU_API_TOKEN\"}" | jq -r '.accessToken')
+
+# Step 2 — Use the access token on subsequent requests
+curl "https://api.withvayu.com/v1/customers" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "x-api-key: $VAYU_CLIENT_ID"
+```
+
+<Note>
+Access tokens expire after **1 hour**. The Vayu SDKs handle token refresh automatically. If you're using a raw HTTP client, re-authenticate when you receive a `401` response.
+</Note>

@@ -1,0 +1,76 @@
+---
+title: 'Rate Limits'
+icon: 'gauge-high'
+description: 'API rate limits and how to handle them'
+---
+
+The Vayu API enforces rate limits to ensure reliability and fair usage across all customers. Limits are applied per API key.
+
+## Limits
+
+| Endpoint category | Limit |
+|---|---|
+| Event ingestion (`POST /events`) | 1,000 requests/minute |
+| All other endpoints | 300 requests/minute |
+
+<Note>
+Need higher limits? Contact [help@withvayu.com](mailto:help@withvayu.com) to discuss enterprise rate limit increases.
+</Note>
+
+## Rate limit headers
+
+Every API response includes the following headers:
+
+| Header | Description |
+|---|---|
+| `X-RateLimit-Limit` | Maximum requests allowed in the current window |
+| `X-RateLimit-Remaining` | Requests remaining in the current window |
+| `X-RateLimit-Reset` | Unix timestamp when the current window resets |
+
+## Handling 429 responses
+
+When you exceed the rate limit, the API returns HTTP `429 Too Many Requests` with a `Retry-After` header indicating seconds to wait.
+
+```json
+{
+  "statusCode": 429,
+  "message": "Rate limit exceeded",
+  "code": "RATE_LIMIT_EXCEEDED"
+}
+```
+
+<CodeGroup>
+
+```typescript TypeScript
+async function withRetry<T>(fn: () => Promise<T>, retries = 3): Promise<T> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (error.statusCode === 429 && i < retries - 1) {
+        const retryAfter = error.headers['retry-after'] ?? 1;
+        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+      } else {
+        throw error;
+      }
+    }
+  }
+}
+```
+
+```python Python
+import time
+
+def with_retry(fn, retries=3):
+    for i in range(retries):
+        try:
+            return fn()
+        except VayuAPIError as e:
+            if e.status_code == 429 and i < retries - 1:
+                retry_after = int(e.headers.get("retry-after", 1))
+                time.sleep(retry_after)
+            else:
+                raise
+```
+
+</CodeGroup>

@@ -1,21 +1,46 @@
 ---
-title: 'Vayu API Review'
-description: 'Sending events to Vayu for dry run'
+title: 'Vayu API'
+description: 'Full API reference for the Vayu billing platform'
 ---
 
-## Introduction
-The Vayu API is a slim and intuitive interface that provides a straightforward way to interact with the Vayu system. Its design is focused on simplicity and ease of use, making it accessible to developers of all levels.
+## Overview
 
-[Click here](https://raw.githubusercontent.com/vayucode/docs/main/config/vy-openapi.yml) for the Vayu OpenAPI spec file.
+The Vayu API gives you programmatic access to your billing operations — create and manage customers, contracts, catalog products, events, invoices, credits, measurements, and webhooks. All resources are accessible via RESTful HTTP endpoints and are supported by official SDKs in TypeScript, Python, and Go.
 
-<Card
-  title="Single Purpose and Focus"
->
-One of the standout features of the Vayu API is its focus on a single purpose. <br/>
-The main usage of the API should be for logging in and sending events. <br/>
-Other actions, such as creating customers and entering data metering details, should be carried out using the UI. 
-This clear separation of concerns reduces the cognitive load for both developers and finance professionals.
-</Card>
+**Base URL:** `https://api.withvayu.com`
 
-## SDKs Availability
-In addition to the API, Vayu also provides SDKs for various programming languages. These SDKs abstract away some of the complexities of working with the API directly and provide a more convenient and idiomatic way to interact with the Vayu system. The details of these SDKs will be covered in the following sections.
+**OpenAPI Spec:** [Download vy-openapi.yml](https://raw.githubusercontent.com/vayucode/docs/main/config/vy-openapi.yml)
+
+<CardGroup cols="3">
+  <Card title="Authentication" icon="key" href="/api-reference/pages/connecting-to-vayu">
+    Get your credentials and make your first authenticated request
+  </Card>
+  <Card title="SDKs" icon="cube" href="/api-reference/pages/sdk">
+    Official client libraries for TypeScript, Python, and Go
+  </Card>
+  <Card title="Webhooks" icon="bell" href="/api-reference/pages/webhooks">
+    Receive real-time event notifications
+  </Card>
+</CardGroup>
+
+## What you can do with the API
+
+| Resource | Operations |
+|---|---|
+| **Customers** | Create, update, delete, list, look up by external ID or name |
+| **Contracts** | Create, get, list, delete |
+| **Catalog Products** | Full CRUD |
+| **Events** | Ingest batches, query, delete, dry-run test |
+| **Invoices** | Get, list, check payment status |
+| **Credits** | Grant, deduct, list ledger entries |
+| **Measurements** | Full CRUD |
+| **Meters** | Get, list, update, delete |
+| **Webhooks** | Subscribe, receive signed payloads |
+
+## Key concepts
+
+- **Pagination** — All list endpoints use cursor-based pagination. See [Pagination](/api-reference/pages/pagination).
+- **Idempotency** — Events support an idempotency key via the `ref` field. See [Idempotency](/api-reference/pages/idempotency).
+- **Batch ingestion** — Send 1–1,000 events per request (256 KB max). See [Sending Events](/api-reference/pages/sending-events).
+- **Error handling** — All errors return structured JSON with a machine-readable code. See [Errors](/api-reference/pages/errors).
+- **Rate limits** — See [Rate Limits](/api-reference/pages/rate-limits).

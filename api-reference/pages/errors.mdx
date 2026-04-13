@@ -1,0 +1,84 @@
+---
+title: 'Errors'
+icon: 'circle-exclamation'
+description: 'HTTP error codes and error response format'
+---
+
+All Vayu API errors return a JSON body with a consistent structure. Handle errors by inspecting the HTTP status code first, then the `code` field for programmatic handling.
+
+## Error response format
+
+```json
+{
+  "statusCode": 422,
+  "message": "Validation failed",
+  "code": "VALIDATION_ERROR",
+  "details": [
+    {
+      "field": "customerAlias",
+      "message": "customerAlias is required"
+    }
+  ]
+}
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `statusCode` | number | The HTTP status code |
+| `message` | string | Human-readable description of the error |
+| `code` | string | Machine-readable error code |
+| `details` | array | (Optional) Field-level validation errors |
+
+## HTTP status codes
+
+| Status | Meaning | Common causes |
+|---|---|---|
+| `400` | Bad Request | Malformed JSON, missing required fields, invalid field values |
+| `401` | Unauthorized | Missing or expired access token |
+| `403` | Forbidden | Valid token but insufficient permissions for this resource |
+| `404` | Not Found | The requested resource does not exist |
+| `409` | Conflict | Duplicate resource — e.g. a customer with this `externalId` already exists |
+| `422` | Unprocessable Entity | Request is well-formed but fails business logic validation |
+| `429` | Too Many Requests | Rate limit exceeded — see [Rate Limits](/api-reference/pages/rate-limits) |
+| `500` | Internal Server Error | Unexpected server error — contact support if this persists |
+
+## Handling errors in code
+
+<CodeGroup>
+
+```typescript TypeScript
+import { VayuClient } from 'vayu-ts';
+
+const vayu = new VayuClient({ apiToken: process.env.VAYU_API_TOKEN });
+
+try {
+  const customer = await vayu.customers.create({ name: 'Acme Corp' });
+} catch (error) {
+  if (error.statusCode === 409) {
+    console.log('Customer already exists');
+  } else if (error.statusCode === 422) {
+    console.log('Validation error:', error.details);
+  } else {
+    throw error;
+  }
+}
+```
+
+```python Python
+from vayu_client import VayuClient
+from vayu_client.exceptions import VayuAPIError
+
+vayu = VayuClient(api_token=os.environ["VAYU_API_TOKEN"])
+
+try:
+    customer = vayu.customers.create(name="Acme Corp")
+except VayuAPIError as e:
+    if e.status_code == 409:
+        print("Customer already exists")
+    elif e.status_code == 422:
+        print("Validation error:", e.details)
+    else:
+        raise
+```
+
+</CodeGroup>

@@ -3,44 +3,34 @@ title: 'Webhooks'
 icon: 'bell'
 ---
 
-Webhooks allow you to receive real-time notifications about important events in your Vayu account. This document describes the available webhook types and their payload structures.
+Webhooks allow you to receive real-time notifications about important events in your Vayu account.
 
 ## Available Webhooks
 
-| Webhook Type | Description | Trigger Condition | 
-|-------------|-------------|-------------------|
-| Overage | Notifies when a customer exceeds their provisioned amount for a product | Customer's consumption exceeds their provisioned amount | 
-| Anonymous Customer Created | Notifies when a new anonymous customer is created in the system | Event was sent for a customer that couldn't exist |
+| Webhook Type | Description |
+|---|---|
+| `Overage` | Customer exceeds their provisioned amount for a product |
+| `AnonymousCustomer` | Event received for an unrecognized customer alias — auto-created as anonymous |
+| `UpcomingRenewal` | Customer contract is approaching its renewal date |
+| `InvoiceApproved` | An invoice has been approved and is ready to send |
+| `CustomerPortalLinkSent` | A customer portal access link was sent to a customer |
+| `NewCustomerWithoutContract` | A new customer was created but has no active contract |
+| `MonthEndReport` | Monthly usage and billing summary report is ready |
+| `UnchargedEvents` | Events exist that have not been counted against any meter |
+| `TierCrossed` | Customer usage has crossed into a new pricing tier |
+| `CommitmentCrossed` | Customer has crossed their committed usage threshold |
+| `FinalTierExceeded` | Customer usage has exceeded the final pricing tier |
+| `InvoicePaymentStatusChanged` | An invoice payment status has changed (e.g. paid, failed, overdue) |
 
 ## Webhook Payloads
 
-### Overage Notification
-
-The overage webhook is triggered when a customer exceeds their provisioned amount for a product. The payload includes detailed information about the product consumption.
-
-#### Payload Structure
+### Overage
 
 ```json
 {
-  "productId": "string",          // The id of the product
-  "productName": "string",        // The name of the product 
-  "provisionedAmount": "number",  // The amount of units provisioned to the customer
-  "consumedAmount": "number",     // The amount of units consumed by the customer
-  "usagePercentage": "number",    // The percentage of the provisioned amount that has been consumed
-  "hasAccess": "boolean",         // Whether the customer has access to the product based on the provisioned amount
-  "remainingAmount": "number",    // The amount of units remaining to consume
-  "exceededAmount": "number"      // The amount of units exceeded
-}
-```
-
-you can read more about the product consumption type in the [ get product consumption endpoint](/api-reference/endpoints/product-consumptions/get-product-consumption) page.
-
-#### Example Payload
-
-```json
-{
+  "type": "Overage",
   "productId": "prod_123456789",
-  "productName": "Vayu Product",
+  "productName": "API Calls",
   "provisionedAmount": 1000,
   "consumedAmount": 1200,
   "usagePercentage": 120,
@@ -50,29 +40,138 @@ you can read more about the product consumption type in the [ get product consum
 }
 ```
 
-### Anonymous Customer Created
-
-This webhook is triggered when a new anonymous customer is created in the system. The payload contains basic customer information.
-
-#### Payload Structure
+### AnonymousCustomer
 
 ```json
 {
-  "id": "string",           // The Vayu Id of the created customer
-  "externalId": "string",   // The assumed external Id of the customer
-  "aliases": "string[]",    // The aliases used to match events to this customer (will be the externalId for this event)
-  "name": "string"          // The temporary assumed name of the customer
-}
-```
-
-#### Example Payload
-
-```json
-{
+  "type": "AnonymousCustomer",
   "id": "cust_123456789",
   "externalId": "ext_987654321",
   "aliases": ["ext_987654321"],
   "name": "Anonymous Customer"
+}
+```
+
+### UpcomingRenewal
+
+```json
+{
+  "type": "UpcomingRenewal",
+  "customerId": "cust_123456789",
+  "customerName": "Acme Corp",
+  "contractId": "contract_abc123",
+  "renewalDate": "2026-02-01T00:00:00Z"
+}
+```
+
+### InvoiceApproved
+
+```json
+{
+  "type": "InvoiceApproved",
+  "invoiceId": "inv_123456789",
+  "customerId": "cust_123456789",
+  "customerName": "Acme Corp",
+  "amount": 1500.00,
+  "currency": "USD",
+  "dueDate": "2026-02-15T00:00:00Z"
+}
+```
+
+### InvoicePaymentStatusChanged
+
+```json
+{
+  "type": "InvoicePaymentStatusChanged",
+  "invoiceId": "inv_123456789",
+  "customerId": "cust_123456789",
+  "previousStatus": "PENDING",
+  "currentStatus": "PAID",
+  "amount": 1500.00,
+  "currency": "USD"
+}
+```
+
+### TierCrossed
+
+```json
+{
+  "type": "TierCrossed",
+  "customerId": "cust_123456789",
+  "productId": "prod_123456789",
+  "productName": "API Calls",
+  "previousTier": 1,
+  "currentTier": 2,
+  "currentUsage": 10001,
+  "tierThreshold": 10000
+}
+```
+
+### CommitmentCrossed
+
+```json
+{
+  "type": "CommitmentCrossed",
+  "customerId": "cust_123456789",
+  "contractId": "contract_abc123",
+  "committedAmount": 50000,
+  "currentUsage": 50001
+}
+```
+
+### FinalTierExceeded
+
+```json
+{
+  "type": "FinalTierExceeded",
+  "customerId": "cust_123456789",
+  "productId": "prod_123456789",
+  "productName": "API Calls",
+  "finalTierThreshold": 100000,
+  "currentUsage": 100500
+}
+```
+
+### CustomerPortalLinkSent
+
+```json
+{
+  "type": "CustomerPortalLinkSent",
+  "customerId": "cust_123456789",
+  "customerName": "Acme Corp",
+  "email": "billing@acmecorp.com"
+}
+```
+
+### NewCustomerWithoutContract
+
+```json
+{
+  "type": "NewCustomerWithoutContract",
+  "customerId": "cust_123456789",
+  "customerName": "Acme Corp",
+  "createdAt": "2026-01-15T14:30:00Z"
+}
+```
+
+### MonthEndReport
+
+```json
+{
+  "type": "MonthEndReport",
+  "reportDate": "2026-01-31T00:00:00Z",
+  "reportUrl": "https://app.withvayu.com/reports/2026-01"
+}
+```
+
+### UnchargedEvents
+
+```json
+{
+  "type": "UnchargedEvents",
+  "customerId": "cust_123456789",
+  "eventCount": 42,
+  "earliestEventTimestamp": "2026-01-10T08:00:00Z"
 }
 ```
 
