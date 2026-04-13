@@ -142,14 +142,17 @@
               {
                 "group": "Reports",
                 "pages": [
-                  "file"
+                  "file",
+                  "billing-reports",
+                  "accounting-reports",
+                  "usage-and-data-reports"
                 ]
               },
               {
                 "group": "AI",
                 "pages": [
-                  "ff",
-                  "ki"
+                  "ai-insights",
+                  "pdf-extraction"
                 ]
               }
             ]

@@ -1,0 +1,81 @@
+---
+title: "Billing Reports"
+---
+
+Billing reports provide visibility into invoices, payment status, and customer financial health. These reports help you monitor upcoming charges, track collections, and identify issues before they impact cash flow.
+
+- **Billing forecast report -** View upcoming invoices and expected charges before they are issued. This helps anticipate revenue and identify anomalies early.
+- **AR Health -** Track overdue invoices and identify customers who may require follow-up. Useful for managing collections and cash flow.
+- **Email exception report -** Monitor email delivery issues related to billing communications, such as failed invoice sends.
+- **Customers -** Access a list of all customers, including their billing status and account details.
+
+### **Billing Forecast Reports**
+
+<Frame>
+  ![Image](/images/image-17.png)
+</Frame>
+
+The Billing forecast report shows upcoming invoices and expected charges before they are issued. This report pulls data from active contracts, scheduled billing cycles, and metered usage to project what will be invoiced in the next period.
+
+Use this report to anticipate revenue, identify potential billing anomalies, and communicate expected charges to customers before invoices are finalized. The forecast includes both recurring charges and usage-based fees, calculated according to each contract's pricing structure and billing schedule.
+
+\
+
+The report displays:
+
+- Customer name and contract details
+- Expected invoice date and billing period
+- Projected subtotal, tax, and total amount
+- Breakdown by product or pricing component
+- Usage estimates for metered products
+
+Forecasts are generated automatically based on contract terms and recent usage patterns. For usage-based products, the system projects charges using historical consumption data and any defined commitments or base amounts.
+
+### AR Health
+
+The AR Health report tracks overdue invoices and identifies customers who may require follow-up. This report is designed to support collections workflows and help you maintain healthy cash flow.
+
+The report shows:
+
+- Customer name and outstanding balance
+- Invoice aging buckets (current, 30 days, 60 days, 90\+ days)
+- Payment status and due dates
+- Days past due for each overdue invoice
+- Contact information for billing follow-up
+
+Use this report to prioritize collection efforts, identify customers with recurring payment issues, and monitor overall accounts receivable health. The report updates in real-time as payments are recorded and invoices are issued.
+
+Invoices are marked as overdue automatically when they pass their due date without payment. Payment status updates flow back from integrated payment providers ([Stripe](/documentation/guides/integrations/stripe)) and ERP systems ([NetSuite](/documentation/guides/integrations/netsuite), [QuickBooks](/documentation/guides/integrations/Quickbooks)) to ensure the report reflects current payment state.
+
+### Email Exception Report
+
+The Email exception report monitors email delivery issues related to billing communications. This report surfaces failed invoice sends, bounced emails, and other delivery problems that could prevent customers from receiving billing notifications.
+
+The report displays:
+
+- Customer name and billing contact
+- Email address that failed
+- Type of failure (bounce, rejection, invalid address)
+- Date and time of failure
+- Invoice or communication that failed to deliver
+
+Use this report to identify and resolve email delivery issues before they impact payment timelines. Common issues include outdated contact information, spam filters, or invalid email addresses.
+
+When an email failure is detected, you can update the customer's billing contact information and resend the invoice manually. The report helps ensure that all customers receive their invoices on time, reducing payment delays caused by communication failures.
+
+### Customers
+
+The Customers report provides a comprehensive list of all customers in your account, including their billing status and account details. This report serves as a central reference for customer information and billing configuration.
+
+The report shows:
+
+- Customer name and legal name
+- Active contracts and billing status
+- Currency and payment terms
+- Billing contacts and email addresses
+- Outstanding balance and payment history
+- Custom fields and account attributes
+
+Use this report to review customer account details, verify billing configuration, and identify customers by specific attributes. The report supports filtering and search to help you quickly locate specific customers or groups.
+
+Customer data syncs with integrated CRM and ERP systems to ensure consistency across platforms. Updates to customer information in [NetSuite](/documentation/guides/integrations/netsuite), [Salesforce](/documentation/guides/integrations/salesforce), or [QuickBooks](/documentation/guides/integrations/Quickbooks) flow back into Vayu and appear in this report.
