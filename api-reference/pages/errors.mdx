@@ -132,4 +132,22 @@ except VayuAPIError as e:
         raise
 ```
 
+```go Go
+import (
+    VayuSDK "github.com/weft-finance/vayu-go"
+    "os"
+    "fmt"
+)
+
+vayu := VayuSDK.NewVayu(os.Getenv("VAYU_API_TOKEN"))
+
+_, err := vayu.Customers.CreateCustomer(VayuSDK.CreateCustomerRequest{Name: "Acme Corp"})
+if err != nil {
+    if vayuErr, ok := err.(*VayuSDK.VayuError); ok {
+        fmt.Println("API error:", vayuErr.Body)
+    }
+    panic(err)
+}
+```
+
 </CodeGroup>

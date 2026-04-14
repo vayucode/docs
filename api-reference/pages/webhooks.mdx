@@ -13,9 +13,6 @@ Webhooks allow you to receive real-time notifications about important events in 
 | `AnonymousCustomer` | Event received for an unrecognized customer alias — auto-created as anonymous |
 | `UpcomingRenewal` | Customer contract is approaching its renewal date |
 | `InvoiceApproved` | An invoice has been approved and is ready to send |
-| `CustomerPortalLinkSent` | A customer portal access link was sent to a customer |
-| `NewCustomerWithoutContract` | A new customer was created but has no active contract |
-| `MonthEndReport` | Monthly usage and billing summary report is ready |
 | `UnchargedEvents` | Events exist that have not been counted against any meter |
 | `TierCrossed` | Customer usage has crossed into a new pricing tier |
 | `CommitmentCrossed` | Customer has crossed their committed usage threshold |
@@ -129,38 +126,6 @@ Webhooks allow you to receive real-time notifications about important events in 
   "productName": "API Calls",
   "finalTierThreshold": 100000,
   "currentUsage": 100500
-}
-```
-
-### CustomerPortalLinkSent
-
-```json
-{
-  "type": "CustomerPortalLinkSent",
-  "customerId": "cust_123456789",
-  "customerName": "Acme Corp",
-  "email": "billing@acmecorp.com"
-}
-```
-
-### NewCustomerWithoutContract
-
-```json
-{
-  "type": "NewCustomerWithoutContract",
-  "customerId": "cust_123456789",
-  "customerName": "Acme Corp",
-  "createdAt": "2026-01-15T14:30:00Z"
-}
-```
-
-### MonthEndReport
-
-```json
-{
-  "type": "MonthEndReport",
-  "reportDate": "2026-01-31T00:00:00Z",
-  "reportUrl": "https://app.withvayu.com/reports/2026-01"
 }
 ```
 

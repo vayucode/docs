@@ -4,38 +4,28 @@ icon: 'gauge-high'
 description: 'API rate limits and how to handle them'
 ---
 
-The Vayu API enforces rate limits to ensure reliability and fair usage across all customers. Limits are applied per API key.
+The Vayu API enforces rate limits via AWS API Gateway to ensure reliability and fair usage across all customers.
 
 ## Limits
 
-| Endpoint category | Limit |
+| | Value |
 |---|---|
-| Event ingestion (`POST /events`) | 1,000 requests/minute |
-| All other endpoints | 300 requests/minute |
+| Rate limit | 500 requests/second |
+| Burst limit | 100 requests |
 
 <Note>
-Need higher limits? Contact [help@withvayu.com](mailto:help@withvayu.com) to discuss enterprise rate limit increases.
+Need higher limits? Contact [help@withvayu.com](mailto:help@withvayu.com) to discuss increases.
 </Note>
-
-## Rate limit headers
-
-Every API response includes the following headers:
-
-| Header | Description |
-|---|---|
-| `X-RateLimit-Limit` | Maximum requests allowed in the current window |
-| `X-RateLimit-Remaining` | Requests remaining in the current window |
-| `X-RateLimit-Reset` | Unix timestamp when the current window resets |
 
 ## Handling 429 responses
 
-When you exceed the rate limit, the API returns HTTP `429 Too Many Requests` with a `Retry-After` header indicating seconds to wait.
+When you exceed the rate limit, the API returns HTTP `429` with the standard error format:
 
 ```json
 {
-  "statusCode": 429,
-  "message": "Rate limit exceeded",
-  "code": "RATE_LIMIT_EXCEEDED"
+  "type": "rate_limit_error",
+  "code": "rate_limit_exceeded",
+  "message": "Too many requests"
 }
 ```
 
@@ -47,9 +37,8 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 3): Promise<T> {
     try {
       return await fn();
     } catch (error) {
-      if (error.statusCode === 429 && i < retries - 1) {
-        const retryAfter = error.headers['retry-after'] ?? 1;
-        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+      if (error.type === 'rate_limit_error' && i < retries - 1) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
       } else {
         throw error;
       }
@@ -66,11 +55,29 @@ def with_retry(fn, retries=3):
         try:
             return fn()
         except VayuAPIError as e:
-            if e.status_code == 429 and i < retries - 1:
-                retry_after = int(e.headers.get("retry-after", 1))
-                time.sleep(retry_after)
+            if e.type == 'rate_limit_error' and i < retries - 1:
+                time.sleep(1)
             else:
                 raise
+```
+
+```go Go
+import "time"
+
+func withRetry(fn func() error, retries int) error {
+    for i := 0; i < retries; i++ {
+        err := fn()
+        if err == nil {
+            return nil
+        }
+        if i < retries-1 {
+            time.Sleep(time.Second)
+            continue
+        }
+        return err
+    }
+    return nil
+}
 ```
 
 </CodeGroup>

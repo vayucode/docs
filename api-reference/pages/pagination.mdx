@@ -1,40 +1,91 @@
 ---
 title: 'Pagination'
 icon: 'list'
-description: 'Vayu API Paginated Responses'
+description: 'How to work with paginated list responses'
 ---
 
-List endpoints utilize a standardized format that contains the requested list in a data response object, as well as some metadata that's useful for pagination in the pagination_metadata response object.
+All list endpoints return a consistent paginated response shape.
 
-Generically, the response format is:
+## Response format
 
-```mdx-code-block
+```json
 {
-    "entities": [
-       ...
-    ],
-    "hasMore": true,
-    "nextCursor": "..."
-    "total": 2,783    
+  "customers": [...],
+  "total": 2783,
+  "hasMore": true,
+  "nextCursor": "eyJpZCI6IjEyMyJ9"
 }
 ```
 
-## Pagination response fields
-### entities
-The entities array contains the requested list of items (e.g. customers, invoices, plans, etc....).
+| Field | Type | Description |
+|---|---|---|
+| `[resource]` | array | The list of items (e.g. `customers`, `events`, `invoices`) |
+| `total` | number | Total count of items in the collection — unaffected by `limit` |
+| `hasMore` | boolean | `true` if more results exist beyond this page |
+| `nextCursor` | string | Cursor to pass in the next request — absent when `hasMore` is `false` |
 
-### total
-total is the number of items that exist in the collection. This value is not affected by the limit query parameter, and is useful for calculating the number of pages in a paginated response.
+## Request parameters
 
-### hasMore
-hasMore is a boolean value that will be true if there are more results to fetch. If hasMore is false, then the nextCursor not be present in the response.
+| Parameter | Default | Max | Description |
+|---|---|---|---|
+| `limit` | 10 | 1,000 | Number of items to return |
+| `cursor` | — | — | Cursor from the previous response to fetch the next page |
 
-### nextCursor
-nextCursor is a string that can be used to fetch the next page of results. Paginated resources are sorted by their createdAT values in ascending order.
+## Iterating all pages
 
-## Pagination request fields
-### limit
-limit is the number of items to return in the response. When limit is not present in the request, the default value is 10. and the maximum value possible is 1,000.
+<CodeGroup>
 
-### cursor
-cursor is a string that can be used to fetch the next page of results. When cursor is not present in the request, the first page of results will be returned.
+```typescript TypeScript
+async function fetchAll<T>(
+  fetchPage: (cursor?: string) => Promise<{ data: T[]; hasMore: boolean; nextCursor?: string }>
+): Promise<T[]> {
+  const results: T[] = [];
+  let cursor: string | undefined;
+
+  do {
+    const page = await fetchPage(cursor);
+    results.push(...page.data);
+    cursor = page.nextCursor;
+  } while (page.hasMore);
+
+  return results;
+}
+```
+
+```python Python
+def fetch_all(fetch_page):
+    results = []
+    cursor = None
+
+    while True:
+        page = fetch_page(cursor=cursor)
+        results.extend(page.data)
+        if not page.has_more:
+            break
+        cursor = page.next_cursor
+
+    return results
+```
+
+```go Go
+import VayuSDK "github.com/weft-finance/vayu-go"
+
+vayu := VayuSDK.NewVayu(os.Getenv("VAYU_API_TOKEN"))
+
+var cursor *string
+for {
+    resp, err := vayu.Customers.ListCustomers(nil, cursor)
+    if err != nil {
+        panic(err)
+    }
+    for _, c := range resp.Customers {
+        fmt.Println(c.Id)
+    }
+    if !resp.HasMore {
+        break
+    }
+    cursor = &resp.NextCursor
+}
+```
+
+</CodeGroup>
