@@ -4,18 +4,57 @@ icon: 'circle-exclamation'
 description: 'HTTP error codes and error response format'
 ---
 
-All Vayu API errors return a JSON body with a consistent structure. Handle errors by inspecting the HTTP status code first, then the `code` field for programmatic handling.
+All Vayu API errors return a JSON body with a consistent structure. Use `type` for broad SDK-level handling and `code` for specific programmatic logic.
 
 ## Error response format
 
 ```json
 {
-  "statusCode": 422,
+  "type": "invalid_request_error",
+  "code": "resource_not_found",
+  "message": "Customer with id cust_123 not found"
+}
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `type` | string | Error category — for broad handling |
+| `code` | string | Specific machine-readable error code |
+| `message` | string | Human-readable explanation |
+
+## Error types
+
+| `type` | Meaning |
+|---|---|
+| `invalid_request_error` | Problem with the request itself (bad input, not found, conflict) |
+| `authentication_error` | Missing or invalid access token |
+| `rate_limit_error` | Too many requests |
+| `api_error` | Unexpected server-side error |
+
+## Error codes
+
+| `code` | HTTP status | `type` | Description |
+|---|---|---|---|
+| `bad_request` | 400 | `invalid_request_error` | Malformed request or missing required fields |
+| `authentication_failed` | 401 | `authentication_error` | Missing or expired access token |
+| `resource_not_found` | 404 | `invalid_request_error` | Requested resource does not exist |
+| `resource_already_exists` | 409 | `invalid_request_error` | Duplicate — e.g. customer with this `externalId` already exists |
+| `request_too_large` | 413 | `invalid_request_error` | Payload exceeds the 256 KB limit |
+| `rate_limit_exceeded` | 429 | `rate_limit_error` | Rate limit exceeded — see [Rate Limits](/api-reference/pages/rate-limits) |
+| `internal_error` | 500 | `api_error` | Unexpected server error — contact support if this persists |
+
+## Validation errors
+
+Validation errors extend the base format with field-level detail:
+
+```json
+{
+  "type": "invalid_request_error",
+  "code": "bad_request",
   "message": "Validation failed",
-  "code": "VALIDATION_ERROR",
-  "details": [
+  "params": [
     {
-      "field": "customerAlias",
+      "param": "customerAlias",
       "message": "customerAlias is required"
     }
   ]
@@ -24,23 +63,8 @@ All Vayu API errors return a JSON body with a consistent structure. Handle error
 
 | Field | Type | Description |
 |---|---|---|
-| `statusCode` | number | The HTTP status code |
-| `message` | string | Human-readable description of the error |
-| `code` | string | Machine-readable error code |
-| `details` | array | (Optional) Field-level validation errors |
-
-## HTTP status codes
-
-| Status | Meaning | Common causes |
-|---|---|---|
-| `400` | Bad Request | Malformed JSON, missing required fields, invalid field values |
-| `401` | Unauthorized | Missing or expired access token |
-| `403` | Forbidden | Valid token but insufficient permissions for this resource |
-| `404` | Not Found | The requested resource does not exist |
-| `409` | Conflict | Duplicate resource — e.g. a customer with this `externalId` already exists |
-| `422` | Unprocessable Entity | Request is well-formed but fails business logic validation |
-| `429` | Too Many Requests | Rate limit exceeded — see [Rate Limits](/api-reference/pages/rate-limits) |
-| `500` | Internal Server Error | Unexpected server error — contact support if this persists |
+| `param` | string | (Optional) Single parameter that failed validation |
+| `params` | array | (Optional) Multiple parameters — each has `param` and `message` |
 
 ## Handling errors in code
 
@@ -54,10 +78,10 @@ const vayu = new VayuClient({ apiToken: process.env.VAYU_API_TOKEN });
 try {
   const customer = await vayu.customers.create({ name: 'Acme Corp' });
 } catch (error) {
-  if (error.statusCode === 409) {
+  if (error.code === 'resource_already_exists') {
     console.log('Customer already exists');
-  } else if (error.statusCode === 422) {
-    console.log('Validation error:', error.details);
+  } else if (error.type === 'invalid_request_error') {
+    console.log('Bad request:', error.message, error.params);
   } else {
     throw error;
   }
@@ -73,10 +97,10 @@ vayu = VayuClient(api_token=os.environ["VAYU_API_TOKEN"])
 try:
     customer = vayu.customers.create(name="Acme Corp")
 except VayuAPIError as e:
-    if e.status_code == 409:
+    if e.code == "resource_already_exists":
         print("Customer already exists")
-    elif e.status_code == 422:
-        print("Validation error:", e.details)
+    elif e.type == "invalid_request_error":
+        print("Bad request:", e.message, e.params)
     else:
         raise
 ```

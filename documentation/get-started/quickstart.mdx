@@ -61,8 +61,8 @@ If you're integrating programmatically, here's the fastest path to your first wo
     ```typescript
     import { VayuClient } from 'vayu-ts';
 
+    // Pass your API Token — the SDK handles login/token refresh automatically
     const vayu = new VayuClient({ apiToken: process.env.VAYU_API_TOKEN });
-    await vayu.login();
 
     const result = await vayu.events.ingest([{
       name: 'api_call',

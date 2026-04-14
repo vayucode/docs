@@ -11,49 +11,58 @@ To connect to Vayu and get your API credentials, follow these steps:
 
 A side pane will open with two important fields:
 
-1. **Client ID** - This is used to identify your organization when making requests to Vayu
-2. **Fetch your API token** - This is used to authenticate you when making requests to Vayu
+1. **Client ID** - Identifies your organization on every request (`x-api-key` header)
+2. **API Token** - A long-lived token used to obtain short-lived access tokens via the `/login` endpoint
+
+<Note>
+Copy the API Token immediately — it won't be shown again after you close the pane.
+</Note>
+
+## How authentication works
+
+Vayu uses a two-token model:
+
+| Token | Where it comes from | Lifetime | How it's used |
+|---|---|---|---|
+| **API Token** (refresh token) | Vayu dashboard | Long-lived | Sent to `POST /login` to get an access token |
+| **Access token** | `POST /login` response | 1 hour | Sent as `Authorization: Bearer <token>` on every API call |
+
+The SDKs handle this exchange automatically — pass your API Token when initializing the client and the SDK calls `/login` and refreshes the access token as needed.
 
 ## Important Notes
 
-- Once you generate the API token, make sure to click the copy button as it will not be visible to you in the future after closing the pane
-- You can only have one active API token at a time
-- To refresh your API token:
-  1. First revoke the existing token (from the same place you generated it)
-  2. Then click generate again to create a new token 
+- You can only have one active API Token at a time
+- To rotate your API Token: revoke the existing one, then generate a new one from the same place
 
 ## Using Your Credentials
 
 ### With the Vayu SDK
 
-When using the Vayu SDK:
-1. Set your client ID as an environment variable:
-   ```bash
-   export VAYU_CLIENT_ID=your_client_id_here
-   ```
-2. Pass your API token when initializing the Vayu client
+```typescript
+import { VayuClient } from 'vayu-ts';
 
-For more details about using the SDK, see the [SDK section](/api-reference/pages/sdk).
+const vayu = new VayuClient({ apiToken: process.env.VAYU_API_TOKEN });
+// No need to call login() — the SDK handles token exchange automatically
+```
+
+For more details, see the [SDK section](/api-reference/pages/sdk).
 
 ### Direct API Usage
 
-When making direct API calls without the SDK:
-- Include your client ID in the request headers:
-  ```
-  x-api-key: your_client_id_here
-  ```
-- When using the API for login, you can read about the login request payload in the [login endpoint documentation](/api-reference/endpoints/auth/login-by-obtaining-a-new-access-token)
+Every request needs two headers:
+- `x-api-key: <your Client ID>`
+- `Authorization: Bearer <access token>` (obtained from `POST /login`)
 
-Make sure to keep your client ID and API token secure and never expose them in client-side code.
+Make sure to keep your Client ID and API Token secure and never expose them in client-side code.
 
 ## Full curl example
 
 ```bash
-# Step 1 — Exchange your API token for a short-lived access token
+# Step 1 — Exchange your API Token for a short-lived access token
 ACCESS_TOKEN=$(curl -s -X POST "https://connect.withvayu.com/login" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $VAYU_CLIENT_ID" \
-  -d "{\"token\": \"$VAYU_API_TOKEN\"}" | jq -r '.accessToken')
+  -d "{\"refreshToken\": \"$VAYU_API_TOKEN\"}" | jq -r '.accessToken')
 
 # Step 2 — Use the access token on subsequent requests
 curl "https://connect.withvayu.com/customers" \
@@ -62,5 +71,5 @@ curl "https://connect.withvayu.com/customers" \
 ```
 
 <Note>
-Access tokens expire after **1 hour**. The Vayu SDKs handle token refresh automatically. If you're using a raw HTTP client, re-authenticate when you receive a `401` response.
+Access tokens expire after **1 hour**. If using a raw HTTP client, re-call `/login` when you receive a `401` response.
 </Note>
