@@ -6,8 +6,6 @@ Vayu supports a full integration with Xero, including: exporting approved invoic
 
 ![XER Ointegration4](/images/XEROintegration4.png)
 
-# **Xero**
-
 Vayu centralizes contract, usage, and pricing data into a single billing system. Xero provides the accounting layer where financial records are stored, categorized, and reported.
 
 When connected, Vayu sends finalized invoices directly to Xero. Each invoice is exported with its full structure, including usage-based and fixed charges as separate line items. This allows finance teams to review, reconcile, and report on revenue inside Xero without needing to reconstruct how an invoice was calculated.
@@ -88,5 +86,14 @@ Vayu tracks sync activity for each record. You can review whether a sync succeed
 
 After connecting Xero, sync a small set of customers and invoices and review how they appear in Xero. Confirm that mappings, line item structure, and totals behave as expected before relying on the integration more broadly.
 
-\
-\
+## **Xero Tax Handling**
+
+When connected to Xero, Vayu supports tax handling that aligns with Xero’s predefined tax rates and codes.
+
+You can control how tax is managed across systems:
+
+- **Xero-managed tax:** Use Xero as the source of truth for tax rates and rules, with Vayu aligning invoice data during sync.
+- **Vayu-applied tax:** Apply tax within Vayu and send finalized invoice values to Xero.
+- **Synced tax consistency:** Maintain alignment between systems by matching tax rates, codes, and product mappings.
+
+Vayu supports line-item tax and Xero-compatible tax codes, ensuring invoices sync correctly with Xero’s tax model.

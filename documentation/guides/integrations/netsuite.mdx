@@ -3,7 +3,7 @@ title: "NetSuite"
 sidebarTitle: "NetSuite"
 ---
 
-## **Vayu + NetSuite Integration: Two-Way Billing & Revenue Sync**
+## **Vayu \+ NetSuite Integration: Two-Way Billing & Revenue Sync**
 
 Vayu specializes in unifying contract and event data into a single revenue management platform. Oracle’s NetSuite platform offers a powerful way for businesses to handle key financial and operational tasks, including accounting and financial management. Integrating the two platforms ensures that your billing and revenue information is fully up to date and aligned at all times, no matter where you’re accessing it. 
 
@@ -151,9 +151,21 @@ Each integration maintains an **Activity Log** showing:
 
 ### Common Issues and Fixes
 
-| Issue                                            | Common Reason                                        | Common Fix                                                      |
-| ------------------------------------------------ | ---------------------------------------------------- | --------------------------------------------------------------- |
+| Issue | Common Reason | Common Fix |
+| --- | --- | --- |
 | Invoice or Sales Order not appearing in NetSuite | Missing or incorrect Cusotmer or ERP product mapping | Verify product codes under _Integration → Manage → ERP Mapping_ |
-| Duplicate customer records                       | Customer existed in both systems before sync         | Merge duplicate records in NetSuite; refresh in Vayu            |
-| Sync failed with “Permission Denied”             | NetSuite role lacks API access                       | Update NetSuite user role to include API + transaction rights   |
-| Discrepancy in invoice totals                    | Currency or rounding mismatch                        | Confirm both systems use same currency and rounding precision   |
+| Duplicate customer records | Customer existed in both systems before sync | Merge duplicate records in NetSuite; refresh in Vayu |
+| Sync failed with “Permission Denied” | NetSuite role lacks API access | Update NetSuite user role to include API \+ transaction rights |
+| Discrepancy in invoice totals | Currency or rounding mismatch | Confirm both systems use same currency and rounding precision |
+
+## **NetSuite Tax Handling**
+
+When connected to NetSuite, Vayu supports flexible tax handling that aligns with NetSuite’s configuration and reporting requirements.
+
+You can control how tax is calculated and synced between systems:
+
+- **NetSuite-managed tax:** Use NetSuite as the source of truth for tax rates, codes, and jurisdiction logic. Vayu aligns invoice data with NetSuite’s configuration during sync.
+- **Vayu-applied tax:** Apply tax within Vayu at the invoice or line-item level, then sync finalized invoices to NetSuite.
+- **Aligned tax syncing:** Maintain consistency between systems by ensuring tax structure, rates, and mappings match NetSuite expectations.
+
+Vayu adapts to NetSuite’s tax model by supporting both line-item and invoice-level tax, depending on how your products and tax settings are configured.
