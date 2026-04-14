@@ -1,0 +1,83 @@
+---
+title: 'Rate Limits'
+icon: 'gauge-high'
+description: 'API rate limits and how to handle them'
+---
+
+The Vayu API enforces rate limits via AWS API Gateway to ensure reliability and fair usage across all customers.
+
+## Limits
+
+| | Value |
+|---|---|
+| Rate limit | 500 requests/second |
+| Burst limit | 100 requests |
+
+<Note>
+Need higher limits? Contact [help@withvayu.com](mailto:help@withvayu.com) to discuss increases.
+</Note>
+
+## Handling 429 responses
+
+When you exceed the rate limit, the API returns HTTP `429` with the standard error format:
+
+```json
+{
+  "type": "rate_limit_error",
+  "code": "rate_limit_exceeded",
+  "message": "Too many requests"
+}
+```
+
+<CodeGroup>
+
+```typescript TypeScript
+async function withRetry<T>(fn: () => Promise<T>, retries = 3): Promise<T> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (error.type === 'rate_limit_error' && i < retries - 1) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      } else {
+        throw error;
+      }
+    }
+  }
+}
+```
+
+```python Python
+import time
+
+def with_retry(fn, retries=3):
+    for i in range(retries):
+        try:
+            return fn()
+        except VayuAPIError as e:
+            if e.type == 'rate_limit_error' and i < retries - 1:
+                time.sleep(1)
+            else:
+                raise
+```
+
+```go Go
+import "time"
+
+func withRetry(fn func() error, retries int) error {
+    for i := 0; i < retries; i++ {
+        err := fn()
+        if err == nil {
+            return nil
+        }
+        if i < retries-1 {
+            time.Sleep(time.Second)
+            continue
+        }
+        return err
+    }
+    return nil
+}
+```
+
+</CodeGroup>

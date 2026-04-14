@@ -4,31 +4,128 @@ icon: 'paper-plane'
 description: 'Sending events to Vayu'
 ---
 
-When you send events to Vayu, our system is designed with robustness in mind. One of the key features of our event sending mechanism is its ability to process multiple events without letting the invalidity of one or more events affect the entire request. This means that if you send a batch of events and some of them are not valid, Vayu will only discard the invalid ones, ensuring that your valid events are still processed and stored.
+Vayu processes events in batches. If some events in a batch are invalid, only those are discarded — valid events are still ingested.
 
+## Event structure
 
-## Immediate Availability
-Upon successful submission, events will be immediately available for viewing and management both through our API and the UI. This real-time availability is crucial for monitoring and analysis purposes, allowing you to act swiftly on the incoming data. For more details on browsing these events, visit our Browse Section.
+Each event requires four fields:
 
-Request Body
-The request body must include an array of events. Each event should comply with the EventInput schema.
+| Field | Type | Description |
+|---|---|---|
+| `name` | string | Event label (e.g. `api_call`, `storage_used`) |
+| `timestamp` | ISO 8601 datetime | When the event occurred (UTC) |
+| `customerAlias` | string | Identifies the customer (external ID or alias) |
+| `ref` | string | Unique reference for idempotency |
+| `data` | object (optional) | Arbitrary key-value metadata |
 
-- **Minimum Events:** 1 <br/>
--  **Maximum Events:** 1000 <br/>
--  **Total Payload Size:** Up to 256KB <br/>
+## Batch limits
 
-## Response Structure 
-The response from the server will include two arrays:
+- **Minimum events:** 1
+- **Maximum events:** 1,000
+- **Total payload size:** 256 KB
 
-**validEvents:** Contains all the events that were successfully processed. <br/>
-**invalidEvents:** Contains details of the events that failed validation, including the error message for each invalid event.
+## Example
 
+<CodeGroup>
+```typescript TypeScript
+import { Vayu } from 'vayu-ts';
+
+const vayu = new Vayu(process.env.VAYU_API_KEY);
+
+const result = await vayu.events.send([
+  {
+    name: 'api_call',
+    timestamp: new Date(),
+    customerAlias: 'customer-123',
+    ref: 'evt_abc123',
+    data: { endpoint: '/users', method: 'GET' },
+  },
+]);
+
+console.log('Valid:', result.validEvents.length);
+console.log('Invalid:', result.invalidEvents.length);
+```
+
+```python Python
+from vayu_sdk import Vayu
+from datetime import datetime, timezone
+import os
+
+vayu = Vayu(api_key=os.environ["VAYU_API_KEY"])
+
+result = vayu.events.send(events=[
+    {
+        "name": "api_call",
+        "timestamp": datetime.now(timezone.utc),
+        "customerAlias": "customer-123",
+        "ref": "evt_abc123",
+        "data": {"endpoint": "/users", "method": "GET"},
+    },
+])
+
+print("Valid:", len(result.valid_events))
+print("Invalid:", len(result.invalid_events))
+```
+
+```go Go
+import vayu "github.com/vayucode/vayu-sdks/go"
+
+v := vayu.NewVayu(os.Getenv("VAYU_API_KEY"))
+
+result, err := v.Events.SendEvents([]vayu.Event{
+    {
+        Name:          "api_call",
+        Timestamp:     time.Now().UTC(),
+        CustomerAlias: "customer-123",
+        Ref:           "evt_abc123",
+        Data: map[string]interface{}{
+            "endpoint": "/users",
+            "method":   "GET",
+        },
+    },
+})
+
+fmt.Println("Valid:", len(result.ValidEvents))
+fmt.Println("Invalid:", len(result.InvalidEvents))
+```
+
+```bash curl
+curl -X PUT "https://connect.withvayu.com/events" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "x-api-key: $VAYU_CLIENT_ID" \
+  -d '{
+    "events": [
+      {
+        "name": "api_call",
+        "timestamp": "2026-04-14T12:00:00Z",
+        "customerAlias": "customer-123",
+        "ref": "evt_abc123",
+        "data": { "endpoint": "/users", "method": "GET" }
+      }
+    ]
+  }'
+```
+</CodeGroup>
+
+## Response structure
+
+The response includes two arrays:
+
+- **`validEvents`** — events that were successfully ingested
+- **`invalidEvents`** — events that failed validation, each with an error message
+
+```json
+{
+  "validEvents": [ { "name": "api_call", "ref": "evt_abc123", ... } ],
+  "invalidEvents": []
+}
+```
+
+## Immediate availability
+
+Events are available in the API and UI immediately after ingestion.
 
 <Note>
-    ## Important Notes
-    Ensure each event in your request adheres to the EventInput schema. <br/>
-    The system can process up to 1000 events in a single request, with a total payload size limit of 256KB. <br/>
-    Invalid events **will not** cause the entire request to fail. Instead, they will be returned in the invalidEvents array of the response.
+Invalid events **do not** cause the entire request to fail. They are returned in the `invalidEvents` array while valid events are still processed.
 </Note>
-
-For detailed information on how to structure your events and manage responses, please refer to our API documentation.

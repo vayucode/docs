@@ -117,9 +117,9 @@
                   {
                     "group": "Events",
                     "pages": [
-                      "events-2",
-                      "s",
-                      "price-events-2"
+                      "documentation/guides/data-metering/events",
+                      "documentation/guides/data-metering/search-events",
+                      "documentation/guides/data-metering/pricing-events"
                     ]
                   }
                 ]
@@ -167,9 +167,12 @@
               "api-reference/pages/introduction",
               "api-reference/pages/connecting-to-vayu",
               "api-reference/pages/sdk",
+              "api-reference/pages/errors",
+              "api-reference/pages/rate-limits",
+              "api-reference/pages/idempotency",
               "api-reference/pages/pagination",
-              "api-reference/pages/ingestion",
               "api-reference/pages/sending-events",
+              "api-reference/pages/ingestion",
               "api-reference/pages/browsing-events",
               "api-reference/pages/webhooks",
               "api-reference/pages/product-structure"
@@ -184,6 +187,8 @@
                   "api-reference/endpoints/customers/list-customers",
                   "api-reference/endpoints/customers/create-customer",
                   "api-reference/endpoints/customers/get-customer",
+                  "api-reference/endpoints/customers/get-customer-by-externalid",
+                  "api-reference/endpoints/customers/get-customer-by-integration-id",
                   "api-reference/endpoints/customers/update-customer",
                   "api-reference/endpoints/customers/delete-customer",
                   "api-reference/endpoints/customers/get-products-consumptions-by-customer-id",
@@ -212,6 +217,7 @@
                 "group": "Contracts",
                 "pages": [
                   "api-reference/endpoints/contracts/get-contract",
+                  "api-reference/endpoints/contracts/get-contract-by-integration-id",
                   "api-reference/endpoints/contracts/delete-contract",
                   "api-reference/endpoints/contracts/list-contracts",
                   "api-reference/endpoints/contracts/create-contract"
@@ -229,7 +235,6 @@
                 "group": "Measurements",
                 "pages": [
                   "api-reference/endpoints/measurements/get-measurement",
-                  "api-reference/endpoints/measurements/update-measurement",
                   "api-reference/endpoints/measurements/list-measurements",
                   "api-reference/endpoints/measurements/create-measurement",
                   "api-reference/endpoints/measurements/delete-measurement"
@@ -264,6 +269,15 @@
                 "group": "Product Consumption",
                 "pages": [
                   "api-reference/endpoints/product-consumptions/get-product-consumption"
+                ]
+              },
+              {
+                "group": "Meters",
+                "pages": [
+                  "api-reference/endpoints/meters/list-meters",
+                  "api-reference/endpoints/meters/get-meter",
+                  "api-reference/endpoints/meters/update-meter",
+                  "api-reference/endpoints/meters/delete-meter"
                 ]
               },
               {

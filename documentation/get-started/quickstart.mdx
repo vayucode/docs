@@ -35,3 +35,89 @@ Check out the steps you’ll need to take:
     You’ll be able to view all the events that have been digested and counted by the platform, download consumption reports, and define products to meter.
   </Step>
 </Steps>
+
+## API Quickstart
+
+If you're integrating programmatically, here's the fastest path to your first working API call:
+
+<Steps>
+  <Step title="Get your credentials">
+    Log into Vayu → Integrations → click **Connect** on the Vayu card. Copy your **Client ID** and **API Token**. See [Connecting to Vayu](/api-reference/pages/connecting-to-vayu) for details.
+  </Step>
+  <Step title="Install the SDK">
+    <CodeGroup>
+    ```bash npm
+    npm install vayu-ts
+    ```
+    ```bash pip
+    pip install vayu-client
+    ```
+    ```bash go
+    go get github.com/weft-finance/vayu-go
+    ```
+    </CodeGroup>
+  </Step>
+  <Step title="Send your first event">
+    <CodeGroup>
+    ```typescript TypeScript
+    import { VayuClient } from 'vayu-ts';
+
+    // Pass your API Token — the SDK handles login/token refresh automatically
+    const vayu = new VayuClient({ apiToken: process.env.VAYU_API_TOKEN });
+
+    const result = await vayu.events.ingest([{
+      name: 'api_call',
+      ref: 'my-unique-ref-001',
+      customerAlias: 'your-customer-id',
+      timestamp: new Date().toISOString(),
+      data: { tokens: 1500 }
+    }]);
+
+    console.log('Valid events:', result.validEvents.length);
+    ```
+
+    ```python Python
+    from vayu_client import VayuClient
+    import os
+
+    vayu = VayuClient(api_token=os.environ["VAYU_API_TOKEN"])
+
+    result = vayu.events.ingest([{
+        "name": "api_call",
+        "ref": "my-unique-ref-001",
+        "customer_alias": "your-customer-id",
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "data": {"tokens": 1500}
+    }])
+
+    print("Valid events:", len(result.valid_events))
+    ```
+
+    ```go Go
+    import (
+        VayuSDK "github.com/weft-finance/vayu-go"
+        "os"
+        "time"
+        "fmt"
+    )
+
+    vayu := VayuSDK.NewVayu(os.Getenv("VAYU_API_TOKEN"))
+
+    result, err := vayu.Events.SendEvents([]VayuSDK.Event{{
+        Name:          "api_call",
+        Ref:           "my-unique-ref-001",
+        CustomerAlias: "your-customer-id",
+        Timestamp:     time.Now().UTC(),
+        Data:          map[string]interface{}{"tokens": 1500},
+    }})
+    if err != nil {
+        panic(err)
+    }
+    fmt.Printf("Valid events: %d\n", len(result.ValidEvents))
+    ```
+    </CodeGroup>
+  </Step>
+  <Step title="Verify with dry-run">
+    Not sure if events will match your customers and meters? Use the [dry-run endpoint](/api-reference/pages/ingestion) to test without storing data.
+  </Step>
+</Steps>

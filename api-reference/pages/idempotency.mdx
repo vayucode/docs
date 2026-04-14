@@ -1,0 +1,66 @@
+---
+title: 'Idempotency'
+icon: 'rotate'
+description: 'Safely retry API requests without creating duplicates'
+---
+
+## Overview
+
+Vayu event ingestion supports idempotency via the `ref` field on each event. If you send the same event twice with the same `ref`, Vayu processes it only once — the second submission is a no-op and returns the original result.
+
+This is critical for reliable integrations: if a network timeout leaves you uncertain whether a request was received, you can safely retry without double-counting usage.
+
+## How to use `ref`
+
+Include a unique `ref` value on every event. Use a stable identifier from your own system — a database row ID, a transaction ID, or a UUID you generate and store before sending.
+
+```json
+{
+  "events": [
+    {
+      "name": "api_call",
+      "ref": "txn_a1b2c3d4e5f6",
+      "customerAlias": "customer-123",
+      "timestamp": "2026-01-15T14:30:00Z",
+      "data": {
+        "endpoint": "/v1/predict",
+        "tokens": 1500
+      }
+    }
+  ]
+}
+```
+
+## Rules
+
+- `ref` must be unique per event name within your account
+- `ref` values are stored permanently — a `ref` used for a deleted event cannot be reused
+- If you omit `ref`, no idempotency protection applies to that event
+- The idempotency window is permanent (not time-bounded)
+
+## Duplicate detection in the response
+
+Duplicate `ref` values are returned in the `invalidEvents` array:
+
+```json
+{
+  "validEvents": [],
+  "invalidEvents": [
+    {
+      "event": { "ref": "txn_a1b2c3d4e5f6" },
+      "error": "Event with ref txn_a1b2c3d4e5f6 already exists"
+    }
+  ]
+}
+```
+
+## Best practice: generate `ref` before sending
+
+Always generate and persist your `ref` before the API call. If the call fails before a response arrives, retry with the same `ref` safely.
+
+```typescript
+const ref = `txn_${uuid()}`;
+await db.pendingEvents.insert({ ref, ...eventData });
+await vayu.events.ingest([{ ref, ...eventData }]);
+await db.pendingEvents.markSent(ref);
+```

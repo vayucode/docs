@@ -1,46 +1,94 @@
 ---
 title: 'Webhooks'
 icon: 'bell'
+description: 'Receive real-time event notifications from Vayu'
 ---
 
-Webhooks allow you to receive real-time notifications about important events in your Vayu account. This document describes the available webhook types and their payload structures.
+Webhooks let Vayu push notifications to your server when billing events occur. You subscribe per event type with a callback URL, and Vayu sends a signed POST request whenever that event fires.
 
-## Available Webhooks
+## Subscribing
 
-| Webhook Type | Description | Trigger Condition | 
-|-------------|-------------|-------------------|
-| Overage | Notifies when a customer exceeds their provisioned amount for a product | Customer's consumption exceeds their provisioned amount | 
-| Anonymous Customer Created | Notifies when a new anonymous customer is created in the system | Event was sent for a customer that couldn't exist |
-
-## Webhook Payloads
-
-### Overage Notification
-
-The overage webhook is triggered when a customer exceeds their provisioned amount for a product. The payload includes detailed information about the product consumption.
-
-#### Payload Structure
+**Endpoint:** `POST /webhook`
 
 ```json
 {
-  "productId": "string",          // The id of the product
-  "productName": "string",        // The name of the product 
-  "provisionedAmount": "number",  // The amount of units provisioned to the customer
-  "consumedAmount": "number",     // The amount of units consumed by the customer
-  "usagePercentage": "number",    // The percentage of the provisioned amount that has been consumed
-  "hasAccess": "boolean",         // Whether the customer has access to the product based on the provisioned amount
-  "remainingAmount": "number",    // The amount of units remaining to consume
-  "exceededAmount": "number"      // The amount of units exceeded
+  "callbackUrl": "https://your-server.com/webhooks/vayu",
+  "eventType": "Overage"
 }
 ```
 
-you can read more about the product consumption type in the [ get product consumption endpoint](/api-reference/endpoints/product-consumptions/get-product-consumption) page.
+<CodeGroup>
 
-#### Example Payload
+```bash curl
+curl -X POST "https://connect.withvayu.com/webhook" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "x-api-key: $VAYU_CLIENT_ID" \
+  -d '{
+    "callbackUrl": "https://your-server.com/webhooks/vayu",
+    "eventType": "Overage"
+  }'
+```
+
+```typescript TypeScript
+import { Vayu } from 'vayu-ts';
+
+const vayu = new Vayu(process.env.VAYU_API_KEY);
+
+await vayu.webhooks.subscribe({
+  callbackUrl: 'https://your-server.com/webhooks/vayu',
+  eventType: 'Overage',
+});
+```
+
+```python Python
+from vayu_sdk import Vayu
+import os
+
+vayu = Vayu(api_key=os.environ["VAYU_API_KEY"])
+
+vayu.webhooks.subscribe(
+    callback_url="https://your-server.com/webhooks/vayu",
+    event_type="Overage",
+)
+```
+
+```go Go
+import vayu "github.com/vayucode/vayu-sdks/go"
+
+v := vayu.NewVayu(os.Getenv("VAYU_API_KEY"))
+
+err := v.Webhooks.Subscribe(vayu.WebhookSubscribeRequest{
+    CallbackUrl: "https://your-server.com/webhooks/vayu",
+    EventType:   "Overage",
+})
+```
+
+</CodeGroup>
+
+## Available event types
+
+| Event type | Description |
+|---|---|
+| `Overage` | Customer exceeds their provisioned amount for a product |
+| `AnonymousCustomer` | Event received for an unrecognized customer alias — auto-created as anonymous |
+| `UpcomingRenewal` | Customer contract is approaching its renewal date |
+| `InvoiceApproved` | An invoice has been approved and is ready to send |
+| `UnchargedEvents` | Events exist that have not been counted against any meter |
+| `TierCrossed` | Customer usage has crossed into a new pricing tier |
+| `CommitmentCrossed` | Customer has crossed their committed usage threshold |
+| `FinalTierExceeded` | Customer usage has exceeded the final pricing tier |
+| `InvoicePaymentStatusChanged` | An invoice payment status has changed (e.g. paid, failed, overdue) |
+
+## Webhook payloads
+
+### Overage
 
 ```json
 {
+  "type": "Overage",
   "productId": "prod_123456789",
-  "productName": "Vayu Product",
+  "productName": "API Calls",
   "provisionedAmount": 1000,
   "consumedAmount": 1200,
   "usagePercentage": 120,
@@ -50,25 +98,11 @@ you can read more about the product consumption type in the [ get product consum
 }
 ```
 
-### Anonymous Customer Created
-
-This webhook is triggered when a new anonymous customer is created in the system. The payload contains basic customer information.
-
-#### Payload Structure
+### AnonymousCustomer
 
 ```json
 {
-  "id": "string",           // The Vayu Id of the created customer
-  "externalId": "string",   // The assumed external Id of the customer
-  "aliases": "string[]",    // The aliases used to match events to this customer (will be the externalId for this event)
-  "name": "string"          // The temporary assumed name of the customer
-}
-```
-
-#### Example Payload
-
-```json
-{
+  "type": "AnonymousCustomer",
   "id": "cust_123456789",
   "externalId": "ext_987654321",
   "aliases": ["ext_987654321"],
@@ -76,77 +110,401 @@ This webhook is triggered when a new anonymous customer is created in the system
 }
 ```
 
-## Webhook Security
+### UpcomingRenewal
 
-For security purposes, all webhook requests include:
-- A timestamp header (in seconds)
-- A signature header (RSA-SHA256 signed message of 'timestamp.payload')
-- The event type in the payload
+```json
+{
+  "type": "UpcomingRenewal",
+  "customerId": "cust_123456789",
+  "customerName": "Acme Corp",
+  "contractId": "contract_abc123",
+  "renewalDate": "2026-02-01T00:00:00Z"
+}
+```
 
-> Note: Only HTTPS endpoints are supported. HTTP endpoints are not allowed for security reasons.
+### InvoiceApproved
 
-### Signature Verification:
-To ensure the webhook is authentic, you must verify the webhook signature using the public key provided by Vayu.
+```json
+{
+  "type": "InvoiceApproved",
+  "invoiceId": "inv_123456789",
+  "customerId": "cust_123456789",
+  "customerName": "Acme Corp",
+  "amount": 1500.00,
+  "currency": "USD",
+  "dueDate": "2026-02-15T00:00:00Z"
+}
+```
 
-Here's a ready-to-use helper function you can drop into your backend codebase:
+### InvoicePaymentStatusChanged
 
-#### Typescript:
+```json
+{
+  "type": "InvoicePaymentStatusChanged",
+  "invoiceId": "inv_123456789",
+  "customerId": "cust_123456789",
+  "previousStatus": "PENDING",
+  "currentStatus": "PAID",
+  "amount": 1500.00,
+  "currency": "USD"
+}
+```
 
-```typescript
-app.post('/webhooks', (req, res) => {
+### TierCrossed
+
+```json
+{
+  "type": "TierCrossed",
+  "customerId": "cust_123456789",
+  "productId": "prod_123456789",
+  "productName": "API Calls",
+  "previousTier": 1,
+  "currentTier": 2,
+  "currentUsage": 10001,
+  "tierThreshold": 10000
+}
+```
+
+### CommitmentCrossed
+
+```json
+{
+  "type": "CommitmentCrossed",
+  "customerId": "cust_123456789",
+  "contractId": "contract_abc123",
+  "committedAmount": 50000,
+  "currentUsage": 50001
+}
+```
+
+### FinalTierExceeded
+
+```json
+{
+  "type": "FinalTierExceeded",
+  "customerId": "cust_123456789",
+  "productId": "prod_123456789",
+  "productName": "API Calls",
+  "finalTierThreshold": 100000,
+  "currentUsage": 100500
+}
+```
+
+### UnchargedEvents
+
+```json
+{
+  "type": "UnchargedEvents",
+  "customerId": "cust_123456789",
+  "eventCount": 42,
+  "earliestEventTimestamp": "2026-01-10T08:00:00Z"
+}
+```
+
+## Handling webhook events
+
+A minimal server that receives Vayu webhooks, routes by event type, and reads the payload:
+
+<CodeGroup>
+
+```typescript TypeScript (Express)
+import express from 'express';
+import { Vayu } from 'vayu-ts';
+
+const vayu = new Vayu(process.env.VAYU_API_KEY);
+const app = express();
+app.use(express.json());
+
+// Register the webhook (run once)
+// await vayu.webhooks.subscribe({
+//   callbackUrl: 'https://your-server.com/webhooks/vayu',
+//   eventType: 'Overage',
+// });
+
+app.post('/webhooks/vayu', (req, res) => {
+  const event = req.body;
+
+  switch (event.type) {
+    case 'Overage':
+      console.log(
+        `${event.productName}: ${event.consumedAmount}/${event.provisionedAmount} used ` +
+        `(${event.exceededAmount} over limit)`
+      );
+      break;
+
+    case 'InvoiceApproved':
+      console.log(`Invoice ${event.invoiceId} for ${event.customerName}: $${event.amount} ${event.currency}`);
+      break;
+
+    case 'TierCrossed':
+      console.log(`${event.productName}: customer moved from tier ${event.previousTier} → ${event.currentTier}`);
+      break;
+
+    case 'AnonymousCustomer':
+      console.log(`New anonymous customer created: ${event.externalId}`);
+      break;
+
+    default:
+      console.log(`Unhandled event: ${event.type}`);
+  }
+
+  res.sendStatus(200);
+});
+
+app.listen(3000, () => console.log('Listening on :3000'));
+```
+
+```python Python (Flask)
+from flask import Flask, request
+from vayu_sdk import Vayu
+import os
+
+vayu = Vayu(api_key=os.environ["VAYU_API_KEY"])
+app = Flask(__name__)
+
+# Register the webhook (run once)
+# vayu.webhooks.subscribe(
+#     callback_url="https://your-server.com/webhooks/vayu",
+#     event_type="Overage",
+# )
+
+@app.route('/webhooks/vayu', methods=['POST'])
+def handle_webhook():
+    event = request.get_json()
+
+    if event['type'] == 'Overage':
+        print(
+            f"{event['productName']}: {event['consumedAmount']}/{event['provisionedAmount']} used "
+            f"({event['exceededAmount']} over limit)"
+        )
+
+    elif event['type'] == 'InvoiceApproved':
+        print(f"Invoice {event['invoiceId']} for {event['customerName']}: ${event['amount']} {event['currency']}")
+
+    elif event['type'] == 'TierCrossed':
+        print(f"{event['productName']}: customer moved from tier {event['previousTier']} → {event['currentTier']}")
+
+    elif event['type'] == 'AnonymousCustomer':
+        print(f"New anonymous customer created: {event['externalId']}")
+
+    else:
+        print(f"Unhandled event: {event['type']}")
+
+    return '', 200
+
+if __name__ == '__main__':
+    app.run(port=3000)
+```
+
+```go Go (net/http)
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+
+    vayu "github.com/vayucode/vayu-sdks/go"
+)
+
+// Register the webhook (run once)
+// v := vayu.NewVayu(os.Getenv("VAYU_API_KEY"))
+// v.Webhooks.Subscribe(vayu.WebhookSubscribeRequest{
+//     CallbackUrl: "https://your-server.com/webhooks/vayu",
+//     EventType:   "Overage",
+// })
+
+func main() {
+    http.HandleFunc("/webhooks/vayu", func(w http.ResponseWriter, r *http.Request) {
+        body, _ := io.ReadAll(r.Body)
+
+        var event map[string]interface{}
+        json.Unmarshal(body, &event)
+
+        switch event["type"] {
+        case "Overage":
+            fmt.Printf("%s: %.0f/%.0f used (%.0f over limit)\n",
+                event["productName"], event["consumedAmount"],
+                event["provisionedAmount"], event["exceededAmount"])
+
+        case "InvoiceApproved":
+            fmt.Printf("Invoice %s for %s: $%.2f %s\n",
+                event["invoiceId"], event["customerName"],
+                event["amount"], event["currency"])
+
+        case "TierCrossed":
+            fmt.Printf("%s: customer moved from tier %.0f → %.0f\n",
+                event["productName"], event["previousTier"], event["currentTier"])
+
+        case "AnonymousCustomer":
+            fmt.Printf("New anonymous customer created: %s\n", event["externalId"])
+
+        default:
+            fmt.Printf("Unhandled event: %s\n", event["type"])
+        }
+
+        w.WriteHeader(http.StatusOK)
+    })
+
+    fmt.Println("Listening on :3000")
+    http.ListenAndServe(":3000", nil)
+}
+```
+
+</CodeGroup>
+
+<Note>
+In production, always [verify the webhook signature](#verifying-signatures) before processing the payload.
+</Note>
+
+## Webhook security
+
+All Vayu webhook requests include headers for signature verification:
+
+| Header | Description |
+|---|---|
+| `X-Timestamp` | Unix timestamp (seconds) of when the request was sent |
+| `X-Signature` | Base64-encoded RSA-SHA256 signature of `timestamp.JSON(payload)` |
+| `X-Signature-Version` | Signature scheme version (currently `v1`) |
+
+The signed message is: `${timestamp}.${JSON.stringify(payload)}`
+
+Only HTTPS callback URLs are supported.
+
+### Verifying signatures
+
+The TypeScript SDK provides a built-in helper. Built-in verification for the Python and Go SDKs is coming soon — in the meantime, verify manually using Vayu's public key.
+
+<CodeGroup>
+
+```typescript TypeScript (SDK)
+import { Vayu } from 'vayu-ts';
+
+const vayu = new Vayu(process.env.VAYU_API_KEY);
+
+app.post('/webhooks', async (req, res) => {
   const payload = JSON.stringify(req.body);
   const timestamp = Number(req.headers['x-timestamp']);
   const signature = String(req.headers['x-signature']);
 
-  // Important to login before verifying webhook signatures.
-  await vayu.login();
-  
-  const isValid = vayu.verifyWebhookSignature({
+  const isValid = vayu.webhooks.verifyWebhookSignature({
     payload,
     timestamp,
     signature,
+    tolerance: 300, // optional — reject if older than 5 minutes (default)
   });
 
   if (!isValid) {
-    // Handle invalid token.
+    return res.sendStatus(401);
   }
 
-  // Proceed with webhook handling
-  console.log('Webhook is valid', JSON.parse(payload));
-  
-  // ... Handle event.
-  
+  const event = req.body;
+  console.log('Received webhook:', event.type);
   res.sendStatus(200);
 });
 ```
 
-#### Python:
+```python Python (manual)
+import json, time, base64, math
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import padding
+from flask import Flask, request
 
-Here's a ready-to-use helper function you can drop into your backend codebase:
+# Load Vayu's public key (provided during onboarding)
+with open("vayu-public.pem", "rb") as f:
+    public_key = serialization.load_pem_public_key(f.read())
 
-```python
+TOLERANCE = 300  # 5 minutes
+
+app = Flask(__name__)
+
 @app.route('/webhooks', methods=['POST'])
 def webhooks():
     payload = request.get_data(as_text=True)
     timestamp = int(request.headers.get('X-Timestamp', '0'))
     signature = request.headers.get('X-Signature', '')
-    
-    # Important: authenticate with Vayu before verifying webhook signatures
-    vayu.login()
-    
-    is_valid = vayu.verify_webhook_signature(
-        payload=payload,
-        timestamp=timestamp,
-        signature=signature
-    )
-    
-    if not is_valid:
-        # Handle invalid token
-    
-    # Proceed with webhook handling
-    print('Webhook is valid:', payload)
 
-    # ... Handle event.
-    
+    # Reject stale webhooks
+    if abs(time.time() - timestamp) > TOLERANCE:
+        return '', 401
+
+    # Reconstruct the signed message
+    message = f"{timestamp}.{json.dumps(json.loads(payload))}"
+
+    try:
+        public_key.verify(
+            base64.b64decode(signature),
+            message.encode(),
+            padding.PKCS1v15(),
+            hashes.SHA256(),
+        )
+    except Exception:
+        return '', 401
+
+    event = json.loads(payload)
+    print('Received webhook:', event['type'])
     return '', 200
 ```
+
+```go Go (manual)
+import (
+    "crypto"
+    "crypto/rsa"
+    "crypto/sha256"
+    "crypto/x509"
+    "encoding/base64"
+    "encoding/json"
+    "encoding/pem"
+    "fmt"
+    "io"
+    "math"
+    "net/http"
+    "os"
+    "strconv"
+    "time"
+)
+
+// Load Vayu's public key (provided during onboarding)
+var publicKey *rsa.PublicKey
+
+func init() {
+    keyData, _ := os.ReadFile("vayu-public.pem")
+    block, _ := pem.Decode(keyData)
+    pub, _ := x509.ParsePKIXPublicKey(block.Bytes)
+    publicKey = pub.(*rsa.PublicKey)
+}
+
+const tolerance = 300 // 5 minutes
+
+func webhookHandler(w http.ResponseWriter, r *http.Request) {
+    body, _ := io.ReadAll(r.Body)
+    timestamp, _ := strconv.ParseInt(r.Header.Get("X-Timestamp"), 10, 64)
+    signature := r.Header.Get("X-Signature")
+
+    // Reject stale webhooks
+    if math.Abs(float64(time.Now().Unix()-timestamp)) > tolerance {
+        http.Error(w, "stale webhook", http.StatusUnauthorized)
+        return
+    }
+
+    // Reconstruct the signed message
+    message := fmt.Sprintf("%d.%s", timestamp, string(body))
+    hash := sha256.Sum256([]byte(message))
+
+    sigBytes, _ := base64.StdEncoding.DecodeString(signature)
+    err := rsa.VerifyPKCS1v15(publicKey, crypto.SHA256, hash[:], sigBytes)
+    if err != nil {
+        http.Error(w, "invalid signature", http.StatusUnauthorized)
+        return
+    }
+
+    var event map[string]interface{}
+    json.Unmarshal(body, &event)
+    fmt.Println("Received webhook:", event["type"])
+
+    w.WriteHeader(http.StatusOK)
+}
+```
+
+</CodeGroup>
