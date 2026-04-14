@@ -50,13 +50,13 @@ Make sure to keep your client ID and API token secure and never expose them in c
 
 ```bash
 # Step 1 — Exchange your API token for a short-lived access token
-ACCESS_TOKEN=$(curl -s -X POST "https://api.withvayu.com/v1/auth/login" \
+ACCESS_TOKEN=$(curl -s -X POST "https://api.withvayu.com/login" \
   -H "Content-Type: application/json" \
   -H "x-api-key: $VAYU_CLIENT_ID" \
   -d "{\"token\": \"$VAYU_API_TOKEN\"}" | jq -r '.accessToken')
 
 # Step 2 — Use the access token on subsequent requests
-curl "https://api.withvayu.com/v1/customers" \
+curl "https://api.withvayu.com/customers" \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
   -H "x-api-key: $VAYU_CLIENT_ID"
 ```
