@@ -1,15 +1,134 @@
 ---
-title: 'Browsing events'
-icon: 'eye'  
+title: 'Browsing Events'
+icon: 'eye'
+description: 'Query and filter ingested events'
 ---
 
+Use the events query endpoint to retrieve ingested events by time range, filter by event name or customer, and paginate through large datasets.
 
-### Through the UI
-You can view events in the Vayu UI by navigating to the Events option under the Usage tab in the left-hand navigation bar. This will display a list of the latest 100 events that have been recorded in the system.
+**Endpoint:** `GET /events`
 
-### Through the API
-You can also view events through the API by making a **GET request** to the _/events_ endpoint. The endpoint provides more options for filtering and the results.
+## Query parameters
 
-<Note>
-For more information visit the Query events endpoint documentation.
-</Note>
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `startTime` | string | Yes | Start of the time range (ISO 8601 UTC) |
+| `endTime` | string | Yes | End of the time range (ISO 8601 UTC) |
+| `eventName` | string | No | Filter to a specific event type |
+| `customerAlias` | string | No | Filter to events for a specific customer alias |
+| `limit` | number | No | Results per page (default: 10, max: 1,000) |
+| `cursor` | string | No | Pagination cursor from the previous response |
+
+## Response
+
+Returns a [paginated response](/api-reference/pages/pagination) with an `events` array.
+
+```json
+{
+  "events": [
+    {
+      "name": "api_call",
+      "ref": "4f6cf35x-2c4y-483z-a0a9-158621f77a21",
+      "customerAlias": "customer-123",
+      "timestamp": "2026-01-15T14:30:00Z",
+      "data": {
+        "endpoint": "/v1/predict",
+        "tokens": 1500
+      }
+    }
+  ],
+  "total": 4821,
+  "hasMore": true,
+  "nextCursor": "eyJpZCI6IjEyMyJ9"
+}
+```
+
+## Examples
+
+<CodeGroup>
+
+```bash curl
+# Basic query by time range
+curl "https://connect.withvayu.com/events?startTime=2026-01-01T00:00:00Z&endTime=2026-01-31T23:59:59Z&limit=100" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "x-api-key: $VAYU_CLIENT_ID"
+
+# Filter by event name and customer
+curl "https://connect.withvayu.com/events?startTime=2026-01-01T00:00:00Z&endTime=2026-01-31T23:59:59Z&eventName=api_call&customerAlias=customer-123" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "x-api-key: $VAYU_CLIENT_ID"
+```
+
+```typescript TypeScript
+import VayuSDK from 'vayu-ts';
+
+const vayu = new VayuSDK({ apiToken: process.env.VAYU_API_TOKEN });
+
+const result = await vayu.events.query({
+  startTime: new Date('2026-01-01'),
+  endTime: new Date('2026-01-31'),
+  eventName: 'api_call',
+  customerAlias: 'customer-123',
+  limit: 100,
+});
+
+console.log(`${result.total} total events`);
+for (const event of result.events) {
+  console.log(event.name, event.customerAlias, event.timestamp);
+}
+```
+
+```python Python
+from vayu_client import VayuClient
+from datetime import datetime
+import os
+
+vayu = VayuClient(api_token=os.environ["VAYU_API_TOKEN"])
+
+result = vayu.events.query(
+    start_time=datetime(2026, 1, 1),
+    end_time=datetime(2026, 1, 31),
+    event_name="api_call",
+    customer_alias="customer-123",
+    limit=100,
+)
+
+print(f"{result.total} total events")
+for event in result.events:
+    print(event.name, event.customer_alias, event.timestamp)
+```
+
+```go Go
+import (
+    VayuSDK "github.com/weft-finance/vayu-go"
+    "os"
+    "time"
+    "fmt"
+)
+
+vayu := VayuSDK.NewVayu(os.Getenv("VAYU_API_TOKEN"))
+
+eventName := "api_call"
+limit := float32(100)
+
+result, err := vayu.Events.QueryEvents(VayuSDK.QueryEventsRequest{
+    StartTime: time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
+    EndTime:   time.Date(2026, 1, 31, 23, 59, 59, 0, time.UTC),
+    Name:      eventName,
+    Limit:     &limit,
+})
+if err != nil {
+    panic(err)
+}
+
+fmt.Printf("%d total events\n", len(result.Events))
+for _, event := range result.Events {
+    fmt.Println(event.Name, event.CustomerAlias, event.Timestamp)
+}
+```
+
+</CodeGroup>
+
+## Via the UI
+
+Navigate to **Usage → Events** in the left sidebar to view the latest 100 events. You can filter by date range, event name, customer alias, or reference ID directly in the interface.

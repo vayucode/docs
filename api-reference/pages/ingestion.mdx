@@ -1,59 +1,190 @@
 ---
-title: 'Dry run ingestion'
+title: 'Dry Run Ingestion'
 icon: 'square-terminal'
+description: 'Test event processing without storing data'
 ---
 
-## Introduction
-Dry run ingestion is a feature that allows you to send events to Vayu without actually storing them. This is useful for testing purposes, as it allows you to verify that the events are being sent correctly and that they are being processed as expected.
+The dry run endpoint processes your events exactly as the live ingestion pipeline would — validating, matching customers, and evaluating meters — but **does not store any data**. Use it to verify your event schema, check customer matching, and preview meter values before going live.
 
-<Info>
- How it works? <br/>
- When you send events to Vayu using the Submit a batch of events for testing endpoint, <br/>
- Vayu will process the events as it normally would, but it will not store them in the database. Instead, it will return a response that indicates whether the events were processed successfully or not, which customers the events will be matched to and how the events would be counted.
-</Info>
+**Endpoint:** `POST /events/dry-run`
 
-## Example
-Here is an example of how you can use the dry run ingestion feature to send events to Vayu:
+## Request
 
+Same schema as live ingestion: 1–1,000 events per request, max 256 KB payload.
 
-```bash
-curl -X POST "https://connect.withvayu.com/events/dry-run" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $ACCESS_TOKEN" \
-  -H "x-api-key: $VAYU_CLIENT_ID"
--d '{
+```json
+{
   "events": [
     {
-      "name": "test_event",
-      "ref": "your_idempotency_key",
-      "customerAlias": "the value by which customer matching will be done",
-      "timestamp": "2021-01-01T00:00:00Z",
+      "name": "api_call",
+      "ref": "test-ref-001",
+      "customerAlias": "customer-123",
+      "timestamp": "2026-01-15T14:30:00Z",
       "data": {
-        "key1": "value1",
-        "key2": "value2"
+        "endpoint": "/v1/predict",
+        "tokens": 1500
       }
     }
   ]
-}'
+}
 ```
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | string | Yes | Event type identifier — must match a configured meter's `eventName` |
+| `ref` | string | Yes | Unique idempotency key for this event |
+| `customerAlias` | string | Yes | Identifier used to match the event to a customer |
+| `timestamp` | string | Yes | ISO 8601 UTC timestamp of when the event occurred |
+| `data` | object | No | Arbitrary key-value payload used by meter filters and aggregations |
+
 ## Response
-The response will be a JSON array that contains objects with the following properties:
 
-event: The events that was created by the ingestion process and the event id.
-matchedCustomer: The customer that the event was matched to, if any.
-meterWithValues: The meters that the event was counted towards.
-value: The value the event contributed to the eventual meter value.
-instanceValue: (Applicable only for instance based meters) The instance identifier for which the event was counted for.
+Returns one result object per submitted event.
 
-## Response Structure
+```json
+{
+  "events": [
+    {
+      "event": {
+        "name": "api_call",
+        "ref": "test-ref-001",
+        "customerAlias": "customer-123",
+        "timestamp": "2026-01-15T14:30:00Z",
+        "data": { "tokens": 1500 }
+      },
+      "matchedCustomer": "cust_abc123",
+      "meterWithValues": [
+        {
+          "name": "API Calls Meter",
+          "eventName": "api_call",
+          "aggregationMethod": "COUNT",
+          "value": 1,
+          "instanceValue": null
+        }
+      ]
+    }
+  ]
+}
+```
 
-The response will be a JSON array that contains objects with the following properties:
-- event: <br/> The events that was created by the ingestion process and the event id.
-- matchedCustomer: <br/>
- The customer that the event was matched to, if any.
-- meterWithValues: <br/>
- The meters that the event was counted towards.
-  - value: <br/>  The value the event contributed to the eventual meter value.
-  - instanceValue: <br/>
-   Applicable only for instance based meters
-   The instance identifier for which the event was counted for.
+| Field | Type | Description |
+|---|---|---|
+| `event` | object | The submitted event as it would be ingested |
+| `matchedCustomer` | string \| null | The customer ID the event matched, or `null` if no match found |
+| `meterWithValues` | array | Meters this event would be counted against |
+| `meterWithValues[].value` | number \| null | Contribution to the meter's aggregated value |
+| `meterWithValues[].instanceValue` | any | For instance-based meters: the instance identifier |
+
+<Note>
+If `matchedCustomer` is `null`, the event would create an anonymous customer in live ingestion. Check your `customerAlias` value.
+</Note>
+
+## Examples
+
+<CodeGroup>
+
+```bash curl
+curl -X POST "https://connect.withvayu.com/events/dry-run" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "x-api-key: $VAYU_CLIENT_ID" \
+  -d '{
+    "events": [
+      {
+        "name": "api_call",
+        "ref": "test-ref-001",
+        "customerAlias": "customer-123",
+        "timestamp": "2026-01-15T14:30:00Z",
+        "data": { "tokens": 1500 }
+      }
+    ]
+  }'
+```
+
+```typescript TypeScript
+import VayuSDK from 'vayu-ts';
+
+const vayu = new VayuSDK({ apiToken: process.env.VAYU_API_TOKEN });
+
+const result = await vayu.events.dryRun([{
+  name: 'api_call',
+  ref: 'test-ref-001',
+  customerAlias: 'customer-123',
+  timestamp: new Date().toISOString(),
+  data: { tokens: 1500 }
+}]);
+
+for (const { event, matchedCustomer, meterWithValues } of result.events) {
+  console.log('Event:', event.name);
+  console.log('Matched customer:', matchedCustomer ?? 'NO MATCH');
+  console.log('Meter values:', meterWithValues.map(m => `${m.name}: ${m.value}`));
+}
+```
+
+```python Python
+from vayu_client import VayuClient
+from datetime import datetime, timezone
+import os
+
+vayu = VayuClient(api_token=os.environ["VAYU_API_TOKEN"])
+
+result = vayu.events.dry_run([{
+    "name": "api_call",
+    "ref": "test-ref-001",
+    "customer_alias": "customer-123",
+    "timestamp": datetime.now(timezone.utc).isoformat(),
+    "data": {"tokens": 1500}
+}])
+
+for item in result.events:
+    print("Event:", item.event.name)
+    print("Matched customer:", item.matched_customer or "NO MATCH")
+    for meter in item.meter_with_values:
+        print(f"  {meter.name}: {meter.value}")
+```
+
+```go Go
+import (
+    VayuSDK "github.com/weft-finance/vayu-go"
+    "os"
+    "time"
+    "fmt"
+)
+
+vayu := VayuSDK.NewVayu(os.Getenv("VAYU_API_TOKEN"))
+
+result, err := vayu.Events.SendEventsDryRun([]VayuSDK.Event{{
+    Name:          "api_call",
+    Ref:           "test-ref-001",
+    CustomerAlias: "customer-123",
+    Timestamp:     time.Now().UTC(),
+    Data:          map[string]interface{}{"tokens": 1500},
+}})
+if err != nil {
+    panic(err)
+}
+
+for _, item := range result.Events {
+    fmt.Printf("Event: %s\n", item.Event.Name)
+    if item.MatchedCustomer != nil {
+        fmt.Printf("Matched customer: %s\n", *item.MatchedCustomer)
+    } else {
+        fmt.Println("Matched customer: NO MATCH")
+    }
+    for _, m := range item.MeterWithValues {
+        fmt.Printf("  %s: %v\n", m.Name, m.Value)
+    }
+}
+```
+
+</CodeGroup>
+
+## Common dry run results
+
+| Scenario | What you'll see |
+|---|---|
+| Event matches a customer | `matchedCustomer` is populated with the customer ID |
+| No customer match | `matchedCustomer` is `null` — live ingestion would create an anonymous customer |
+| Event matches a meter | `meterWithValues` contains the meter with a non-null `value` |
+| Event name not in any meter | `meterWithValues` is empty |
+| Invalid event schema | Event appears in the `invalidEvents` array with an error message |

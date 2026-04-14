@@ -1,13 +1,63 @@
 ---
 title: 'Webhooks'
 icon: 'bell'
+description: 'Receive real-time event notifications from Vayu'
 ---
 
-Webhooks allow you to receive real-time notifications about important events in your Vayu account.
+Webhooks let Vayu push notifications to your server when billing events occur. You subscribe per event type with a callback URL, and Vayu sends a signed POST request whenever that event fires.
 
-## Available Webhooks
+## Subscribing
 
-| Webhook Type | Description |
+**Endpoint:** `POST /webhook`
+
+```json
+{
+  "callbackUrl": "https://your-server.com/webhooks/vayu",
+  "eventType": "Overage"
+}
+```
+
+<CodeGroup>
+
+```bash curl
+curl -X POST "https://connect.withvayu.com/webhook" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "x-api-key: $VAYU_CLIENT_ID" \
+  -d '{
+    "callbackUrl": "https://your-server.com/webhooks/vayu",
+    "eventType": "Overage"
+  }'
+```
+
+```typescript TypeScript
+import VayuSDK from 'vayu-ts';
+
+const vayu = new VayuSDK({ apiToken: process.env.VAYU_API_TOKEN });
+
+await vayu.webhooks.subscribe({
+  callbackUrl: 'https://your-server.com/webhooks/vayu',
+  eventType: 'Overage',
+});
+```
+
+```python Python
+from vayu_client import VayuClient
+import os
+
+vayu = VayuClient(api_token=os.environ["VAYU_API_TOKEN"])
+
+vayu.webhooks.subscribe(
+    callback_url="https://your-server.com/webhooks/vayu",
+    event_type="Overage",
+)
+```
+
+</CodeGroup>
+
+## Available event types
+
+| Event type | Description |
 |---|---|
 | `Overage` | Customer exceeds their provisioned amount for a product |
 | `AnonymousCustomer` | Event received for an unrecognized customer alias — auto-created as anonymous |
@@ -19,7 +69,7 @@ Webhooks allow you to receive real-time notifications about important events in 
 | `FinalTierExceeded` | Customer usage has exceeded the final pricing tier |
 | `InvoicePaymentStatusChanged` | An invoice payment status has changed (e.g. paid, failed, overdue) |
 
-## Webhook Payloads
+## Webhook payloads
 
 ### Overage
 
@@ -140,77 +190,74 @@ Webhooks allow you to receive real-time notifications about important events in 
 }
 ```
 
-## Webhook Security
+## Webhook security
 
-For security purposes, all webhook requests include:
-- A timestamp header (in seconds)
-- A signature header (RSA-SHA256 signed message of 'timestamp.payload')
-- The event type in the payload
+All Vayu webhook requests include two headers you must verify:
 
-> Note: Only HTTPS endpoints are supported. HTTP endpoints are not allowed for security reasons.
+| Header | Description |
+|---|---|
+| `x-timestamp` | Unix timestamp (seconds) of when the request was sent |
+| `x-signature` | RSA-SHA256 signature of `timestamp.payload` |
 
-### Signature Verification:
-To ensure the webhook is authentic, you must verify the webhook signature using the public key provided by Vayu.
+Only HTTPS endpoints are supported.
 
-Here's a ready-to-use helper function you can drop into your backend codebase:
+### Verifying signatures
 
-#### Typescript:
+<CodeGroup>
 
-```typescript
-app.post('/webhooks', (req, res) => {
+```typescript TypeScript
+import VayuSDK from 'vayu-ts';
+
+const vayu = new VayuSDK({ apiToken: process.env.VAYU_API_TOKEN });
+
+app.post('/webhooks', async (req, res) => {
   const payload = JSON.stringify(req.body);
   const timestamp = Number(req.headers['x-timestamp']);
   const signature = String(req.headers['x-signature']);
 
-  // Important to login before verifying webhook signatures.
-  await vayu.login();
-  
-  const isValid = vayu.verifyWebhookSignature({
-    payload,
-    timestamp,
-    signature,
-  });
+  const isValid = vayu.verifyWebhookSignature({ payload, timestamp, signature });
 
   if (!isValid) {
-    // Handle invalid token.
+    return res.sendStatus(401);
   }
 
-  // Proceed with webhook handling
-  console.log('Webhook is valid', JSON.parse(payload));
-  
-  // ... Handle event.
-  
+  const event = JSON.parse(payload);
+  console.log('Received webhook:', event.type);
+
+  // Handle by type
+  if (event.type === 'Overage') {
+    // ...
+  }
+
   res.sendStatus(200);
 });
 ```
 
-#### Python:
+```python Python
+from vayu_client import VayuClient
+import os
 
-Here's a ready-to-use helper function you can drop into your backend codebase:
+vayu = VayuClient(api_token=os.environ["VAYU_API_TOKEN"])
 
-```python
 @app.route('/webhooks', methods=['POST'])
 def webhooks():
     payload = request.get_data(as_text=True)
     timestamp = int(request.headers.get('X-Timestamp', '0'))
     signature = request.headers.get('X-Signature', '')
-    
-    # Important: authenticate with Vayu before verifying webhook signatures
-    vayu.login()
-    
+
     is_valid = vayu.verify_webhook_signature(
         payload=payload,
         timestamp=timestamp,
-        signature=signature
+        signature=signature,
     )
-    
-    if not is_valid:
-        # Handle invalid token
-    
-    # Proceed with webhook handling
-    print('Webhook is valid:', payload)
 
-    # ... Handle event.
-    
+    if not is_valid:
+        return '', 401
+
+    event = json.loads(payload)
+    print('Received webhook:', event['type'])
+
     return '', 200
 ```
+
+</CodeGroup>
