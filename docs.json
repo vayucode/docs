@@ -236,7 +236,6 @@
                 "group": "Measurements",
                 "pages": [
                   "api-reference/endpoints/measurements/get-measurement",
-                  "api-reference/endpoints/measurements/update-measurement",
                   "api-reference/endpoints/measurements/list-measurements",
                   "api-reference/endpoints/measurements/create-measurement",
                   "api-reference/endpoints/measurements/delete-measurement"
