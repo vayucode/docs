@@ -38,14 +38,51 @@ The SDKs handle this exchange automatically — pass your API Token when initial
 
 ### With the Vayu SDK
 
-```typescript
-import { VayuClient } from 'vayu-ts';
+The SDKs handle the full token lifecycle — just pass your API key and start making calls.
 
-const vayu = new VayuClient({ apiToken: process.env.VAYU_API_TOKEN });
-// No need to call login() — the SDK handles token exchange automatically
+<CodeGroup>
+```typescript TypeScript
+import { Vayu } from 'vayu-ts';
+
+const vayu = new Vayu(process.env.VAYU_API_KEY);
+
+// Start using the client — authentication is automatic
+const customers = await vayu.customers.list();
 ```
 
-For more details, see the [SDK section](/api-reference/pages/sdk).
+```python Python
+from vayu_sdk import Vayu
+
+vayu = Vayu(api_key=os.environ["VAYU_API_KEY"])
+
+# Start using the client — authentication is automatic
+customers = vayu.customers.list()
+```
+
+```go Go
+import vayu "github.com/vayucode/vayu-sdks/go"
+
+v := vayu.NewVayu(os.Getenv("VAYU_API_KEY"))
+
+// Start using the client — authentication is automatic
+customers, err := v.Customers.List()
+```
+
+```bash curl
+# Step 1 — Get an access token
+ACCESS_TOKEN=$(curl -s -X POST "https://connect.withvayu.com/login" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $VAYU_CLIENT_ID" \
+  -d "{\"refreshToken\": \"$VAYU_API_TOKEN\"}" | jq -r '.accessToken')
+
+# Step 2 — Make API calls with the token
+curl "https://connect.withvayu.com/customers" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "x-api-key: $VAYU_CLIENT_ID"
+```
+</CodeGroup>
+
+For installation and more examples, see the [SDK section](/api-reference/pages/sdk).
 
 ### Direct API Usage
 
@@ -55,9 +92,10 @@ Every request needs two headers:
 
 Make sure to keep your Client ID and API Token secure and never expose them in client-side code.
 
-## Full curl example
+## Full example — obtaining and using an access token
 
-```bash
+<CodeGroup>
+```bash curl
 # Step 1 — Exchange your API Token for a short-lived access token
 ACCESS_TOKEN=$(curl -s -X POST "https://connect.withvayu.com/login" \
   -H "Content-Type: application/json" \
@@ -70,6 +108,69 @@ curl "https://connect.withvayu.com/customers" \
   -H "x-api-key: $VAYU_CLIENT_ID"
 ```
 
+```typescript TypeScript
+// Without the SDK — manual token exchange with fetch
+const loginRes = await fetch("https://connect.withvayu.com/login", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-api-key": process.env.VAYU_CLIENT_ID,
+  },
+  body: JSON.stringify({ refreshToken: process.env.VAYU_API_TOKEN }),
+});
+const { accessToken } = await loginRes.json();
+
+const customersRes = await fetch("https://connect.withvayu.com/customers", {
+  headers: {
+    "Authorization": `Bearer ${accessToken}`,
+    "x-api-key": process.env.VAYU_CLIENT_ID,
+  },
+});
+const customers = await customersRes.json();
+```
+
+```python Python
+# Without the SDK — manual token exchange with requests
+import os, requests
+
+login = requests.post(
+    "https://connect.withvayu.com/login",
+    headers={"x-api-key": os.environ["VAYU_CLIENT_ID"]},
+    json={"refreshToken": os.environ["VAYU_API_TOKEN"]},
+)
+access_token = login.json()["accessToken"]
+
+customers = requests.get(
+    "https://connect.withvayu.com/customers",
+    headers={
+        "Authorization": f"Bearer {access_token}",
+        "x-api-key": os.environ["VAYU_CLIENT_ID"],
+    },
+).json()
+```
+
+```go Go
+// Without the SDK — manual token exchange with net/http
+loginBody, _ := json.Marshal(map[string]string{
+    "refreshToken": os.Getenv("VAYU_API_TOKEN"),
+})
+req, _ := http.NewRequest("POST", "https://connect.withvayu.com/login",
+    bytes.NewBuffer(loginBody))
+req.Header.Set("Content-Type", "application/json")
+req.Header.Set("x-api-key", os.Getenv("VAYU_CLIENT_ID"))
+
+resp, _ := http.DefaultClient.Do(req)
+var loginRes struct{ AccessToken string `json:"accessToken"` }
+json.NewDecoder(resp.Body).Decode(&loginRes)
+
+req, _ = http.NewRequest("GET", "https://connect.withvayu.com/customers", nil)
+req.Header.Set("Authorization", "Bearer "+loginRes.AccessToken)
+req.Header.Set("x-api-key", os.Getenv("VAYU_CLIENT_ID"))
+
+resp, _ = http.DefaultClient.Do(req)
+```
+</CodeGroup>
+
 <Note>
-Access tokens expire after **1 hour**. If using a raw HTTP client, re-call `/login` when you receive a `401` response.
+Access tokens expire after **1 hour**. If using a raw HTTP client, re-call `/login` when you receive a `401` response. The SDKs handle this automatically.
 </Note>
