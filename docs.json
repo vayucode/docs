@@ -92,8 +92,6 @@
                 "group": "Invoices",
                 "pages": [
                   "documentation/guides/invoices/invoices-overview",
-                  "documentation/guides/invoices/real-time-invoice",
-                  "documentation/guides/invoices/billing-and-invoice-automation",
                   "documentation/guides/invoices/invoices-portal",
                   "documentation/guides/invoices/dunning",
                   "documentation/guides/invoices/untitled-page",
