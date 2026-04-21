@@ -71,22 +71,21 @@
                   {
                     "group": "Usage-Based Fees",
                     "pages": [
-                      "documentation/guides/plans-and-pricing/usage-based-fees",
-                      "documentation/guides/plans-and-pricing/matrix-pricing"
+                      "documentation/guides/plans-and-pricing/usage-based-fees"
                     ]
                   },
                   "documentation/guides/plans-and-pricing/create-plan",
+                  "documentation/guides/plans-and-pricing/pricing-and-product-line-items",
+                  "documentation/guides/plans-and-pricing/base-amount-and-commitment",
+                  "documentation/guides/plans-and-pricing/assign-plan-to-customer",
                   {
                     "group": "Contracts",
                     "pages": [
                       "documentation/guides/plans-and-pricing/contract-processing",
-                      "documentation/guides/plans-and-pricing/phases"
+                      "documentation/guides/plans-and-pricing/phases",
+                      "documentation/guides/plans-and-pricing/plan-templates-and-contracts"
                     ]
-                  },
-                  "documentation/guides/plans-and-pricing/plan-templates-and-contracts",
-                  "documentation/guides/plans-and-pricing/pricing-and-product-line-items",
-                  "documentation/guides/plans-and-pricing/base-amount-and-commitment",
-                  "documentation/guides/plans-and-pricing/assign-plan-to-customer"
+                  }
                 ]
               },
               {
