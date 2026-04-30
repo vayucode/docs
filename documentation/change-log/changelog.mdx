@@ -6,6 +6,54 @@ icon: "clock"
 
 # Change Log
 
+<Update label="April 30, 2026" tags={["Reporting","Integrations","API","UI"]}>
+  # New reports suite, Snowflake integration & API improvements
+
+  ## New features
+
+  ### Expanded reports library
+
+  We've shipped a redesigned, expanded reports library covering billing, accounting, and usage workflows. Each report includes filters, chart views, and CSV export.
+
+  - **Billing reports** — [Billing Forecast](/billing-reports), AR Health, Email Exception, and Customers reports. Anticipate revenue, manage collections, and resolve email delivery issues before they impact cash flow.
+  - **Accounting reports** — [Month-End](/accounting-reports), MRR/ARR, Revenue Waterfall, and Contracts reports. Close books faster and forecast bookings with ASC 606-aligned recognition.
+  - **Usage & Data reports** — [Commitment vs. Usage, Uncharged Usage, Anonymous Customers, and Usage by Product](/usage-and-data-reports). Catch revenue leakage and resolve attribution gaps in real time.
+
+  ### Snowflake integration
+
+  The [Snowflake integration](/documentation/guides/integrations/snowflake) is live. Pull usage data from a Snowflake table or view on a schedule, or push records to Vayu through the Usage Ingestion API. Use Snowflake as your source of truth without duplicating data into a separate billing system.
+
+  ### PDF Extraction
+
+  [PDF Extraction](/pdf-extraction) now has a dedicated experience for parsing contracts. Upload a contract PDF and Vayu will extract customer details, contract terms, pricing, and commitments — then drop them into the contract creation workflow for review.
+
+  ### Ask Agent for AI Insights
+
+  [AI Insights](/ai-insights) is now accessible via **Reports → Ask Agent**. Ask natural-language questions about customer health, revenue trends, and product adoption to surface churn risks, expansion opportunities, and pricing patterns.
+
+  ## Updates
+
+  ### Invoices Portal
+
+  The Customer Portal has been renamed [Invoices Portal](/documentation/guides/invoices/invoices-portal) to better reflect its focus on invoice access, review, and payment workflows for your customers.
+
+  ### Subsidiaries
+
+  The Entities object is now called [Subsidiaries](/entities), aligning the terminology with how most finance teams organize multi-entity billing.
+
+  ### API: rate limits, idempotency, and errors
+
+  We've published explicit API documentation for [rate limits](/api-reference/pages/rate-limits) (500 req/sec, 100 burst), [idempotency](/api-reference/pages/idempotency) via the `ref` field on events, and a standard [error format](/api-reference/pages/errors). Build retry-safe integrations without double-counting usage.
+
+  ### Go SDK
+
+  The [Go SDK](/api-reference/pages/sdk) is now distributed through the unified `vayu-sdks` monorepo alongside the TypeScript and Python clients.
+
+  ### Integration refresh
+
+  Updated guides and screenshots for [NetSuite](/documentation/guides/integrations/netsuite), [QuickBooks](/documentation/guides/integrations/quickbooks2), [Xero](/documentation/guides/integrations/xero), [HubSpot](/documentation/guides/integrations/hubspot), [Salesforce](/documentation/guides/integrations/salesforce), [Stripe](/documentation/guides/integrations/stripe), [Rillet](/documentation/guides/integrations/rillet), and [Anrok](/documentation/guides/integrations/anrok) to reflect the current connection flows.
+</Update>
+
 <Update label="March 12, 2026" tags={["Revenue"]}>
   # Vayu Insights Agent
 
