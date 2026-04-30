@@ -6,6 +6,23 @@ icon: "clock"
 
 # Change Log
 
+<Update label="April 30, 2026" tags={["API","Billing & Invoicing","Integrations"]}>
+  # API enhancements and Go SDK update
+
+  This week's release brings expanded customer balance visibility through the API, native discount support on contract products, and a refreshed Go SDK location.
+
+  ## New features
+
+  - **Customer balance fields on the API.** Customer responses now include `totalOutstandingAmount`, `openAmount`, `overdueAmount`, `pendingPaymentAmount`, and `paidAmount`, so you can pull a customer's full receivables picture in a single call. See the [Customers API](/api-reference/endpoints/customers/get-customer).
+  - **Product-level discounts on contracts.** Contracts now accept an optional `discount` object on products, supporting both `FIXED` and `PERCENTAGE` discounts with an optional `recurring` count to limit the number of billing periods. Discount names appear directly on the resulting invoice. See the [Create Contract endpoint](/api-reference/endpoints/contracts/create-contract).
+  - **Recurring commitment scheduling.** Commitments now support a scheduling block (with `dayOfMonth` and `MONTH`/`YEAR` duration units) for recurring commitment cycles, alongside a `UNITS` commitment type for unit-based commitments.
+
+  ## Updates
+
+  - **Go SDK relocated to the `vayu-sdks` monorepo.** The Go client now lives at [vayucode/vayu-sdks](https://github.com/vayucode/vayu-sdks/tree/main/go) and contains the latest updates. Update any imports pointing at the old `weft-finance/vayu-go` path. See the [SDKs page](/api-reference/pages/sdk).
+  - **Refreshed integration screenshots.** [NetSuite](/documentation/guides/integrations/netsuite), [Stripe](/documentation/guides/integrations/stripe), [HubSpot](/documentation/guides/integrations/hubspot), [Anrok](/documentation/guides/integrations/anrok), [Xero](/documentation/guides/integrations/xero), [QuickBooks](/documentation/guides/integrations/quickbooks2), [Salesforce](/documentation/guides/integrations/salesforce), [Snowflake](/documentation/guides/integrations/snowflake), and [Rillet](/documentation/guides/integrations/rillet) integration guides have been updated with the latest UI.
+</Update>
+
 <Update label="March 12, 2026" tags={["Revenue"]}>
   # Vayu Insights Agent
 
