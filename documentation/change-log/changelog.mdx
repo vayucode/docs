@@ -6,6 +6,91 @@ icon: "clock"
 
 # Change Log
 
+<Update label="May 3, 2026" tags={["AI","Revenue","Usage Metering","Integrations"]}>
+  # Insights Agent expansion, Search Events, and integration updates
+
+  ## New
+
+  **Insights Agent: churn, customer revenue, and MRR/ARR Q&A.** The Vayu Insights Agent now answers questions about churn risk, customer revenue analysis, and MRR/ARR trends through natural language. Ask the agent directly from the **Reports** dashboard.
+
+  <Frame>
+    ![Ask Agent](/images/ask-agent.png)
+  </Frame>
+
+  See [AI Insights](https://guide.withvayu.com/ai-insights) for examples.
+
+  **Search Events.** Query and filter usage events from the **Usage > Events** page to verify metered usage and troubleshoot billing discrepancies. Filter by customer alias, event name, and time range. See [Search Events](https://guide.withvayu.com/documentation/guides/data-metering/search-events).
+
+  ## Updates
+
+  - **Anrok integration:** Refreshed setup flow with clearer prerequisites and tax category configuration. See [Anrok](https://guide.withvayu.com/documentation/guides/integrations/anrok).
+  - **NetSuite integration:** Updated invoice sync experience with improved status visibility. See [NetSuite](https://guide.withvayu.com/documentation/guides/integrations/netsuite).
+  - **Go SDK:** Now distributed from the unified `vayu-sdks` monorepo alongside other language SDKs. See [SDKs](https://guide.withvayu.com/api-reference/pages/sdk).
+
+  ## Fixes
+
+  - Resolved duplicate sections and image rendering issues across the NetSuite, Stripe, and Xero integration guides.
+</Update>
+
+<Update label="April 21, 2026" tags={["Reporting","Billing & Invoicing","Usage Metering"]}>
+  # New report library: accounting, billing, and usage
+
+  Vayu's reports library has been expanded with a new set of reports organized into three categories.
+
+  ## New
+
+  **Accounting reports** for closing books and recognizing revenue:
+
+  - **Month-End** — consolidated invoice, revenue, and payment data for the period, with CSV export and ERP sync.
+  - **Recurring revenue (MRR/ARR)** — recurring revenue tracked at customer and account level with custom fields and contract-phase support.
+  - **Revenue** — recognized revenue with a redesigned waterfall chart and filters.
+  - **Contracts** — list of contracts with TCV, ACV, renewal dates, and estimated bookings.
+
+  <Frame>
+    ![Revenue Waterfall](/images/revenue-waterfall-chart-20260421-130623.gif)
+  </Frame>
+
+  See [Accounting Reports](https://guide.withvayu.com/accounting-reports).
+
+  **Billing reports** for monitoring invoices and AR:
+
+  - **Billing forecast** — upcoming invoices and projected charges before they're issued.
+  - **AR Health** — overdue invoices grouped by aging buckets to support collections.
+  - **Email exception** — failed invoice email deliveries with failure type and contact details.
+  - **Customers** — directory of customers with billing status, contracts, and outstanding balance.
+
+  See [Billing Reports](https://guide.withvayu.com/billing-reports).
+
+  **Usage and data reports** for understanding consumption:
+
+  - **Commitment vs. usage** — actual usage compared against contractual commitments and overages.
+  - **Uncharged usage** — usage events that have not been billed, to prevent revenue leakage.
+  - **Anonymous customers** — usage from unattributed customers ready to be linked.
+  - **Usage by product** — usage broken down by product or pricing component.
+  - **Usage report** — granular event-level breakdown of usage and charges.
+
+  See [Usage and Data Reports](https://guide.withvayu.com/usage-and-data-reports).
+
+  ## Updates
+
+  - **Invoices Portal** (formerly Customer Portal) — renamed and refocused around the invoice experience. See [Invoices Portal](https://guide.withvayu.com/documentation/guides/invoices/invoices-portal).
+  - **Subsidiaries** (formerly Entities) — manage multiple legal entities and sync them with NetSuite from a single dropdown.
+</Update>
+
+<Update label="April 14, 2026" tags={["API","Integrations"]}>
+  # API hardening and Snowflake integration guide
+
+  ## New
+
+  - **Idempotency, rate limits, and error handling** — new dedicated guidance for safe retries, request limits, and error response codes when integrating with the Vayu API. See [Idempotency](https://guide.withvayu.com/api-reference/pages/idempotency), [Rate Limits](https://guide.withvayu.com/api-reference/pages/rate-limits), and [Errors](https://guide.withvayu.com/api-reference/pages/errors).
+  - **Snowflake integration** — full setup walkthrough for syncing Vayu data to Snowflake. See [Snowflake](https://guide.withvayu.com/documentation/guides/integrations/snowflake).
+
+  ## Updates
+
+  - **External API alignment** — public API surface aligned with the internal API, giving consistent schemas and dynamic paths for catalog products, customers, and events.
+  - **Pricing events** documentation expanded with examples for ingestion and search.
+</Update>
+
 <Update label="March 12, 2026" tags={["Revenue"]}>
   # Vayu Insights Agent
 
