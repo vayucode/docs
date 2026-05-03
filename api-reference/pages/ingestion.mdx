@@ -1,7 +1,7 @@
 ---
-title: 'Dry Run Ingestion'
+title: "Dry run ingestion: test events without storing data"
 icon: 'square-terminal'
-description: 'Test event processing without storing data'
+description: "Use POST /events/dry-run to validate event payloads, customer matching, and meter evaluation against the live ingestion pipeline without persisting data."
 ---
 
 The dry run endpoint processes your events exactly as the live ingestion pipeline would — validating, matching customers, and evaluating meters — but **does not store any data**. Use it to verify your event schema, check customer matching, and preview meter values before going live.
