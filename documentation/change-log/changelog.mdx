@@ -6,6 +6,26 @@ icon: "clock"
 
 # Change Log
 
+<Update label="May 3, 2026" tags={["Reporting","Integrations","API","Revenue"]}>
+  # Revenue waterfall charts, Stripe auto-collect & expanded API
+
+  ## New features
+
+  - **Revenue waterfall charts and filters.** The [Revenue report](/accounting-reports) now includes a chart view and filters for analyzing recognized and deferred revenue across periods. Month-End and MRR/ARR reports also gained richer in-app visualizations.
+  - **Stripe auto-collect.** Toggle **Automatically charge payment** on the [Stripe integration](/documentation/guides/integrations/stripe) to charge customers as soon as invoices are approved. Invoices now include an embedded **Pay Online** link to Stripe's hosted checkout, and approved invoices sync to Stripe automatically (with manual sync available as a fallback).
+  - **Expanded AI Insights.** [Ask Agent](/ai-insights) can now answer natural-language questions on churn rate, customer revenue analysis, and MRR/ARR trends directly from the Reports dashboard.
+  - **Events dashboard and search.** A new [Events dashboard](/documentation/guides/data-metering/events) and [event search](/documentation/guides/data-metering/search-events) view make it easier to query, filter, and verify usage events recorded in Vayu.
+  - **Snowflake integration.** Connect [Snowflake](/documentation/guides/integrations/snowflake) to sync data into Vayu on a configurable schedule.
+
+  ## Updates
+
+  - **Anrok tax workflow.** The [Anrok integration](/documentation/guides/integrations/anrok) now documents prerequisites and supports both automated tax calculation and manual tax rate overrides on a per-invoice basis.
+  - **Xero integration enhancements.** Improved guidance and configuration for the [Xero integration](/documentation/guides/integrations/xero).
+  - **Customer Portal is now Invoices Portal.** The customer-facing portal has been renamed to better reflect its scope.
+  - **API reference improvements.** Added dedicated pages for [Errors](/api-reference/pages/errors), [Rate limits](/api-reference/pages/rate-limits), [Idempotency](/api-reference/pages/idempotency), and [Pagination](/api-reference/pages/pagination), plus full payloads for all 12 [webhook event types](/api-reference/pages/webhooks).
+  - **Go SDK relocation.** The Go client has moved to the consolidated [vayu-sdks monorepo](/api-reference/pages/sdk) for faster updates.
+</Update>
+
 <Update label="March 12, 2026" tags={["Revenue"]}>
   # Vayu Insights Agent
 
