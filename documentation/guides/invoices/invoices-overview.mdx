@@ -24,6 +24,17 @@ Filtering allows you to narrow down invoices by status, customer, contract, or t
 
 Presets help standardize common workflows, such as review queues or approval batches.
 
+#### **Filtering by custom fields**
+
+You can filter the invoices list by any custom field defined on the **Customer**, **Contract**, or **Invoice** entity. The operators and input adapt to the field's value type:
+
+- **Text** - "contains" with free-text input
+- **Number** - "equals," "greater than," or "less than"
+- **Boolean** - "is" with true/false
+- **Enum** - "is any of" with a multi-select of allowed values
+
+Custom field filters appear automatically once the field is defined in **Settings**. Columns for invoice-level custom fields are also shown in the table, even if no invoice currently has a value set, so you can quickly identify records that still need to be populated.
+
 ### **Working With Multiple Invoices**
 
 From the invoice list view, you can take actions on multiple invoices simultaneously, allowing for:
