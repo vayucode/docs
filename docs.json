@@ -62,18 +62,8 @@
                 "group": "Plans & Pricing",
                 "pages": [
                   "documentation/guides/plans-and-pricing/pricing-new-overview",
-                  {
-                    "group": "Fixed Fees",
-                    "pages": [
-                      "documentation/guides/plans-and-pricing/fixed-fees"
-                    ]
-                  },
-                  {
-                    "group": "Usage-Based Fees",
-                    "pages": [
-                      "documentation/guides/plans-and-pricing/usage-based-fees"
-                    ]
-                  },
+                  "documentation/guides/plans-and-pricing/fixed-fees",
+                  "documentation/guides/plans-and-pricing/usage-based-fees",
                   "documentation/guides/plans-and-pricing/create-plan",
                   "documentation/guides/plans-and-pricing/pricing-and-product-line-items",
                   "documentation/guides/plans-and-pricing/base-amount-and-commitment",
@@ -140,8 +130,8 @@
                 "pages": [
                   "file",
                   "billing-reports",
-                  "accounting-reports",
-                  "usage-and-data-reports"
+                  "usage-and-data-reports",
+                  "accounting-reports"
                 ]
               },
               {
