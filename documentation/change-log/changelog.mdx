@@ -6,6 +6,40 @@ icon: "clock"
 
 # Change Log
 
+<Update label="May 3, 2026" tags={["Revenue","Integrations","API"]}>
+  # Expanded AI Insights, NetSuite enhancements, and unified SDKs
+
+  ## New features
+
+  ### Visual AI Insights for revenue, churn, and customer analysis
+
+  The [Vayu Insights Agent](/documentation/change-log/changelog) now surfaces interactive insights for **churn rate**, **MRR/ARR queries**, and **customer revenue analysis** directly from the Ask Agent. Ask natural-language questions and get charts and breakdowns back in seconds.
+
+  <Frame>
+    ![MRR/ARR AI Agent](/images/mrr-arr-ai-agent-question.gif)
+  </Frame>
+
+  See [AI Insights](/ai-insights) for the full list of supported questions.
+
+  ### NetSuite: automatic customer export and invoice sync
+
+  The [NetSuite integration](/documentation/guides/integrations/netsuite) now supports **automatic customer export** and **automatic invoice sync on approval**. Draft invoices generated from metered events and pricing rules can be pushed to NetSuite without manual handoff, keeping billing and revenue data aligned across both systems.
+
+  ## Updates
+
+  ### Unified Vayu SDK monorepo
+
+  The Go SDK has moved to the new `vayu-sdks` monorepo, where all official Vayu SDKs now live together. Existing imports should be updated to point to the new location for the latest fixes and features. See the [SDK reference](/api-reference/pages/sdk) for details.
+
+  ### Expanded external API
+
+  The external API has been aligned with the internal API, adding broad coverage for catalog products, contracts, invoices, and reporting endpoints. New reference pages cover [errors](/api-reference/pages/errors), [idempotency](/api-reference/pages/idempotency), and [rate limits](/api-reference/pages/rate-limits) so you can build more reliable integrations.
+
+  ### Streamlined customer export
+
+  Exporting customers is now a single click from the **Customers** page. Apply filters, hit **Export / Download**, and the file downloads immediately—no extra format step required. See [Managing customers](/documentation/guides/customers/managing-customers) for details.
+</Update>
+
 <Update label="March 12, 2026" tags={["Revenue"]}>
   # Vayu Insights Agent
 
