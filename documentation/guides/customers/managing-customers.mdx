@@ -122,6 +122,9 @@ Click **Filters** to build complex queries using:
 - **Address fields** - Country, State, City, Postal Code
 - **Subsidiary** - Filter by subsidiary assignment
 - **Manual Review** - Flag status
+- **Custom fields** - Any custom field defined on the Customer entity
+
+For custom fields, the operators and input adapt to the field's value type: text fields use "contains," number fields support "equals," "greater than," and "less than," boolean fields use "is," and enum fields use "is any of" with a multi-select of allowed values.
 
 Multiple conditions can be combined to narrow results.
 

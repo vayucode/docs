@@ -28,9 +28,9 @@ To create a new customer, click **\+ Customer**.
 
 You can filter customer data in a few different ways. That includes using multiple filters or combining conditions.
 
-You can define conditions using a structured rule format with fields, operators or values. You can set the operators to "contains," "equals," or "is any of" and relate it to a dropdown will let you select from number of fields:
+You can define conditions using a structured rule format with fields, operators, and values. Operators include "contains," "equals," "is any of," "greater than," and "less than," depending on the field type.
 
-The available filter fields include:
+The available built-in filter fields include:
 
 - Status
 - Parent Customer
@@ -42,7 +42,16 @@ The available filter fields include:
 - Manual Review
 - Subsidiary
 
-Multiple filter conditions can be combined to narrow the result set. Filters can be removed individually or cleared entirely.
+### **Filtering by custom fields**
+
+Any custom field defined for the **Customer** entity is also available as a filter. The operators and input shown depend on the custom field's value type:
+
+- **Text** - "contains" with free-text input
+- **Number** - "equals," "greater than," or "less than"
+- **Boolean** - "is" with true/false
+- **Enum** - "is any of" with a multi-select of allowed values
+
+Customer custom field filters appear automatically once the field is defined in **Settings**, even if no customer has a value set yet. Multiple filter conditions can be combined to narrow the result set, and filters can be removed individually or cleared entirely.
 
 ## **Customers Table**
 
@@ -53,6 +62,8 @@ Each row represents a single customer profile and includes operational and billi
 ### **Table Columns**
 
 The table includes fields such as Status, Customer name, Legal Name, number of Contracts, Subsidiary, Created Date, Address details, Invoice Due configuration, Manual Review state, and Parent Customer relationships. A contextual action menu is available at the end of each row for additional operations.
+
+A column is also added for every custom field defined on the Customer entity, regardless of whether any customer currently has a value set. Empty cells indicate that no value has been provided for that customer.
 
 ### **Table Behavior**
 
