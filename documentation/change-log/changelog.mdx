@@ -6,6 +6,64 @@ icon: "clock"
 
 # Change Log
 
+<Update label="May 3, 2026" tags={["Integrations","Billing & Invoicing","Reporting","API","Usage Metering"]}>
+  # Snowflake integration, dunning automation, new reports, and expanded API
+
+  This release ships a new data warehouse integration, automated collections, an expanded reporting suite, and a major upgrade to the public API.
+
+  ## New Features
+
+  **Snowflake integration.** Vayu now ingests usage data directly from Snowflake for usage-based billing, replacing the legacy ERP Imports workflow. Choose between a pull model (Vayu reads from a configured table or view on a schedule) or a push model (send usage records via the Usage Ingestion API). See the [Snowflake guide](/documentation/guides/integrations/snowflake).
+
+  **Dunning and payment reminders.** Automate follow-up on unpaid invoices with configurable reminder schedules that escalate as invoices age. Set cadence, messaging tone, and final-state handling in your billing preferences. See [Dunning and Payment Reminders](/documentation/guides/invoices/dunning).
+
+  **Matrix pricing.** Define unit prices in a two-dimensional grid (for example, region × instance type) so the same metric can be charged differently based on context, without creating separate products for each variation. See [Usage-based fees](/documentation/guides/plans-and-pricing/usage-based-fees).
+
+  **SQL metering.** Express pricing logic with SQL-like conditions for calculations that field-based or rule-based metering cannot describe, layered on top of existing metering. See [Usage-based fees](/documentation/guides/plans-and-pricing/usage-based-fees).
+
+  **New report suite.** Reports are now organized into Billing, Accounting, and Usage & Data categories, with several additions:
+
+  - **Billing forecast** — projects upcoming invoices and expected charges before they are issued, including recurring and usage-based fees.
+  - **AR Health** — tracks overdue invoices and surfaces customers who need follow-up.
+  - **Email exception** — surfaces failed invoice email deliveries so they can be resolved.
+  - **Month-end** — consolidates invoices, recognized revenue, payments, adjustments, and tax for period close.
+  - **Commitment vs. usage** — compares actual usage against contractual commitments, highlighting underutilization and overages.
+  - **Uncharged usage** — flags usage that has not yet been billed to prevent revenue leakage.
+  - **Anonymous customers** — identifies new or unassigned customers imported without full attribution.
+  - **Usage by product** — breaks down usage across products and pricing components.
+
+  See [Billing reports](/billing-reports), [Accounting reports](/accounting-reports), and [Usage and data reports](/usage-and-data-reports).
+
+  **Events page for usage validation.** A new Events view shows raw event data before aggregation or billing, with filters for date range, event name, ref, and customer alias—useful for validation and troubleshooting. See [Events](/documentation/guides/data-metering/events).
+
+  **Customer data export.** Export customer information to CSV directly from the Customers page, with configurable column selection covering profile, address, subsidiary, contracts, and custom fields. See [Exporting customer data](/documentation/guides/customers/export).
+
+  ## Updates
+
+  **Expanded public API.** The developer experience is significantly improved with new reference pages and broader language coverage:
+
+  - New [Errors](/api-reference/pages/errors), [Rate Limits](/api-reference/pages/rate-limits), [Idempotency](/api-reference/pages/idempotency), and [Pagination](/api-reference/pages/pagination) reference pages.
+  - [Webhooks](/api-reference/pages/webhooks) now documents all 12 event types with full payloads, subscription examples, and verification handlers.
+  - Code examples in TypeScript, Python, Go, and curl across [Connecting to Vayu](/api-reference/pages/connecting-to-vayu), [Sending events](/api-reference/pages/sending-events), and the [Quickstart](/documentation/get-started/quickstart).
+  - [Product structure](/api-reference/pages/product-structure) now includes `baseAmount`, `usageReset`, `commitment`, `paymentTerm`, `isCalendarAligned`, and product groups.
+  - The [Dry-run ingestion](/api-reference/pages/ingestion) and [Browsing events](/api-reference/pages/browsing-events) endpoints now have full request/response schemas and SDK examples.
+
+  **Go SDK moved to the unified SDK monorepo.** The Go client is now published from `vayucode/vayu-sdks` alongside the other SDKs and receives the latest updates. See the [SDK page](/api-reference/pages/sdk).
+
+  **AI Insights — Ask Agent.** The Insights Agent is now accessible as **Ask Agent** from the Reports dashboard, with expanded coverage for customer health, churn risk, MRR/ARR analysis, and revenue trend questions. See [AI Insights](/ai-insights).
+
+  **PDF Extraction documentation.** A standalone guide covers uploading contract PDFs to auto-populate customer details, contract terms, pricing, plans, and commitments in the contract creation flow. See [PDF Extraction](/pdf-extraction).
+
+  **Subsidiaries (formerly Entities).** The Entities concept has been renamed to **Subsidiaries** across the product to better reflect how multi-entity customer hierarchies are modeled. See [Subsidiaries and related entities](/documentation/guides/customers/subsidiaries-and-related-entities).
+
+  ## Bug Fixes
+
+  - Corrected the API base URL to `connect.withvayu.com` and removed the unused `/v1` prefix from documented routes.
+  - Validation error responses now correctly document the `errors` array shape (with `param` and `message`) returned by the API.
+  - Rate limits are documented at their actual values (500 req/sec, burst 100); previously referenced `X-RateLimit` headers that the API does not return have been removed.
+  - Removed references to webhook events that are not emitted (`CustomerPortalLinkSent`, `NewCustomerWithoutContract`, `MonthEndReport`) and the non-existent `PUT /measurements` endpoint.
+</Update>
+
 <Update label="March 12, 2026" tags={["Revenue"]}>
   # Vayu Insights Agent
 
