@@ -101,6 +101,7 @@
                 "group": "Data Metering",
                 "pages": [
                   "usage",
+                  "documentation/guides/data-metering/aggregation-methods",
                   {
                     "group": "Events",
                     "pages": [

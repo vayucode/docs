@@ -1,0 +1,85 @@
+---
+title: "Aggregation methods"
+description: "How meter aggregation methods turn raw events into billable usage, including daily carry-forward for Last."
+---
+
+A meter's **aggregation method** decides how Vayu combines raw events into the single usage value used for billing. The method you pick affects how the value is calculated, how it changes over a billing period, and how it appears on invoices.
+
+## Available methods
+
+| Method | What it returns | Typical use case |
+| --- | --- | --- |
+| **Sum** | The sum of all event values in the period | Counting consumption (API calls, tokens, GB processed) |
+| **Count** | The number of events in the period | Counting actions or transactions |
+| **Distinct** | The count of unique values for a chosen field | Active users, distinct entities |
+| **Max** | The highest event value in the period | Peak load, peak concurrent users |
+| **Min** | The lowest event value in the period | Minimum thresholds |
+| **First** | The first event value in the period | Opening snapshots |
+| **Average** | The average of all event values in the period | Average performance metrics |
+| **Last** | The most recent event value, prorated daily | Subscription seats, storage levels, "current state" metrics |
+
+## How Last works
+
+`Last` is designed for meters that track a **current state** rather than cumulative consumption — for example, the number of active seats, the size of a stored dataset, or a feature tier the customer is currently on.
+
+Vayu treats `Last` as a **daily carry-forward** aggregation:
+
+- Each day in the billing period is charged independently using the most recent event value as of that day.
+- If no new event is received for a day, the value from the previous day **carries forward**.
+- The day's charge is **prorated** by dividing the period charge by the number of days in the month.
+- When a newer event supersedes an earlier one for the same day, the older charge is replaced rather than stacked.
+
+This means a customer who keeps the same value all month is charged the equivalent of one full period, while a customer who changes mid-month is charged proportionally for each value they had.
+
+### Example
+
+A meter `active_seats` is configured with the `Last` aggregation method on a per-seat price of \$30/seat/month in a 30-day month.
+
+| Event timestamp | Value |
+| --- | --- |
+| Day 1 | 10 |
+| Day 16 | 20 |
+
+The charge breakdown:
+
+- Days 1–15 (15 days at 10 seats): 15 × (10 × \$30 / 30) = **\$150**
+- Days 16–30 (15 days at 20 seats): 15 × (20 × \$30 / 30) = **\$300**
+- **Total: \$450**
+
+If no event is sent on a given day, the previous day's value is reused, so the seat count never drops to zero just because no event arrived.
+
+<Note>
+  Because `Last` carries values forward across days, you do **not** need to send a daily heartbeat event. Send an event only when the value changes.
+</Note>
+
+## Choosing between Last and Sum
+
+| Scenario | Use |
+| --- | --- |
+| Customer's value can go up or down over time and you bill for the **state on each day** | `Last` |
+| Each event represents new consumption that should be **added** to a running total | `Sum` |
+| You want to bill the **peak** value reached during the period | `Max` |
+
+## Configuring an aggregation method
+
+When creating a meter through the API or SDK, specify the aggregation method on the meter's `aggregationMethod`:
+
+```typescript
+import { Vayu, CreateProductPayload, AggregationMethods } from "vayu-ts/v2";
+
+const productPayload: CreateProductPayload = {
+  name: 'Active Seats',
+  eventName: 'seat_count_changed',
+  aggregation: {
+    type: AggregationMethods.Last,
+    field: 'seats',
+  },
+  pricing: {
+    tiers: [
+      { start: 0, end: -1, price: 30, chunkSize: 1 },
+    ],
+  },
+};
+```
+
+The `field` property tells Vayu which key in the event's `data` payload to read the value from.
