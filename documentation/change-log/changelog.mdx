@@ -6,6 +6,46 @@ icon: "clock"
 
 # Change Log
 
+<Update label="May 5, 2026" tags={["Reporting","UI","Contracts","Integrations"]}>
+  # Release 2026.18.1
+
+  This release expands Vayu's reporting suite with two new accounting reports, brings AI copilot support to recurring revenue analysis, and ships several UX improvements across the platform.
+
+  ## New reports
+
+  - **Customer Master report** — A unified report combining customer and contract data with collapsible rows, flat CSV/XLSX export, custom field support, and Ask Agent (AI copilot) integration. See [Accounting reports](/accounting-reports#customer-master-report).
+  - **NRR/GRR report** — A new report tracking Net Revenue Retention and Gross Revenue Retention to measure expansion, contraction, and churn over time. See [Accounting reports](/accounting-reports#nrr-grr-report).
+
+  ## Reports UX
+
+  - **Ask Agent on the MRR report** — Ask natural-language questions about MRR concentration, retention health, upcoming renewals, and currency mix directly from the report.
+  - **XLSX export across reports** — Every report can now be exported as XLSX with formatted date cells and clickable customer hyperlinks, in addition to CSV.
+  - **Persistent search and filters** — Search and filter selections are now persisted in the URL and within your session on the Customers, Invoices, and Contracts pages. Pagination resets to page 1 whenever a filter changes.
+  - **Column picker consistency** and **chart legend repositioning** across reports.
+
+  ## Home page
+
+  - **Business Overview dashboard v2** — A refreshed home page with a new KPI strip (ACV, MRR Waterfall, ARR trend) and an invoices date picker.
+  - Account stats now invalidate automatically on contract, customer, and invoice mutations, so the dashboard reflects changes in real time.
+
+  ## Contracts and pricing
+
+  - **Contract PDF viewer** — When a contract is created from an uploaded or imported PDF, the original document is now viewable inline from the contract page. See [Contract lifecycle](/documentation/guides/plans-and-pricing/contract-processing).
+  - **Auto-tick commitment refill** — Per-unit products with a meter reset now refill the committed amount automatically at the start of each reset period. See [Usage-based fees](/documentation/guides/plans-and-pricing/usage-based-fees).
+
+  ## Integrations
+
+  - **Default tax method (Anrok)** — Choose whether new invoices use automated Anrok tax calculation or a manual rate by default. See [Anrok](/documentation/guides/integrations/anrok#default-tax-method).
+
+  ## Bug fixes
+
+  - Fixed an off-by-one month in the ARR/MRR and NRR/GRR display.
+  - The AR Aging download now respects applied filters.
+  - The Customer Master report no longer times out for large QuickBooks/Xero accounts.
+  - The "Auto pay = No" filter on the Customers report now returns the expected results.
+  - MRR Waterfall month labels and dormant-account stale data issues are resolved.
+</Update>
+
 <Update label="March 12, 2026" tags={["Revenue"]}>
   # Vayu Insights Agent
 

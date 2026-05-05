@@ -8,6 +8,8 @@ Accounting reports are designed to support financial reporting and reconciliatio
 - **Recurring revenue report -** Track trends in recurring revenue over time.
 - **Revenue report -** Analyze recognized revenue across customers and time periods.
 - **Contracts report -** View a list of contracts along with estimated bookings and financial commitments.
+- **Customer Master report -** A unified view of customers and their contracts in one report, with collapsible rows and flat export.
+- **NRR/GRR report -** Track Net Revenue Retention and Gross Revenue Retention to measure expansion, contraction, and churn.
 
 Accounting reports are designed to support financial reporting and reconciliation workflows. These reports provide the data needed to close books, recognize revenue, and maintain compliance with accounting standards.
 
@@ -52,7 +54,16 @@ Use this report to monitor recurring revenue growth, identify churn or expansion
 
 Recurring revenue is calculated based on active contracts and their billing schedules. The report includes only recurring charges (subscriptions, fixed fees) and excludes one-time charges and usage-based fees. Contract phases are reflected in the calculation, so revenue changes when contracts renew or terms are modified.
 
-The report is available in the Vayu UI and can be downloaded as CSV. Historical MRR data is retained, allowing you to view trends over time and compare current performance to past periods.
+The report is available in the Vayu UI and can be exported as CSV or XLSX. Historical MRR data is retained, allowing you to view trends over time and compare current performance to past periods.
+
+The MRR Report supports the **Vayu Insights Agent** through an **Ask Agent** toggle. When enabled, you can ask natural-language questions about your recurring revenue, including:
+
+- MRR trends across past and current months
+- MRR concentration (which customers drive the most recurring revenue)
+- Upcoming renewals and retention health
+- Currency mix and customer-level drill-downs
+
+To enable, open the MRR Report and toggle **Ask Agent** in the report header.
 
 ### **Revenue Report**
 
@@ -105,3 +116,44 @@ Use this report to monitor contract lifecycle, track upcoming renewals, and fore
 Contract data syncs from CRM systems ([Salesforce](/documentation/guides/integrations/salesforce), [HubSpot](/documentation/guides/integrations/hubspot)) when deals are marked Closed-Won. The report reflects the commercial terms defined in Vayu, including pricing tiers, commitments, and billing schedules.
 
 Contracts with future start dates are labeled as "Inactive" and will automatically transition to active status when the start date is reached. Terminated contracts are retained in the report for historical reference but do not generate new invoices.
+
+### Customer Master Report
+
+The Customer Master report combines customer and contract data into a single, unified view. Use it when you need a holistic snapshot of who your customers are and the contracts they hold, without switching between the Customers and Contracts reports.
+
+The report displays:
+
+- Customer name, status, and account details
+- Active and inactive contracts grouped under each customer
+- Total Contract Value (TCV), Annual Contract Value (ACV), and renewal dates
+- Auto-pay and manual review flags
+- Custom fields configured at both the customer and contract levels
+
+Each customer row is collapsible. Expand a row to inspect the customer's contracts inline; collapse it to keep the table compact for high-level review.
+
+When you export the Customer Master report, the system flattens nested customer and contract rows into a single, spreadsheet-friendly table. Exports support both CSV and XLSX, with Excel-formatted date cells and clickable customer hyperlinks.
+
+The Customer Master report supports the **Vayu Insights Agent** through the **Ask Agent** toggle. Use natural language to surface insights such as:
+
+- Revenue concentration across the customer base
+- The renewal pipeline for upcoming contract end dates
+- Account manager book-of-business breakdowns
+
+The Ask Agent panel is available directly inside the report — no separate setup required.
+
+### NRR/GRR Report
+
+The NRR/GRR report tracks **Net Revenue Retention** and **Gross Revenue Retention** across your customer base. Use this report to measure how well you retain and expand revenue from existing customers.
+
+The report shows:
+
+- NRR and GRR for each period
+- Expansion, contraction, and churn broken out by customer
+- Period-over-period changes
+- Custom field segmentation (for example, by region or sales team)
+
+NRR includes expansion revenue from existing customers, while GRR excludes expansion and only reflects retention and churn. Together, the two metrics reveal whether growth is driven by new customer expansion or by holding the existing base.
+
+Use this report alongside the [MRR Report](#mrr-report) to understand both the absolute size and the retention quality of your recurring revenue.
+
+Like other reports, NRR/GRR can be exported as CSV or XLSX.
