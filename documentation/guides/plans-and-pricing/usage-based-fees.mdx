@@ -149,3 +149,26 @@ This lets you charge different prices for the same metric depending on where and
 ## **SQL Metering**
 
 SQL Metering is an advanced metering mechanism that allows pricing logic to be expressed using SQL-like conditions, enabling calculations that cannot be expressed using standard field-based or rule-based metering alone. It functions as an additional layer of complexity on top of existing metering.
+
+---
+
+## **Daily Snapshot Pricing (Last Aggregation)**
+
+Use the **Last** aggregation operator on a meter when you want to bill a customer based on the most recent measurement for each day in the billing period. This is well-suited for snapshot-style metrics such as provisioned seats, active workspaces, or any quantity that represents a current state rather than a cumulative count.
+
+When a meter is configured with the **Last** operator, Vayu:
+
+- Emits a separate usage charge for each day in the billing period.
+- Carries the most recent measurement forward into any day that has no new events, so the value persists until it changes.
+- Splits flat-rate components from per-unit components in tiered pricing, billing each tier's flat rate once per billing period while still accruing per-unit charges daily.
+
+**Example:** A customer provisions 5 seats on the 1st of the month and 8 seats on the 15th. With the **Last** aggregation operator and per-seat pricing of \$10/seat:
+
+- Days 1–14: billed for 5 seats per day
+- Days 15–end of period: billed for 8 seats per day
+
+The result is a prorated total that reflects the seat count on each day, without requiring a daily measurement event.
+
+<Note>
+  When migrating from a different aggregation operator to **Last**, review your tier configuration. Flat-rate tier fees are now charged once per tier per billing period, and per-unit charges accrue daily.
+</Note>
