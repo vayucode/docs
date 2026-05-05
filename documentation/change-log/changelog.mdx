@@ -6,6 +6,20 @@ icon: "clock"
 
 # Change Log
 
+<Update label="April 28, 2026" tags={["Usage Metering","Billing & Invoicing"]}>
+  # Prorated daily seat pricing with the Last aggregation operator
+
+  Meters that use the **Last** aggregation operator now bill on a per-day basis, with the most recent measurement carried forward into days that have no new events. This makes it easy to charge for snapshot-style metrics, like seat counts or active resources, on a prorated daily basis without sending an event every day.
+
+  **What changed:**
+
+  - The **Last** operator is no longer treated as a temporal aggregation. Vayu emits one usage charge per day for the period instead of a single rolled-up charge.
+  - If a day has no measurement, the previous day's value carries forward, so a customer who provisions five seats on day one is billed for five seats every day until the value changes.
+  - When a tier defines a flat rate, that flat-rate component is now emitted as its own charge line and deduplicated per tier per billing period, so the fixed portion is billed once even when daily per-unit charges continue to accrue.
+
+  No configuration changes are required. Existing meters set to **Last** will automatically use the new daily behavior on the next billing run.
+</Update>
+
 <Update label="March 12, 2026" tags={["Revenue"]}>
   # Vayu Insights Agent
 
