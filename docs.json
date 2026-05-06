@@ -20,6 +20,28 @@
     },
     "tabs": [
       {
+        "tab": "Integrations",
+        "groups": [
+          {
+            "group": "Integrations",
+            "pages": [
+              "documentation/guides/integrations/anrok",
+              "documentation/guides/integrations/hubspot",
+              "documentation/guides/integrations/stripe",
+              "documentation/guides/integrations/rillet",
+              "documentation/guides/integrations/xero",
+              "documentation/guides/integrations/salesforce",
+              "documentation/guides/integrations/quickbooks2",
+              "documentation/guides/integrations/netsuite",
+              "documentation/guides/integrations/snowflake"
+             ]
+          }
+        ]
+       }
+     ]
+  },
+   {
+      {
         "tab": "Documentation",
         "groups": [
           {
