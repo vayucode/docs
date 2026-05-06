@@ -6,6 +6,68 @@ icon: "clock"
 
 # Change Log
 
+<Update label="May 6, 2026" tags={["Integrations","Reporting","Billing & Invoicing","API"]}>
+  # This week's release
+
+  ## New features
+
+  **Snowflake integration**
+
+  The Snowflake integration is now generally available. Connect your Snowflake warehouse as a source of usage data for billing — either by letting Vayu pull from a configured table or view, or by pushing records through the Usage Ingestion API. This replaces the legacy ERP Imports workflow for teams that already store metering data in Snowflake. See the [Snowflake guide](/documentation/guides/integrations/snowflake) for setup details.
+
+  **Integrations tab**
+
+  Integrations now have their own dedicated tab in the documentation, making it easier to find setup guides for [Anrok](/documentation/guides/integrations/anrok), [HubSpot](/documentation/guides/integrations/hubspot), [Stripe](/documentation/guides/integrations/stripe), [Rillet](/documentation/guides/integrations/rillet), [Xero](/documentation/guides/integrations/xero), [Salesforce](/documentation/guides/integrations/salesforce), [QuickBooks](/documentation/guides/integrations/quickbooks2), [NetSuite](/documentation/guides/integrations/netsuite), and [Snowflake](/documentation/guides/integrations/snowflake).
+
+  **New report types**
+
+  Reporting has been expanded with several new reports across billing, accounting, and usage:
+
+  - [Billing forecast report](/billing-reports) — anticipate upcoming invoices and expected charges before they are issued.
+  - [AR Health](/billing-reports) — track overdue invoices and surface customers who need follow-up.
+  - [Email exception report](/billing-reports) — monitor failed billing communications.
+  - [Month-end report](/accounting-reports) — consolidated invoice, revenue, and payment data for closing books.
+  - [Commitment vs. usage](/usage-and-data-reports) — compare actual consumption against contracted commitments.
+  - [Uncharged usage](/usage-and-data-reports) — detect usage events that have not yet been billed.
+  - [Anonymous customers](/usage-and-data-reports) — identify unattributed customer records.
+
+  **Contract phases**
+
+  Build contracts where pricing, products, or billing terms change at defined points in the contract lifecycle. Useful for pilot-to-production rollouts, tiered ramps, seasonal pricing, and graduated commitments. See [Phases](/documentation/guides/plans-and-pricing/phases).
+
+  **Dunning and payment reminders**
+
+  Automate follow-up on overdue invoices with configurable reminder schedules and escalation. Reminders are triggered automatically as invoices approach or pass their due date. See [Dunning and Payment Reminders](/documentation/guides/invoices/dunning).
+
+  ## Updates
+
+  **API: idempotency, rate limits, and expanded webhooks**
+
+  The public API now documents and supports:
+
+  - [Idempotency](/api-reference/pages/idempotency) via the `ref` field to safely retry requests.
+  - [Rate limits](/api-reference/pages/rate-limits) with response headers and retry guidance.
+  - [Webhooks](/api-reference/pages/webhooks) for all 12 event types, with payload references and verification examples.
+  - A standardized [Errors](/api-reference/pages/errors) reference covering HTTP status codes and validation error shapes.
+
+  **Multi-language SDK examples**
+
+  [Connecting to Vayu](/api-reference/pages/connecting-to-vayu), [sending events](/api-reference/pages/sending-events), and [webhook handlers](/api-reference/pages/webhooks) now include TypeScript, Python, Go, and curl examples, including full handler servers for Express, Flask, and Go.
+
+  **Go SDK location**
+
+  The Go client has moved to the unified [vayu-sdks monorepo](/api-reference/pages/sdk), which carries the latest updates.
+
+  **Subsidiaries**
+
+  "Entities" has been renamed to "Subsidiaries" across the product to better reflect how customers organize legal entities for billing and reporting.
+
+  ## Bug fixes
+
+  - Corrected the API base URL and authentication flow documentation so the two-token model (API Token → access token via `POST /login`) is accurate.
+  - Fixed validation error response shape to match what the API actually returns.
+</Update>
+
 <Update label="March 12, 2026" tags={["Revenue"]}>
   # Vayu Insights Agent
 
