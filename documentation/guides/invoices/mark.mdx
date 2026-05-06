@@ -33,8 +33,43 @@ The invoice status will update to **Paid** and the paid date will be recorded.
 
 Use the payment status endpoint to retrieve and verify invoice payment information:
 
-<ResponseField name="response" type="string">
-  GET /invoices/{invoiceId}/payment-status
+```text
+GET /invoices/{invoiceId}/payment-status
+```
 
-  `The response includes: - billingStatus - Current payment status - amountDue - Outstanding amount - amountPaid - Amount already paid - total - Total invoice amount - dueDate - Payment due date - paidAt - Date payment was received - invoicePdfUrl - Link to invoice PDF ## Automatic payment status updates When using integrated payment systems like Stripe, payment status updates automatically: - **Successful payments** - Invoice status updates to Paid in Vayu automatically - **Failed payments** - Surface in outstanding balances and AR workflows - **No manual intervention needed** - Billing and finance teams see current payment state in real-time This eliminates the need to manually mark invoices as paid when using integrated payment processors. ## Payment tracking Once marked as paid: - The invoice appears in paid invoice filters - The paid date is recorded for reporting - Outstanding balance calculations exclude the invoice - AR aging reports reflect the payment - The invoice is locked from further editing ## Best practices - **Verify payment receipt** - Confirm funds are received before marking as paid - **Document payment method** - Add notes about how payment was received - **Reconcile regularly** - Match marked payments against bank deposits - **Use integrations when possible** - Automated payment tracking reduces manual work and errors`
-</ResponseField>
+The response includes:
+
+- `billingStatus` - Current payment status
+- `amountDue` - Outstanding amount
+- `amountPaid` - Amount already paid
+- `total` - Total invoice amount
+- `dueDate` - Payment due date
+- `paidAt` - Date payment was received
+- `invoicePdfUrl` - Link to invoice PDF
+
+## Automatic payment status updates
+
+When using integrated payment systems like Stripe, payment status updates automatically:
+
+- **Successful payments** - Invoice status updates to Paid in Vayu automatically
+- **Failed payments** - Surface in outstanding balances and AR workflows
+- **No manual intervention needed** - Billing and finance teams see current payment state in real-time
+
+This eliminates the need to manually mark invoices as paid when using integrated payment processors.
+
+## Payment tracking
+
+Once marked as paid:
+
+- The invoice appears in paid invoice filters
+- The paid date is recorded for reporting
+- Outstanding balance calculations exclude the invoice
+- AR aging reports reflect the payment
+- The invoice is locked from further editing
+
+## Best practices
+
+- **Verify payment receipt** - Confirm funds are received before marking as paid
+- **Document payment method** - Add notes about how payment was received
+- **Reconcile regularly** - Match marked payments against bank deposits
+- **Use integrations when possible** - Automated payment tracking reduces manual work and errors
