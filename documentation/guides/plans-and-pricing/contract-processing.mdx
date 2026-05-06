@@ -6,7 +6,23 @@ icon: "arrows-spin"
 #### Contract Status
 
 - **Active / Inactive** An active contract refers to a contract that is live and operational. The platform's automated billing cycle generates invoices based on the contract's defined terms and billing period. Invoices for active contracts will appear in the **Invoices** section. You also have the option to deactivate a contract, which will suspend billing automation, and no further invoices will be issued.Contracts with future start dates are labeled as "Inactive" and will automatically transition to active status once the start date is reached.
+- **Expired** A contract automatically moves to **Expired** once its end date has passed. No new invoices are generated for an expired contract. You can bring an expired contract back into service by extending its end date — see [Extend Contract End Date](#extend-contract-end-date) below.
 - **Terminated** The contract will conclude on the specified end date. Upon termination, no additional invoices will be issued. Terminated contracts cannot be duplicated or turned into Active again.
+
+#### Extend Contract End Date
+
+Extend the end date of an existing contract to keep billing running for an additional period.
+
+**When to use**
+
+- The customer renews or continues service past the original end date.
+- A contract has already moved to **Expired** and you want to resume billing without recreating it.
+
+**What to expect**
+
+1. The new end date is applied at the end of the selected day (UTC), so the contract remains active for the full final day.
+2. If the contract was **Expired**, it automatically transitions back to **Active** once the new end date is in the future.
+3. Any invoices that were affected by the previous end date and are no longer valid for the extended period are removed and regenerated based on the new terms.
 
 #### Contract Edit
 
