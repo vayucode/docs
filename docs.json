@@ -145,7 +145,8 @@
                       "documentation/guides/data-metering/events",
                       "documentation/guides/data-metering/search-events",
                       "documentation/guides/data-metering/pricing-events"
-                    ]
+                    ],
+                    "icon": "calendar-star"
                   }
                 ]
               },
