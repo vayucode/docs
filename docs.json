@@ -127,7 +127,8 @@
                     "pages": [
                       "documentation/guides/invoices/untitled-page-2",
                       "documentation/guides/invoices/untitled-page-1"
-                    ]
+                    ],
+                    "icon": "credit-card-front"
                   },
                   "documentation/guides/invoices/mark",
                   "documentation/guides/invoices/untitled-page-4"
