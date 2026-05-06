@@ -6,6 +6,51 @@ icon: "clock-one"
 
 # Change Log
 
+<Update label="May 6, 2026" tags={["Integrations","API","Billing & Invoicing","UI"]}>
+  # Snowflake integration, expanded API, and UI refinements
+
+  ## New features
+
+  **Snowflake integration**
+
+  <Frame>
+    ![Vayu Snowflake](/images/Vayu-Snowflake.png)
+  </Frame>
+
+  Vayu now ingests usage data directly from Snowflake to drive usage-based billing. Choose between a pull model, where Vayu reads from a configured table or view on a schedule, or a push model, where you send records into Vayu's ingestion endpoint. This replaces the legacy ERP Imports workflow for teams that already use Snowflake as their warehouse of record. See the [Snowflake integration guide](/documentation/guides/integrations/snowflake) for setup details.
+
+  **Dunning**
+
+  Automate follow-up on overdue invoices with built-in dunning workflows that nudge customers and surface payment status without manual chasing. See [Dunning](/documentation/guides/invoices/dunning).
+
+  **Expanded API surface**
+
+  The API reference has been rebuilt to be API-first. New reference pages are now available:
+
+  - [Errors](/api-reference/pages/errors) — full list of HTTP status codes, error types, and validation error shapes with code examples.
+  - [Rate limits](/api-reference/pages/rate-limits) — documented rate-limit headers and retry handling guidance.
+  - [Idempotency](/api-reference/pages/idempotency) — how to use the `ref` field to safely retry requests.
+  - [Webhooks](/api-reference/pages/webhooks) — all 12 supported event types with example payloads.
+  - [Pagination](/api-reference/pages/pagination) and an [API quickstart](/documentation/get-started/quickstart) covering the auth flow and SDK usage end to end.
+
+  The OpenAPI spec has also been significantly expanded so client generation and SDK behavior stay in sync with the platform.
+
+  ## Updates
+
+  - **Subsidiaries:** "Entities" has been renamed to **Subsidiaries** across the product to better reflect what the section manages — legal entities used for tax, ERP mapping, and billing. See [Subsidiaries](/entities).
+  - **Invoices Portal:** The Customer Portal has been renamed to the **Invoices Portal** to clarify its scope. Customer-facing links and navigation have been updated accordingly.
+  - **New report types:** Reports have been reorganized into [Accounting reports](/accounting-reports), [Billing reports](/billing-reports), and [Usage and data reports](/usage-and-data-reports), with refreshed visuals and clearer breakdowns.
+  - **Contract phases:** The phases workflow now ships with an in-app walkthrough video and updated guidance for setting up phased contract agreements. See [Phases](/documentation/guides/plans-and-pricing/phases).
+  - **AI Insights & PDF Extraction:** Refreshed documentation, screenshots, and walkthroughs for the [Vayu Insights Agent](/ai-insights) and [PDF Extraction](/pdf-extraction) so it's easier to get value out of both features.
+  - **Customer overview & integrations UI:** Updated icons and a new dedicated **Integrations** tab in the navigation make it faster to find connected systems and customer data.
+
+  ## Bug fixes
+
+  - Corrected the API base URL to `connect.withvayu.com` and removed the unused `/v1` prefix from request paths.
+  - Fixed the auth flow documentation to reflect the actual two-token model (API token exchanged via `POST /login` for an access token; SDKs handle this automatically).
+  - Fixed broken image links and several broken internal links across the docs.
+</Update>
+
 <Update label="March 12, 2026" tags={["Revenue"]}>
   # Vayu Insights Agent
 
