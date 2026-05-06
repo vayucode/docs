@@ -1,7 +1,7 @@
 ---
 title: 'Sending events'
 icon: 'paper-plane'
-description: 'Sending events to Vayu'
+description: 'Send batched usage events to Vayu via the ingestion API, with partial-failure handling so valid events are accepted even when some entries are rejected.'
 ---
 
 Vayu processes events in batches. If some events in a batch are invalid, only those are discarded — valid events are still ingested.
