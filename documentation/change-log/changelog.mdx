@@ -6,6 +6,39 @@ icon: "clock-one"
 
 # Change Log
 
+<Update label="May 6, 2026" tags={["Integrations","Usage Metering","Billing & Invoicing","API","Reporting"]}>
+  # Snowflake ingestion, dunning automation, and expanded reporting
+
+  ## New features
+
+  **Snowflake integration.** Vayu now ingests usage data directly from Snowflake for usage-based billing. Both pull (Vayu reads from a configured table or view) and push (send via the Usage Ingestion API) models are supported, replacing the legacy ERP Imports workflow. See the [Snowflake integration guide](/documentation/guides/integrations/snowflake).
+
+  **Salesforce integration.** Connect Salesforce CRM data with Vayu's revenue and billing workflows. See the [Salesforce integration guide](/documentation/guides/integrations/salesforce).
+
+  **Rillet integration.** Sync approved invoices and customer data from Vayu to Rillet for automated accounting, revenue recognition, and month-end close. See the [Rillet integration guide](/documentation/guides/integrations/rillet).
+
+  **Dunning and payment reminders.** Automate follow-up on unpaid invoices with configurable reminder schedules that escalate as invoices age. Reduces manual outreach and improves collection rates. See [Dunning and payment reminders](/documentation/guides/invoices/dunning).
+
+  **Events page and event search.** A new **Usage → Events** page surfaces raw event data with filters for date range, event name, reference, and customer alias. Use it to validate ingestion, investigate activity, and troubleshoot billing discrepancies. See [Search events](/documentation/guides/data-metering/search-events).
+
+  **New reporting suite.** Three report categories are now available from the Reports area:
+  - **[Billing reports](/billing-reports):** Billing forecast, AR Health, email exception, and customers reports for collections and cash-flow visibility.
+  - **[Accounting reports](/accounting-reports):** Month-end, recurring revenue, revenue, and contracts reports for close and reconciliation.
+  - **[Usage & data reports](/usage-and-data-reports):** Commitment vs. usage, uncharged usage, anonymous customers, usage by product, and detailed usage activity.
+
+  ## Updates
+
+  **PDF extraction for contracts.** Upload a contract PDF to automatically extract customer details, contract terms, pricing, products, plans, and commitments into the contract creation workflow. See [PDF extraction](/pdf-extraction).
+
+  **AI Insights via Ask Agent.** Access AI-generated insights and recommendations from **Reports → Ask Agent**, including high-value customer identification, churn risk, and revenue opportunities. See [AI Insights](/ai-insights).
+
+  **Customer management improvements.** New flows for creating, updating, and deleting customers via UI and API, plus a [customer data export](/documentation/guides/customers/export) that produces a CSV with names, contact info, status, and account details.
+
+  **Expanded API documentation.** New reference pages for [idempotency](/api-reference/pages/idempotency) (safe retries via the `ref` field on events), [rate limits](/api-reference/pages/rate-limits) (500 req/sec, 100 burst), and [errors](/api-reference/pages/errors) with a consistent JSON error format.
+
+  **Pricing events (measurements).** Clarified guidance on ingesting raw usage data points for usage-based billing, including event name, customer identifier, timestamp, quantity, and metadata. See [Pricing events](/documentation/guides/data-metering/pricing-events).
+</Update>
+
 <Update label="March 12, 2026" tags={["Revenue"]}>
   # Vayu Insights Agent
 
