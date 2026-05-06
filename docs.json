@@ -1,5 +1,4 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Vayu docs",
   "colors": {
@@ -7,7 +6,35 @@
     "light": "#06ADBA",
     "dark": "#163B7E"
   },
+  "logo": {
+    "light": "/assets/logo/light.svg",
+    "dark": "/assets/logo/dark.svg"
+  },
   "favicon": "/assets/favicon.png",
+  "navbar": {
+    "links": [
+      {
+        "href": "mailto:shai@withvayu.com?subject=Support Request",
+        "label": "Support"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get started now",
+      "href": "https://www.withvayu.com/#FAQ"
+    }
+  },
+  "footer": {
+    "socials": {
+      "linkedin": "https://www.linkedin.com/company/withvayu"
+    }
+  },
+  "seo": {
+    "metatags": {
+      "robots": "noindex"
+    },
+    "indexing": "navigable"
+  },
   "navigation": {
     "global": {
       "anchors": [
@@ -20,32 +47,12 @@
     },
     "tabs": [
       {
-        "tab": "Integrations",
-        "groups": [
-          {
-            "group": "Integrations",
-            "pages": [
-              "documentation/guides/integrations/anrok",
-              "documentation/guides/integrations/hubspot",
-              "documentation/guides/integrations/stripe",
-              "documentation/guides/integrations/rillet",
-              "documentation/guides/integrations/xero",
-              "documentation/guides/integrations/salesforce",
-              "documentation/guides/integrations/quickbooks2",
-              "documentation/guides/integrations/netsuite",
-              "documentation/guides/integrations/snowflake"
-             ]
-          }
-        ]
-       }
-     ]
-  },
-   {
-      {
         "tab": "Documentation",
+        "icon": "file-doc",
         "groups": [
           {
             "group": "Get Started",
+            "icon": "rocket",
             "pages": [
               "documentation/get-started/introduction",
               "documentation/get-started/quickstart"
@@ -53,15 +60,18 @@
           },
           {
             "group": "Product Log",
+            "icon": "table-list",
             "pages": [
               "documentation/change-log/changelog"
             ]
           },
           {
             "group": "Guides",
+            "icon": "hat-cowboy",
             "pages": [
               {
                 "group": "Settings",
+                "icon": "gear-complex",
                 "pages": [
                   "general",
                   "documentation/guides/users/user-management",
@@ -71,6 +81,7 @@
               },
               {
                 "group": "Customers",
+                "icon": "people-group",
                 "pages": [
                   "documentation/guides/customers/customer-overview",
                   "documentation/guides/customers/adding-a-customer",
@@ -82,6 +93,7 @@
               },
               {
                 "group": "Plans & Pricing",
+                "icon": "file-invoice",
                 "pages": [
                   "documentation/guides/plans-and-pricing/pricing-new-overview",
                   "documentation/guides/plans-and-pricing/fixed-fees",
@@ -92,6 +104,7 @@
                   "documentation/guides/plans-and-pricing/assign-plan-to-customer",
                   {
                     "group": "Contracts",
+                    "icon": "file-contract",
                     "pages": [
                       "documentation/guides/plans-and-pricing/contract-processing",
                       "documentation/guides/plans-and-pricing/phases",
@@ -102,6 +115,7 @@
               },
               {
                 "group": "Invoices",
+                "icon": "file-invoice-dollar",
                 "pages": [
                   "documentation/guides/invoices/invoices-overview",
                   "documentation/guides/invoices/invoices-portal",
@@ -121,6 +135,7 @@
               },
               {
                 "group": "Data Metering",
+                "icon": "meter-bolt",
                 "pages": [
                   "usage",
                   {
@@ -134,21 +149,8 @@
                 ]
               },
               {
-                "group": "Integrations",
-                "pages": [
-                  "documentation/guides/integrations/anrok",
-                  "documentation/guides/integrations/hubspot",
-                  "documentation/guides/integrations/stripe",
-                  "documentation/guides/integrations/rillet",
-                  "documentation/guides/integrations/xero",
-                  "documentation/guides/integrations/salesforce",
-                  "documentation/guides/integrations/quickbooks2",
-                  "documentation/guides/integrations/netsuite",
-                  "documentation/guides/integrations/snowflake"
-                ]
-              },
-              {
                 "group": "Reports",
+                "icon": "file-arrow-down",
                 "pages": [
                   "file",
                   "billing-reports",
@@ -158,6 +160,7 @@
               },
               {
                 "group": "AI",
+                "icon": "robot-astromech",
                 "pages": [
                   "ai-insights",
                   "pdf-extraction"
@@ -172,6 +175,7 @@
         "groups": [
           {
             "group": "API Documentation",
+            "icon": "file-doc",
             "pages": [
               "api-reference/pages/introduction",
               "api-reference/pages/connecting-to-vayu",
@@ -189,9 +193,11 @@
           },
           {
             "group": "API Reference",
+            "icon": "file-dashed-line",
             "pages": [
               {
                 "group": "Customers",
+                "icon": "hand-holding-box",
                 "pages": [
                   "api-reference/endpoints/customers/list-customers",
                   "api-reference/endpoints/customers/create-customer",
@@ -207,6 +213,7 @@
               },
               {
                 "group": "Customer Relations",
+                "icon": "handshake",
                 "pages": [
                   "api-reference/endpoints/customers/get-customer-relation",
                   "api-reference/endpoints/customers/create-customer-relation"
@@ -214,6 +221,7 @@
               },
               {
                 "group": "Catalog Products",
+                "icon": "list-dropdown",
                 "pages": [
                   "api-reference/endpoints/catalog-products/get-catalog-product",
                   "api-reference/endpoints/catalog-products/update-catalog-product",
@@ -224,6 +232,7 @@
               },
               {
                 "group": "Contracts",
+                "icon": "file-contract",
                 "pages": [
                   "api-reference/endpoints/contracts/get-contract",
                   "api-reference/endpoints/contracts/get-contract-by-integration-id",
@@ -234,6 +243,7 @@
               },
               {
                 "group": "Invoices",
+                "icon": "file-invoice-dollar",
                 "pages": [
                   "api-reference/endpoints/invoices/get-invoice",
                   "api-reference/endpoints/invoices/list-invoices",
@@ -242,6 +252,7 @@
               },
               {
                 "group": "Measurements",
+                "icon": "ruler-combined",
                 "pages": [
                   "api-reference/endpoints/measurements/get-measurement",
                   "api-reference/endpoints/measurements/list-measurements",
@@ -251,12 +262,14 @@
               },
               {
                 "group": "Auth",
+                "icon": "key-skeleton",
                 "pages": [
                   "api-reference/endpoints/auth/login-by-obtaining-a-new-access-token"
                 ]
               },
               {
                 "group": "Events",
+                "icon": "calendar",
                 "pages": [
                   "api-reference/endpoints/events/submit-a-batch-of-events-for-testing",
                   "api-reference/endpoints/events/query-events-by-timestamp-period-and-optional-event-name",
@@ -268,6 +281,7 @@
               },
               {
                 "group": "Credits",
+                "icon": "credit-card-front",
                 "pages": [
                   "api-reference/endpoints/credits/retrieve-credit-ledger-entries-for-customer",
                   "api-reference/endpoints/credits/grant-credits-to-a-customer-credit-ledger",
@@ -276,12 +290,14 @@
               },
               {
                 "group": "Product Consumption",
+                "icon": "space-station-moon-construction",
                 "pages": [
                   "api-reference/endpoints/product-consumptions/get-product-consumption"
                 ]
               },
               {
                 "group": "Meters",
+                "icon": "meter",
                 "pages": [
                   "api-reference/endpoints/meters/list-meters",
                   "api-reference/endpoints/meters/get-meter",
@@ -291,6 +307,7 @@
               },
               {
                 "group": "Webhooks",
+                "icon": "webhook",
                 "pages": [
                   "api-reference/endpoints/webhooks/subscribe-to-webhooks"
                 ]
@@ -298,35 +315,28 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "Integrations",
+        "icon": "bullseye-pointer",
+        "pages": [
+          {
+            "group": "Integrations",
+            "icon": "link-horizontal",
+            "pages": [
+              "documentation/guides/integrations/anrok",
+              "documentation/guides/integrations/hubspot",
+              "documentation/guides/integrations/stripe",
+              "documentation/guides/integrations/rillet",
+              "documentation/guides/integrations/xero",
+              "documentation/guides/integrations/salesforce",
+              "documentation/guides/integrations/quickbooks2",
+              "documentation/guides/integrations/netsuite",
+              "documentation/guides/integrations/snowflake"
+            ]
+          }
+        ]
       }
     ]
-  },
-  "logo": {
-    "light": "/assets/logo/light.svg",
-    "dark": "/assets/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:shai@withvayu.com?subject=Support Request"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Get started now",
-      "href": "https://www.withvayu.com/#FAQ"
-    }
-  },
-  "seo": {
-    "metatags": {
-      "robots": "noindex"
-    },
-    "indexing": "navigable"
-  },
-  "footer": {
-    "socials": {
-      "linkedin": "https://www.linkedin.com/company/withvayu"
-    }
   }
 }
