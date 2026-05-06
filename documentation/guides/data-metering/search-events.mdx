@@ -33,11 +33,25 @@ For more advanced filtering and larger result sets, use the API to query events.
 
 ### Query events endpoint
 
-````text
+```text
 GET /events
+```
 
-### Query parameters Filter events using these parameters: - `startTime` - Beginning of timestamp range (ISO 8601 format) - `endTime` - End of timestamp range (ISO 8601 format) - `eventName` - Filter by specific event name (optional) - `limit` - Maximum number of results to return (default: 10) - `cursor` - Pagination cursor for retrieving additional results ### Example request ```bash GET /events?startTime=2023-11-01T00:00:00Z&endTime=2023-11-30T23:59:59Z&eventName=api_call&limit=100
-````
+### Query parameters
+
+Filter events using these parameters:
+
+- `startTime` - Beginning of timestamp range (ISO 8601 format)
+- `endTime` - End of timestamp range (ISO 8601 format)
+- `eventName` - Filter by specific event name (optional)
+- `limit` - Maximum number of results to return (default: 10)
+- `cursor` - Pagination cursor for retrieving additional results
+
+### Example request
+
+```bash
+GET /events?startTime=2023-11-01T00:00:00Z&endTime=2023-11-30T23:59:59Z&eventName=api_call&limit=100
+```
 
 ### **Example response**
 
