@@ -70,16 +70,6 @@
             "icon": "hat-cowboy",
             "pages": [
               {
-                "group": "Settings",
-                "icon": "gear-complex",
-                "pages": [
-                  "general",
-                  "documentation/guides/users/user-management",
-                  "entities",
-                  "invoice-preferences"
-                ]
-              },
-              {
                 "group": "Customers",
                 "icon": "people-group",
                 "pages": [
@@ -96,9 +86,9 @@
                 "icon": "file-invoice",
                 "pages": [
                   "documentation/guides/plans-and-pricing/pricing-new-overview",
+                  "documentation/guides/plans-and-pricing/create-plan",
                   "documentation/guides/plans-and-pricing/fixed-fees",
                   "documentation/guides/plans-and-pricing/usage-based-fees",
-                  "documentation/guides/plans-and-pricing/create-plan",
                   "documentation/guides/plans-and-pricing/pricing-and-product-line-items",
                   "documentation/guides/plans-and-pricing/base-amount-and-commitment",
                   "documentation/guides/plans-and-pricing/assign-plan-to-customer",
@@ -151,6 +141,16 @@
                 "pages": [
                   "ai-insights",
                   "pdf-extraction"
+                ]
+              },
+              {
+                "group": "Settings",
+                "icon": "gear-complex",
+                "pages": [
+                  "general",
+                  "documentation/guides/users/user-management",
+                  "entities",
+                  "invoice-preferences"
                 ]
               }
             ]
