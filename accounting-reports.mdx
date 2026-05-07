@@ -5,10 +5,12 @@ icon: "abacus"
 
 Accounting reports are designed to support financial reporting and reconciliation workflows.
 
-- **Month-end -** Review data needed to close books efficiently at the end of a reporting period.
-- **Recurring revenue report -** Track trends in recurring revenue over time.
-- **Revenue report -** Analyze recognized revenue across customers and time periods.
-- **Contracts report -** View a list of contracts along with estimated bookings and financial commitments.
+- **ARR/MRR Report\* -** This reviews recurring revenue and trends over different periods of time, whether monthly (MRR), quarterly (QRR), or annually (ARR).
+  <Note>
+    \*This merges the previous Month-End Report with the previous Recurring Revenue Report.
+  </Note>
+- **NRR/GRR Report -** Measure customer revenue retention performance for two things: 1) Net Revenue Retention (NRR) and Gross Revenue Retention (GRR)
+- **Revenue Analysis Report -** Analyze recognized revenue across customers and time periods.
 
 Accounting reports are designed to support financial reporting and reconciliation workflows. These reports provide the data needed to close books, recognize revenue, and maintain compliance with accounting standards.
 
@@ -29,13 +31,17 @@ The report includes:
 - Tax collected and remitted
 - Reconciliation data for ERP sync
 
-Use this report to prepare journal entries, verify revenue recognition, and ensure that all billing activity is properly recorded in your accounting system. The report is generated automatically at the end of each month and can be exported to CSV or synced directly to [NetSuite](/documentation/guides/integrations/netsuite), [QuickBooks](/documentation/guides/integrations/quickbooks2), or [Rillet](/documentation/guides/integrations/rillet).
+Use this report to prepare journal entries, verify revenue recognition, and ensure that all billing activity is properly recorded in your accounting system. The report is generated automatically at the end of each month and can be exported to CSV or synced directly to [NetSuite](/documentation/guides/integrations/netsuite) or [QuickBooks](/documentation/guides/integrations/quickbooks2).
 
 The Month-End Report reflects approved invoices only. Draft invoices are not included until they complete the approval workflow and are locked for editing. This ensures that the report matches the data synced to your ERP system.
 
-### MRR Report
+### ARR/MRR Report
 
-The MRR Report tracks trends in recurring revenue over time. This report calculates MRR (Monthly Recurring Revenue) and ARR (Annual Recurring Revenue) at both the customer and account levels.
+The ARR/MRR Report tracks trends in recurring revenue over time. This report calculates ARR (Annual Recurring Revenue) and MRR (Monthly Recurring Revenue) at both the customer and account levels.
+
+<Frame>
+  ![Arr Mrr New May72026](/images/arr-mrr-new-may72026.gif)
+</Frame>
 
 <Frame>
   ![Arr Mrr Final 20260421 132139](/images/arr-mrr-final-20260421-132139.gif)
@@ -43,7 +49,7 @@ The MRR Report tracks trends in recurring revenue over time. This report calcula
 
 The report displays:
 
-- MRR and ARR by customer
+- MRR, QRR, or ARR by customer (including all invoices issued during the respective period)
 - Revenue by product or contract
 - Contract phases and their impact on recurring revenue
 - Custom fields for additional segmentation
