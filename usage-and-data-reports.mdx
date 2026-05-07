@@ -6,10 +6,12 @@ icon: "database"
 Usage & Data reports provide visibility into how customers are consuming your product and how that maps to billing.
 
 - **Commitment vs. usage** - Compare actual usage against contractual commitments. This is especially useful for identifying underutilization or overages.
+- **Commitment vs. usage - Detailed** - Track per-period commitment consumption with a month-by-month breakdown, pacing, and projected end-of-period usage.
 - **Uncharged usage** - Detect usage events that have not yet been billed. Helps prevent revenue leakage.
 - **Anonymous customers** - Identify new or unassigned customers that were imported or created without full attribution.
 - **Usage by product** - Break down usage across different products or pricing components.
 - **Usage report** - View a detailed, granular breakdown of usage activity.
+- **Usage report (v2)** - Inspect tier-level usage with customer and contract custom fields, billing cadence, and accumulation interval.
 
 Usage & Data reports provide visibility into how customers consume your product and how that consumption maps to billing. These reports help you identify usage patterns, detect billing issues, and ensure that all usage is properly charged.
 
@@ -31,6 +33,24 @@ Use this report to monitor whether customers are on track to meet their commitme
 Commitments can be configured at the product level and may reset on a defined schedule. When usage exceeds the commitment, overage charges are calculated according to the contract's overage strategy (bill at standard rate, ignore, or custom pricing).
 
 The report updates in real-time as usage events are ingested and processed. You can view commitment tracking at the customer level or drill down to specific products and billing periods.
+
+### Commitment vs. Usage - Detailed
+
+The Commitment vs. usage - Detailed report extends the standard Commitment vs. usage view with a per-period, month-by-month breakdown of consumption against each commitment. Use this report when you need to understand how usage accumulated within the current commitment cycle and how the customer is pacing through the period.
+
+The report includes the standard commitment columns (customer, contract, product/meter, reset cycle, committed quantity, consumed quantity, % usage, shortfall, and overage), plus the following:
+
+- **Pacing %** - How far the customer is through the commitment cycle compared to the percentage of the commitment they have consumed.
+- **Projected EoP (Qty)** - Forecasted total consumption by the end of the current commitment period, based on current pacing.
+- **Monthly columns** - For each calendar month in the report range, four values are shown:
+  - **Qty Used** - Quantity consumed during that month.
+  - **Cumul. Qty** - Cumulative quantity consumed since the start of the current commitment cycle.
+  - **Cumul. %** - Cumulative consumption as a percentage of the committed quantity.
+  - **Reset** - Indicates whether the commitment reset during that month (based on the contract's reset cycle).
+
+Use this report to spot customers who are consuming too quickly (high pacing %) and risk overage, or too slowly and risk underutilization. The monthly breakdown makes it easy to see when commitment cycles reset, how usage is distributed across the period, and whether projected end-of-period totals will exceed the committed amount.
+
+The report respects the contract's reset interval (monthly, quarterly, annually, or contract-aligned) when calculating cumulative columns and the **Reset** marker. Filter by customer, contract, product, or commitment status to narrow the view, and export the report to CSV for offline review or sharing with account teams.
 
 ### Uncharged Usage
 
@@ -113,3 +133,19 @@ The report displays:
 Use this report to audit usage data, investigate billing questions, and verify that usage is being recorded and charged correctly. The report supports export to CSV for further analysis or reconciliation with external systems.
 
 Usage events are ingested in real-time and processed according to the contract's pricing rules. The report shows both billed and unbilled usage, allowing you to track consumption throughout the billing cycle.
+
+### Usage Report (v2)
+
+The Usage Report (v2) extends the standard Usage report with tier-level detail and richer customer, contract, and product context. Use this report when you need to audit how usage maps to specific pricing tiers or analyze consumption alongside custom fields defined on customers and contracts.
+
+The report displays:
+
+- **Customer** - Name, customer ID, and external (ERP) ID, plus any custom fields defined on the customer.
+- **Contract** - Name, contract ID, start and end dates, days remaining, contract duration (or "EverGreen" for contracts without a fixed end), status, and any custom fields defined on the contract.
+- **Product** - Name, ID, description, product group, pricing model, charging cadence, and billing interval.
+- **Usage modifications** - Commitment quantity, commitment reset interval, tier number, tier `FROM` and `TO` quantities, and bulk amount.
+- **Usage** - The current usage period (start to end) and total consumed quantity from contract start through today.
+
+Use this report to verify that usage is being assigned to the correct tier, reconcile tiered pricing against expected charges, and pull a consolidated view that combines pricing configuration with custom metadata (for example, sales region, account owner, or product category) for downstream analysis.
+
+The report supports filtering and search across all columns and exports to CSV. Custom field columns are automatically added to the report based on the custom fields you have defined on customers and contracts in your workspace.
