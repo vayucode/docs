@@ -139,7 +139,7 @@
                 "group": "Reports",
                 "icon": "file-arrow-down",
                 "pages": [
-                  "file",
+                  "reports-overview",
                   "billing-reports",
                   "usage-and-data-reports",
                   "accounting-reports"
