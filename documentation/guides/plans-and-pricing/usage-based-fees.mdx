@@ -150,3 +150,23 @@ This lets you charge different prices for the same metric depending on where and
 ## **SQL Metering**
 
 SQL Metering is an advanced metering mechanism that allows pricing logic to be expressed using SQL-like conditions, enabling calculations that cannot be expressed using standard field-based or rule-based metering alone. It functions as an additional layer of complexity on top of existing metering.
+
+---
+
+## **Seat-Day Metering**
+
+Use seat-day metering when you want to bill a usage product based on a daily snapshot of a value, such as the number of provisioned seats, active licenses, or running instances on each day of the billing period.
+
+When the meter's aggregation operator is set to **Last**, Vayu treats each day as its own billable unit:
+
+- The most recent measurement is taken on each day, and is carried forward through any days where no new event was sent.
+- Each day is rated against the configured tier or flat rate, then prorated by the length of the accumulation period (for example, divided by the number of days in the calendar month or in the billing cycle).
+- The total charge equals the sum of the daily prorated amounts across the billing period.
+
+For example, if you charge \$30 per seat per month and a customer has 10 seats for the first 15 days of a 30-day month and then increases to 12 seats for the remaining 15 days, the charge is `(10 × \$1 × 15) + (12 × \$1 × 15) = \$330`.
+
+On the invoice, line items configured this way display a **Seat-days** column in place of Period QTY and Units, and the YTD QTY and Billable QTY columns are hidden since they do not apply to point-in-time measurements.
+
+<Note>
+  Seat-day metering applies to any usage product whose meter uses the Last aggregation operator. It is not limited to seats — the same logic prorates daily snapshots of any quantity across the accumulation period.
+</Note>

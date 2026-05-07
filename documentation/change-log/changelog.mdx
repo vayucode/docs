@@ -6,6 +6,16 @@ icon: "clock-one"
 
 # Change Log
 
+<Update label="May 7, 2026" tags={["Billing & Invoicing","Usage Metering"]}>
+  # Seat-day metering and daily proration
+
+  Usage products that aggregate metered values with the **Last** operator (such as daily seat counts or active license snapshots) now bill on a per-day basis using the most recent measurement carried forward through days with no new events.
+
+  - Invoice line items for these meters display **Seat-days** in place of Period QTY/Units, and hide YTD QTY and Billable QTY columns since they do not apply to point-in-time measurements.
+  - Each day is prorated by the actual length of the meter's accumulation period (calendar month, cycle length, or other configured interval) so partial-month or non-aligned billing cycles produce accurate charges.
+  - Flat rate tier pricing now runs on the same calculation path as tiered subscriptions, giving consistent breakdowns across both pricing models.
+</Update>
+
 <Update label="May 6, 2026" tags={["UI"]}>
   # Reporting Upgrades
 
