@@ -52,6 +52,16 @@ In this example, volume charges would be calculated as such when consuming 9,000
 
 Usage accumulation is ‘lifetime’ from the contract start date. The charges are periodic and are based on the accumulative volume up until that point.
 
+### Automatic upgrade
+
+When you configure a usage charge with volume pricing, you can enable **Automatic upgrade** to lock customers into the highest tier they reach. Once a customer crosses into a new tier, all future usage in that period is billed at the new tier rate, even if their usage drops back down.
+
+Toggle **Automatic upgrade** in the usage charge drawer when editing a Tiers charge with volume enabled. Leave it off to recalculate the tier on every billing cycle based on the period’s usage.
+
+<Note>
+  Automatic upgrade is also available for [Tiered Subscriptions](#tiered-subscription) and applies the same locking behavior across billing periods.
+</Note>
+
 ---
 
 ## **Per Unit Pricing**
