@@ -1,11 +1,11 @@
 ---
 title: "Accounting Reports"
-icon: "abacus"
+icon: "money-bill-transfer"
 ---
 
 Accounting reports are designed to support financial reporting and reconciliation workflows.
 
-- **ARR/MRR Report\* -** This reviews recurring revenue and trends over different periods of time, whether monthly (MRR), quarterly (QRR), or annually (ARR).
+- **ARR/MRR Report\* -** This reviews recurring revenue and trends over different periods of time, whether monthly (MRR), quarterly (QRR), or annually (ARR). 
   <Note>
     \*This merges the previous Month-End Report with the previous Recurring Revenue Report.
   </Note>
@@ -14,101 +14,117 @@ Accounting reports are designed to support financial reporting and reconciliatio
 
 Accounting reports are designed to support financial reporting and reconciliation workflows. These reports provide the data needed to close books, recognize revenue, and maintain compliance with accounting standards.
 
-### **Month-End Report**
+## ARR / MRR Report
 
-The Month-End Report provides the data needed to close books efficiently at the end of a reporting period. This report consolidates invoice, revenue, and payment data into a format designed for accounting workflows.
+The ARR / MRR Report tracks recurring revenue trends over time across customers, contracts, products, and billing periods. This report calculates MRR (Monthly Recurring Revenue), QRR (Quarterly Recurring Revenue), and ARR (Annual Recurring Revenue) using active recurring contract data and displays both current revenue values and historical changes.
 
-<Frame>
-  ![Month End 20260421 132240](/images/month-end-20260421-132240.gif)
-</Frame>
+It includes the following metrics:
 
-The report includes:
+- Current MRR values by customer and contract
+- Historical MRR, QRR, and ARR trends across selected time periods
+- Revenue waterfall movements, including:
+- New revenue
+- Expansion revenue
+- Reactivation revenue
+- Contraction revenue
+- Churned revenue
+- Contract start and end dates
+- Contract status information
+- Revenue grouped by customer, contract, or product
+- Original currency values and exchange rate conversions
+- Custom fields and metadata for segmentation
+- Monthly, quarterly, and annual reporting views
 
-- All invoices issued during the period
-- Revenue recognized during the period
-- Payment activity and outstanding balances
-- Adjustments, credits, and refunds
-- Tax collected and remitted
-- Reconciliation data for ERP sync
+Recurring revenue is calculated using active recurring contract charges and billing schedules. The report includes recurring subscription and fixed-fee revenue while excluding one-time charges and non-recurring invoice items. Contract phase changes, renewals, expirations, uplifts, and pricing adjustments are reflected automatically in the calculation logic.
 
-Use this report to prepare journal entries, verify revenue recognition, and ensure that all billing activity is properly recorded in your accounting system. The report is generated automatically at the end of each month and can be exported to CSV or synced directly to [NetSuite](/documentation/guides/integrations/netsuite) or [QuickBooks](/documentation/guides/integrations/quickbooks2).
+The chart view provides a recurring revenue waterfall visualization that highlights revenue movement between reporting periods. Revenue categories such as New, Expansion, Reactivation, Contraction, and Churn are displayed alongside total MRR trends to help explain period-over-period changes.
 
-The Month-End Report reflects approved invoices only. Draft invoices are not included until they complete the approval workflow and are locked for editing. This ensures that the report matches the data synced to your ERP system.
+The report supports configurable dimensions and column selection, allowing users to customize views using customer attributes, labels, subsidiaries, contract metadata, currencies, and other available business fields.
 
-### ARR/MRR Report
+### Export/Download
 
-The ARR/MRR Report tracks trends in recurring revenue over time. This report calculates ARR (Annual Recurring Revenue) and MRR (Monthly Recurring Revenue) at both the customer and account levels.
+You can download the report as a CSV for financial reporting, board reporting, forecasting, and revenue operations analysis.
+
+### Ask AI Agent
+
+The ARR / MRR Report includes the Ask AI Agent, which allows users to analyze recurring revenue trends using natural-language questions. Users can quickly investigate churn, expansion, MRR waterfalls, product-level revenue breakdowns, and projected ARR without manually building filters or reports.
 
 <Frame>
   ![Arr Mrr New May72026](/images/arr-mrr-new-may72026.gif)
 </Frame>
 
-<Frame>
-  ![Arr Mrr Final 20260421 132139](/images/arr-mrr-final-20260421-132139.gif)
-</Frame>
+# **NRR / GRR Report**
 
-The report displays:
+The NRR / GRR Report measures customer revenue retention over time by analyzing recurring revenue changes across existing customer accounts. This report calculates NRR (Net Revenue Retention) and GRR (Gross Revenue Retention) using recurring revenue activity such as expansions, contractions, and churn.
 
-- MRR, QRR, or ARR by customer (including all invoices issued during the respective period)
-- Revenue by product or contract
-- Contract phases and their impact on recurring revenue
-- Custom fields for additional segmentation
-- Historical trends and period-over-period changes
+The report displays the following metrics:
 
-Use this report to monitor recurring revenue growth, identify churn or expansion, and report on key revenue metrics. The report supports custom fields, allowing you to segment revenue by region, sales team, or other business dimensions.
+- Starting MRR for each reporting period
+- Expansion MRR from upgrades and account growth
+- Contraction MRR from downgrades or reduced spend
+- Churn MRR from fully lost recurring revenue
+- NRR percentages by reporting period
+- GRR percentages by reporting period
+- Historical monthly retention trends
+- Retention performance across selected date ranges
 
-Recurring revenue is calculated based on active contracts and their billing schedules. The report includes only recurring charges (subscriptions, fixed fees) and excludes one-time charges and usage-based fees. Contract phases are reflected in the calculation, so revenue changes when contracts renew or terms are modified.
-
-The report is available in the Vayu UI and can be downloaded as CSV. Historical MRR data is retained, allowing you to view trends over time and compare current performance to past periods.
-
-### **Revenue Report**
-
-The Revenue report analyzes recognized revenue across customers and time periods. This report is designed to support revenue recognition workflows and financial reporting requirements.
+NRR calculations include expansion revenue, contraction revenue, and churned revenue to measure overall retained and expanded recurring revenue from existing customers. GRR calculations exclude expansion revenue and measure only retained recurring revenue after accounting for contraction and churn.
 
 <Frame>
-  ![Revenue Waterfall Final 1 20260421 131932](/images/revenue-waterfall-final-1-20260421-131932.gif)
+  ![Nrr Grr Report 7may2026](/images/nrr-grr-report-7may2026.gif)
 </Frame>
 
-The report shows:
+Retention calculations are based on recurring contract revenue and active customer billing activity during each reporting period. One-time charges and non-recurring invoice items are excluded from retention calculations.
 
-- Revenue recognized by period
+<Frame>
+  ![Switch Between Nrr Grr](/images/switch-between-nrr-grr.gif)
+</Frame>
+
+The report supports both chart and table views for analyzing retention performance at a high level or reviewing detailed monthly retention metrics.
+
+The chart view visualizes retention trends over time and compares NRR and GRR performance across reporting periods. This makes it easier to identify periods of strong expansion, elevated churn, or declining customer retention.
+
+### Export/Download
+
+You can download the report as a CSV for board reporting, investor reporting, revenue operations analysis, and customer retention monitoring.
+
+### Ask AI Agent
+
+The NRR / GRR Report includes the Ask AI Agent for conversational retention analysis. Users can ask questions about NRR and GRR performance, identify customer contractions or expansions, and review retention trends across reporting periods directly from the report interface.
+
+## Revenue Analysis Report
+
+The Revenue Analysis Report provides visibility into recognized, deferred, and unbilled revenue across customers, contracts, and adjustable reporting periods. This report shows finance and revenue teams how billed and unbilled revenue changes over time, monitor deferred balances, and recognize trends.
+
+The report combines chart and table views to support both high-level financial analysis and detailed customer-level revenue review. It displays the following metrics:
+
+- Recognized revenue by reporting period
+- Deferred revenue balances over time
+- Unbilled revenue amounts
 - Revenue by customer and contract
-- Breakdown by product or revenue stream
-- Deferred revenue and recognition schedule
-- Adjustments and credits applied
+- Monthly, quarterly, and annual revenue trends
+- Remaining deferred balances by customer
+- Historical revenue recognition activity
+- Revenue totals across selected date ranges
 
-Use this report to verify revenue recognition, prepare financial statements, and ensure compliance with accounting standards (ASC 606, IFRS 15). The report integrates with [Rillet](/documentation/guides/integrations/rillet) for automated revenue recognition workflows.
-
-Revenue is recognized according to the contract's billing schedule and revenue recognition rules. For usage-based products, revenue is recognized when usage is billed. For subscription products, revenue may be recognized ratably over the subscription period.
-
-The report updates as invoices are approved and synced to your accounting system. It reflects the current state of recognized and deferred revenue, providing a complete view of your revenue position.
-
-There are also a chart view and filters:
+The table view can be adjusted to give even more granular detail by adjusting metrics that appear on the table. It provides customer-level revenue detail, including monthly recognized revenue values, cumulative recognized totals, and remaining balances associated with active contracts and schedules.
 
 <Frame>
-  ![Revenue Waterfall Final Filter And Chart 20260421 131850](/images/revenue-waterfall-final-filter-and-chart-20260421-131850.gif)
+  ![Revenue Analysis New Filters](/images/revenue-analysis-new-filters.gif)
 </Frame>
 
-### **Contracts Report**
+Revenue calculations are based on active billing schedules, invoice timing, contract structures, and revenue recognition rules configured within the platform. Recognized revenue reflects revenue earned during each reporting period, while deferred revenue represents billed revenue that has not yet been recognized. Unbilled revenue represents earned or scheduled revenue that has not yet been invoiced.
 
-The Contracts report provides a list of contracts along with estimated bookings and financial commitments. This report helps you track contract value, renewal dates, and revenue projections.
+The chart view visualizes recognized, deferred, and unbilled revenue trends across adjustable time periods, making it easier to identify revenue timing shifts or changes in billing patterns.
+
+### Export/Download
+
+You can download the report as a CSV for accounting review, financial reporting, revenue reconciliation, audit preparation, and operational analysis.
+
+### Ask AI Agent
+
+The Revenue Analysis Report includes the Ask AI Agent for interactive revenue analysis and financial insights. Users can generate revenue summaries, identify concentration risks, analyze customer revenue distribution, and break down recognized revenue trends using natural-language queries.
 
 <Frame>
-  ![Contracts Report 20260421 132335](/images/contracts-report-20260421-132335.gif)
+  ![Revenue Analysis Ai](/images/revenue-analysis-ai.gif)
 </Frame>
-
-The report displays:
-
-- Customer name and contract details
-- Start date, end date, and signature date
-- Contract status (active, inactive, terminated)
-- Total contract value (TCV) and annual contract value (ACV)
-- Products and pricing included in the contract
-- Estimated bookings by period
-- Auto-renewal settings
-
-Use this report to monitor contract lifecycle, track upcoming renewals, and forecast future revenue. The report includes both active and inactive contracts, allowing you to see the full pipeline of committed revenue.
-
-Contract data syncs from CRM systems ([Salesforce](/documentation/guides/integrations/salesforce), [HubSpot](/documentation/guides/integrations/hubspot)) when deals are marked Closed-Won. The report reflects the commercial terms defined in Vayu, including pricing tiers, commitments, and billing schedules.
-
-Contracts with future start dates are labeled as "Inactive" and will automatically transition to active status when the start date is reached. Terminated contracts are retained in the report for historical reference but do not generate new invoices.

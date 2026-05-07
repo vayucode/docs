@@ -4,37 +4,33 @@ icon: "circle-play"
 description: "The best way to get a sense of how easy Vayu is to use is to explore the platform's user guide. "
 ---
 
-You'll find that everything — from setting up and creating pricing plans to reviewing invoices, monitoring customer usage, and managing data metering — is straightforward and intuitive.
+You'll find that everything — from setting up and creating pricing plans to reviewing [invoices](/documentation/guides/invoices/invoices-overview), [monitoring customer usage](/usage-and-data-reports), and [managing data metering](/file) — is straightforward and intuitive.
 
 If you have any questions, or would like to inquire about additional features, please reach out to us. We'd love to hear from you: [help@withvayu.com](mailto:help@withvayu.com)
 
 ### Get Started
 
-Getting started with Vayu could not be simpler.
-Check out the steps you’ll need to take:
+Getting started with Vayu could not be simpler. Check out the steps you’ll need to take:
 
-<Steps>
-  <Step title="Create a Pricing Plan">
-    You can create pricing plans for specific customers or subsidiaries as well as create generic pricing plans to use as templates that can be customized as necessary.
+#### 1. [Create a Pricing Plan](/documentation/guides/plans-and-pricing/create-plan)
 
-    Any plan can combine whichever types of pricing you need, whether it’s usage-based, commitment fees, tiered pricing, etc. You can also choose the currency you need for each plan. Furthermore, you get to define the start date, duration, and the frequency at which invoices are created and at what intervals.
-  </Step>
+You can create pricing plans for specific customers or subsidiaries as well as create generic pricing plans to use as templates that can be customized as necessary.
 
-  <Step title="Explore Invoices">
-    You’ll have real-time insight into your customers’ consumption at any given time, as well as what that means for their billing. Invoices are generated automatically and accurately according to your specifications. Once they’re ready, you can review, modify if desired, and send.
-  </Step>
+Any plan can combine whichever types of pricing you need, whether it’s usage-based, commitment fees, tiered pricing, etc. You can also choose the currency you need for each plan. Furthermore, you get to define the start date, duration, and the frequency at which invoices are created and at what intervals.
 
-  <Step title="Review Customers">
-    You can add customers directly from data in a CSV file, from syncing via a Salesforce or Hubspot integration, or manually using the quick and simple process in the Vayu platform. You can establish subsidiaries and related entities with ease.
+#### 2. [Explore Invoices](/documentation/guides/invoices/invoices-overview)
 
-    Once a customer is set up, you can view their current billing and usage status, balance overview, issued and overdue invoices, and more at any time.
-  </Step>
+You’ll have real-time insight into your customers’ consumption at any given time, as well as what that means for their billing. Invoices are generated automatically and accurately according to your specifications. Once they’re ready, you can review, modify if desired, and send.
 
-  <Step title="Data Metering">
-    The Vayu platform gives you visibility into your events and data metering.
-    You’ll be able to view all the events that have been digested and counted by the platform, download consumption reports, and define products to meter.
-  </Step>
-</Steps>
+#### 3. [Review Customers](/documentation/guides/customers/customer-overview)
+
+You can add customers directly from data in a CSV file, from syncing via a Salesforce or Hubspot integration, or manually using the quick and simple process in the Vayu platform. You can establish subsidiaries and related entities with ease.
+
+Once a customer is set up, you can view their current billing and usage status, balance overview, issued and overdue invoices, and more at any time.
+
+#### 4. [Data Metering](/documentation/guides/data-metering/events)
+
+The Vayu platform gives you visibility into your events and data metering. You’ll be able to view all the events that have been digested and counted by the platform, download consumption reports, and define products to meter.
 
 ## API Quickstart
 
@@ -46,25 +42,30 @@ If you're integrating programmatically, here's the fastest path to your first wo
   </Step>
   <Step title="Install the SDK">
     <CodeGroup>
+
     ```bash npm
     npm install vayu-ts
     ```
+
     ```bash pip
     pip install vayu-client
     ```
+
     ```bash go
     go get github.com/weft-finance/vayu-go
     ```
+
     </CodeGroup>
   </Step>
   <Step title="Send your first event">
     <CodeGroup>
+
     ```typescript TypeScript
     import { VayuClient } from 'vayu-ts';
-
+    
     // Pass your API Token — the SDK handles login/token refresh automatically
     const vayu = new VayuClient({ apiToken: process.env.VAYU_API_TOKEN });
-
+    
     const result = await vayu.events.ingest([{
       name: 'api_call',
       ref: 'my-unique-ref-001',
@@ -72,16 +73,16 @@ If you're integrating programmatically, here's the fastest path to your first wo
       timestamp: new Date().toISOString(),
       data: { tokens: 1500 }
     }]);
-
+    
     console.log('Valid events:', result.validEvents.length);
     ```
 
     ```python Python
     from vayu_client import VayuClient
     import os
-
+    
     vayu = VayuClient(api_token=os.environ["VAYU_API_TOKEN"])
-
+    
     result = vayu.events.ingest([{
         "name": "api_call",
         "ref": "my-unique-ref-001",
@@ -89,7 +90,7 @@ If you're integrating programmatically, here's the fastest path to your first wo
         "timestamp": datetime.utcnow().isoformat() + "Z",
         "data": {"tokens": 1500}
     }])
-
+    
     print("Valid events:", len(result.valid_events))
     ```
 
@@ -100,9 +101,9 @@ If you're integrating programmatically, here's the fastest path to your first wo
         "time"
         "fmt"
     )
-
+    
     vayu := VayuSDK.NewVayu(os.Getenv("VAYU_API_TOKEN"))
-
+    
     result, err := vayu.Events.SendEvents([]VayuSDK.Event{{
         Name:          "api_call",
         Ref:           "my-unique-ref-001",
@@ -115,6 +116,7 @@ If you're integrating programmatically, here's the fastest path to your first wo
     }
     fmt.Printf("Valid events: %d\n", len(result.ValidEvents))
     ```
+
     </CodeGroup>
   </Step>
   <Step title="Verify with dry-run">

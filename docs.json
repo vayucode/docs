@@ -122,14 +122,7 @@
                   "documentation/guides/invoices/dunning",
                   "documentation/guides/invoices/untitled-page",
                   "documentation/guides/invoices/untitled-page-3",
-                  {
-                    "group": "Credits",
-                    "pages": [
-                      "documentation/guides/invoices/untitled-page-2",
-                      "documentation/guides/invoices/untitled-page-1"
-                    ],
-                    "icon": "credit-card-front"
-                  },
+                  "documentation/guides/invoices/untitled-page-1",
                   "documentation/guides/invoices/mark",
                   "documentation/guides/invoices/untitled-page-4"
                 ]
@@ -139,15 +132,7 @@
                 "icon": "meter-bolt",
                 "pages": [
                   "usage",
-                  {
-                    "group": "Events",
-                    "pages": [
-                      "documentation/guides/data-metering/events",
-                      "documentation/guides/data-metering/search-events",
-                      "documentation/guides/data-metering/pricing-events"
-                    ],
-                    "icon": "calendar-star"
-                  }
+                  "documentation/guides/data-metering/events"
                 ]
               },
               {
