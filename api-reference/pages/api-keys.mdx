@@ -1,0 +1,72 @@
+---
+title: 'API Keys'
+description: 'Manage API keys for the v1 Public API in the Vayu Developer Portal.'
+icon: 'key-skeleton'
+---
+
+The Vayu **v1 Public API** (`https://api.withvayu.com/v1`) uses simple API key authentication. Every request includes a single `x-api-key` header — there is no token exchange and no expiry to manage on the client.
+
+<Note>
+  This page covers the new v1 Public API. The existing partner API at `connect.withvayu.com` continues to use the [two-token model](/api-reference/pages/connecting-to-vayu).
+</Note>
+
+## Create an API key
+
+1. Sign in to the [Vayu Developer Portal](https://app.withvayu.com/developers).
+2. Open the **API Keys** tab.
+3. Click **Create API Key** and give it a descriptive name (for example, `production-billing-service`).
+4. Copy the key immediately — it is only shown once at creation time.
+
+Each key is scoped to your account. All requests made with that key operate on your account's data.
+
+## Authenticate a request
+
+Include your key in the `x-api-key` header on every request:
+
+```bash
+curl https://api.withvayu.com/v1/customers \
+  -H "x-api-key: YOUR_API_KEY"
+```
+
+Requests without a valid key receive a `401 Unauthorized` response:
+
+```json
+{
+  "error": {
+    "type": "authentication",
+    "code": "invalid_api_key",
+    "message": "Invalid or missing API key",
+    "request_id": "req_abc123"
+  }
+}
+```
+
+## Revoke a key
+
+Open the **API Keys** tab in the Developer Portal and delete the key. Revoked keys are rejected immediately — any request using a revoked key returns `401 Unauthorized`.
+
+## Rotate a key without downtime
+
+1. Create a new API key.
+2. Update your application to use the new key.
+3. Verify that requests succeed with the new key.
+4. Revoke the old key.
+
+## Unauthenticated endpoints
+
+The following endpoints do not require an API key:
+
+| Endpoint | Purpose |
+|---|---|
+| `/health` | Health check |
+| `/version` | API version |
+| `/docs` | API documentation |
+| `/openapi.json` | OpenAPI specification |
+
+## Best practices
+
+- **Never commit API keys to source control.** Use environment variables or a secrets manager.
+- **Use separate keys for each environment** (development, staging, production).
+- **Give keys descriptive names** so you can identify which service or environment uses each one.
+- **Rotate keys periodically** and revoke keys that are no longer in use.
+- **Restrict access** to API keys within your team to only those who need them.
