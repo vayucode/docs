@@ -166,6 +166,7 @@
             "pages": [
               "api-reference/pages/introduction",
               "api-reference/pages/connecting-to-vayu",
+              "api-reference/pages/api-keys",
               "api-reference/pages/sdk",
               "api-reference/pages/errors",
               "api-reference/pages/rate-limits",
