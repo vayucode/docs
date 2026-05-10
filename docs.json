@@ -122,7 +122,8 @@
                 "icon": "meter-bolt",
                 "pages": [
                   "usage",
-                  "documentation/guides/data-metering/events"
+                  "documentation/guides/data-metering/events",
+                  "documentation/guides/data-metering/upload-measurements"
                 ]
               },
               {

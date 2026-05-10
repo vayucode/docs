@@ -1,26 +1,71 @@
 ---
-title: "Create Plan"
-description: "Plans holds the pricing, commercials, and terms defined for the customers."
+title: "Create a plan"
+description: "Create plans, contracts, or reuse templates from a streamlined plan creation flow."
 icon: "plane-engines"
 ---
 
-### How to create a new pricing plan
+Plans hold the pricing, commercials, and terms defined for your customers. Vayu offers three ways to start a new plan, each surfaced from a single creation dialog so you can choose the right path without leaving your workflow.
 
-1. Begin by selecting **Plans and Pricing** from the menu on the left hand side, then click **Create** in the upper right hand corner to create a new plan.
-2. **Name the plan** (e.g. “Premium plan”) and add a description (optional).
+## Start the creation flow
+
+1. Select **Plans and Pricing** from the left-hand navigation.
+2. Click **Create** in the upper-right corner.
+3. The **Create a new pricing plan** dialog opens with three options. Select one and click **Next**.
+
+## Choose a creation method
+
+Pick the option that best matches what you are doing:
+
+<CardGroup cols={3}>
+  <Card title="Start a new contract" icon="file-contract">
+    Create a custom pricing plan tied directly to a customer. Use this when the terms are specific to a single account and you do not plan to reuse them.
+  </Card>
+
+  <Card title="Create a new template" icon="paint-roller">
+    Build a reusable pricing plan with products and fees. Use this for standard packages like Basic, Pro, or Enterprise that you assign to many customers.
+  </Card>
+
+  <Card title="Choose a template" icon="copy">
+    Select an existing contract template and apply it to a customer. Use this when you already have a template that fits and want to get started quickly.
+  </Card>
+</CardGroup>
+
+### Start a new contract
+
+Choose this option to create a custom plan directly tied to a specific customer:
+
+1. Select **Start a new contract** and click **Next**.
+2. In the contract dialog, select the customer and configure the contract terms.
+3. Add fees and products as needed.
+4. Save the contract to assign it to the customer immediately.
+
+### Create a new template
+
+Choose this option to build a reusable plan that can be assigned to multiple customers later:
+
+1. Select **Create a new template** and click **Next**.
+2. **Name the plan** (for example, "Premium plan") and add an optional description.
 3. Click **Add Fees** to view the pricing elements menu.
-4. Choose to use fixed fees, usage charges, etc. as relevant. You’ll be **able to add as many** of these to a single plan as you like; you just need to add them one by one.
+4. Choose fixed fees, usage charges, or any combination. You can add as many as you like, one at a time.
 5. For each product, enter the product name and the amount to be charged.
-6. To add more items, select **Add Item** and fill in the required details. Each item you put in will be a line item on the invoice that is issued based on this pricing plan.
-7. Define the **plan setting details** - start date, duration, and billing interval.
-
-Once you have finished this process, click **Save Plan and Continue** (at the bottom right of the page) to save your selections.
+6. To add more line items, select **Add Item** and fill in the required details. Each item becomes a line item on invoices issued from this plan.
+7. Define the **plan setting details** — start date, duration, and billing interval.
+8. Click **Save Plan and Continue** at the bottom right to save your selections.
 
 <Note>
-  The system will then redirect you to the plan that it has created.
+  After saving, the system redirects you to the plan that was created.
 </Note>
 
-### Settings
+### Choose a template
+
+Choose this option to apply an existing template to a customer:
+
+1. Select **Choose a template** and click **Next**.
+2. Browse the list of existing templates and select the one you want to use.
+3. Confirm the selection to start a contract from that template.
+4. Adjust any customer-specific details and save.
+
+## Settings
 
 <AccordionGroup>
   <Accordion title="Billing interval">
@@ -36,10 +81,10 @@ Once you have finished this process, click **Save Plan and Continue** (at the bo
   </Accordion>
 
   <Accordion title="Activation / Deactivation">
-    Changing the status of the plan to inactive will prevent the issuing of future invoices.
+    Changing the status of the plan to inactive prevents the issuing of future invoices.
   </Accordion>
 
   <Accordion title="Start date">
-    Billing cycles and invoices are triggered based on the start date given for the plan. Future or past dates can be used, and if the plan is active, the billing cycle automation flow will generate invoices accordingly.
+    Billing cycles and invoices are triggered based on the start date given for the plan. Future or past dates can be used. If the plan is active, the billing cycle automation flow generates invoices accordingly.
   </Accordion>
 </AccordionGroup>

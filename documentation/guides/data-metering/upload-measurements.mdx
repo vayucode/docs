@@ -1,0 +1,73 @@
+---
+title: "Upload measurements"
+description: "Upload measurement data into Vayu from a spreadsheet or CSV file using the guided file upload flow."
+icon: "file-arrow-up"
+---
+
+The **Upload measurements** flow lets you bring usage data into Vayu directly from a spreadsheet, without writing API integrations. Use it when you have batched usage data — for example, a monthly export from another system — and you want to push it into Vayu for billing, reporting, or reconciliation.
+
+The upload uses an embedded file feed that previews your data, validates each row, and helps you map your columns to the fields Vayu expects before submitting.
+
+## When to use this
+
+Use the upload flow when you need to:
+
+- Backfill historical usage data when first onboarding a customer or product.
+- Import usage data from an external system that you do not yet stream into Vayu via the API.
+- Quickly correct or top up measurements for a billing period before invoicing.
+
+For continuous, automated ingestion, send measurements through the [API](/api-reference/endpoints/measurements/create-measurement) instead.
+
+## How to upload measurements
+
+1. Navigate to **Data Metering** in the left-hand navigation.
+2. Open the actions menu and select **Upload data**.
+3. In the **Upload file** dialog, drag and drop your file, or click to browse and select a `.csv`, `.xlsx`, or `.xls` file.
+4. Map your spreadsheet columns to the required Vayu fields. The file feed automatically suggests matches based on column headers.
+5. Review the validation results. Rows with errors are highlighted so you can fix them inline.
+6. Click **Submit** to upload the validated rows.
+
+A confirmation toast appears once the upload completes. You can verify the imported data on the **Usage** page.
+
+## Required columns
+
+Your file must include the following columns. Column order does not matter — you map headers during the upload step.
+
+| Field | Required | Description |
+| --- | --- | --- |
+| **Date** | Yes | The date the usage occurred. Use `MM/DD/YYYY` or `MM/DD/YY`. |
+| **Customer** | Yes | The customer alias or identifier the usage belongs to. |
+| **Meter** | Yes | The name of an existing meter in your account. Names are matched case-insensitively. |
+| **Value** | Yes | The numeric quantity of usage to record. Must be a finite number. |
+| **Parent** | No | Optional parent identifier for grouping or hierarchical usage. |
+
+### Example CSV
+
+```csv
+date,customer,meter,value,parent
+05/01/2026,acme-corp,api_calls,1250,
+05/01/2026,acme-corp,storage_gb,42.5,
+05/02/2026,globex-inc,api_calls,980,project-alpha
+```
+
+## Validation rules
+
+Before any data is submitted, every row is validated. The upload dialog shows inline errors for:
+
+- **Invalid dates** — Values that do not match `MM/DD/YYYY` or `MM/DD/YY`.
+- **Unknown meters** — Meter names that do not match an existing meter in your account. Create the meter first, or correct the spelling.
+- **Non-numeric values** — The `value` column must contain finite numbers only.
+- **Missing required fields** — Empty cells in `Date`, `Customer`, `Meter`, or `Value`.
+
+You can fix issues directly in the preview grid and re-validate without re-uploading the file.
+
+<Note>
+  If a meter name does not exist yet, add it under **Data Metering → Meters** before uploading. Only existing meters are accepted.
+</Note>
+
+## Tips for clean uploads
+
+- Use consistent customer aliases that match what is configured in Vayu.
+- Keep one row per customer, meter, and date combination.
+- Avoid currency symbols, thousands separators, or units in the `value` column.
+- For large files, split uploads into smaller batches if you need finer-grained error tracking.
