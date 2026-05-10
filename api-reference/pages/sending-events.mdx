@@ -1,7 +1,7 @@
 ---
-title: 'Sending events'
+title: 'Sending Events'
 icon: 'paper-plane'
-description: 'Sending events to Vayu'
+description: "Send batches of usage events to Vayu through the events endpoint, with up to 1,000 events per request, idempotency via ref, and partial-success responses."
 ---
 
 Vayu processes events in batches. If some events in a batch are invalid, only those are discarded — valid events are still ingested.
