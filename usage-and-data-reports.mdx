@@ -113,3 +113,11 @@ The report displays:
 Use this report to audit usage data, investigate billing questions, and verify that usage is being recorded and charged correctly. The report supports export to CSV for further analysis or reconciliation with external systems.
 
 Usage events are ingested in real-time and processed according to the contract's pricing rules. The report shows both billed and unbilled usage, allowing you to track consumption throughout the billing cycle.
+
+#### Filtering and customizing the view
+
+Both the Usage report and the Commitment vs. usage report share a consistent toolbar to help you scope the data you see:
+
+- **Usage period** - Use the **From** and **To** month pickers to set the date range for the report. The pickers are grouped together so it is clear they bound a single time window. The **From** picker cannot be set later than **To**, and **To** cannot be set earlier than **From**.
+- **Customer and contract custom field columns** - To keep the default view focused, customer and contract custom field columns are hidden by default. Open the column selector in the table toolbar and toggle on any custom fields you want to display. Your selection persists for the current session.
+- **Number formatting** - Numeric values such as total consumed units, commitment units, tier bounds, bulk amounts, and days remaining are displayed with thousands separators (for example, `1,250,000`) so large numbers are easier to scan. Values exported to XLSX remain numeric and can be reformatted in your spreadsheet tool.
