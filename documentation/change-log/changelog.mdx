@@ -6,6 +6,14 @@ icon: "clock-one"
 
 # Change Log
 
+<Update label="May 10, 2026" tags={["Integrations"]}>
+  # NetSuite product dropdowns filter by customer subsidiary
+
+  NetSuite product dropdowns now only show products that belong to the selected customer's subsidiary. This applies to invoice ERP settings, contract ERP settings, dynamic invoice line items, and the NetSuite sync wizard's "Add ERP ID" dialog.
+
+  Previously, all NetSuite products across every subsidiary were listed, which could cause sync failures when a product from the wrong subsidiary was chosen. Plan-level and integration-level dropdowns continue to show all products, since they aren't tied to a specific customer.
+</Update>
+
 <Update label="May 6, 2026" tags={["UI"]}>
   # Reporting Upgrades
 
