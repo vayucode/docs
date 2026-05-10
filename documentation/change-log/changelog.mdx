@@ -6,6 +6,16 @@ icon: "clock-one"
 
 # Change Log
 
+<Update label="May 10, 2026" tags={["Integrations","Billing & Invoicing"]}>
+  # Stripe credits and partial payments sync
+
+  When you apply a Vayu credit or record a partial payment against an invoice that has been synced to [Stripe](/documentation/guides/integrations/stripe), Vayu now automatically reduces the **amount due** on the Stripe-hosted invoice so the customer-facing page reflects the updated balance.
+
+  The adjustment is delivered as an out-of-band credit note in Stripe, which is the supported way to modify a finalized invoice. If a credit or payment fully covers the balance, Stripe transitions the invoice to **paid** automatically.
+
+  No configuration is required—the sync runs for every Stripe-connected customer, and Stripe outages never block the underlying credit or payment in Vayu.
+</Update>
+
 <Update label="May 6, 2026" tags={["UI"]}>
   # Reporting Upgrades
 
