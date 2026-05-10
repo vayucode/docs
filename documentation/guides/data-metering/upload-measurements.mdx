@@ -1,0 +1,102 @@
+---
+title: "Upload measurements"
+description: "Send aggregated usage measurements to Vayu in bulk via spreadsheet or JSON."
+icon: "cloud-arrow-up"
+---
+
+Measurements are pre-aggregated usage records — one row per customer, meter, and day. Use them when you don't want to stream raw events and instead push consolidated totals on a schedule. Vayu accepts measurements through a guided spreadsheet uploader in the app and through JSON endpoints for programmatic ingestion.
+
+## When to use measurements vs. events
+
+- **Use [events](/documentation/guides/data-metering/events) when** you can stream raw activity in real time and want Vayu to aggregate it.
+- **Use measurements when** your source system already aggregates usage (daily roll-ups, exports from a data warehouse, manual reconciliations) and you want to upload the totals directly.
+
+Both flow into the same usage tables and feed the same invoices.
+
+## Upload from the Vayu app
+
+The **Data metering → Upload measurements** dialog walks you through importing a spreadsheet or pasted table.
+
+1. Go to **Data metering** in the left navigation.
+2. Open the **⋯** menu and select **Upload measurements**.
+3. Drop a CSV/Excel file or paste rows from a spreadsheet. The uploader maps columns automatically and highlights validation errors inline so you can fix them before submitting.
+4. Review the preview, then click **Upload**.
+
+The uploader validates every row before any data is written. If a row fails, you can correct it in place and re-run validation without starting over.
+
+### Required columns
+
+Each row must include the following columns. Headers can be pasted in any order; the uploader maps them by name.
+
+| Column | Required | Description |
+| ------ | :------: | ----------- |
+| `date` | ✅ | The day the usage occurred. Accepts most month/day/year formats with `,`, `;`, `\`, `/`, `-`, or `.` delimiters (for example `MM/DD/YYYY`, `M-D-YY`, `MM.DD.YYYY`). |
+| `customer` | ✅ | The customer alias or external id the usage belongs to. |
+| `parent` | ❌ | Optional parent customer alias for hierarchical accounts. Leave blank when not applicable. |
+| `meter` | ✅ | The meter (event name) the measurement belongs to. Must already exist in your account. |
+| `value` | ✅ | The numeric quantity for the day. Must parse as a number. |
+
+Rows that fail validation are flagged with the specific reason (invalid date format, non-numeric value, missing customer, unknown meter) so you can fix them without re-uploading the whole file.
+
+## Upload via API
+
+For automated pipelines, post measurement rows directly to Vayu. Both endpoints accept the same row schema as the spreadsheet uploader, so you can validate locally before committing data.
+
+### `POST /measurements/validate-json`
+
+Run the same validation the in-app uploader uses without writing anything to your account. Useful for dry-running large imports or surfacing errors in your own tooling.
+
+```bash
+curl -X POST https://api.withvayu.com/measurements/validate-json \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "rows": [
+      {
+        "date": "03/17/2026",
+        "customer": "acme-corp",
+        "meter": "api_calls",
+        "value": "1240"
+      }
+    ]
+  }'
+```
+
+The response lists per-row validation results. Fix any errors locally, then call the upload endpoint with the corrected rows.
+
+### `POST /measurements/upload-json`
+
+Persist the measurements to your account. Validation runs first; if any row is invalid, the entire request is rejected and nothing is written.
+
+```bash
+curl -X POST https://api.withvayu.com/measurements/upload-json \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "rows": [
+      {
+        "date": "03/17/2026",
+        "customer": "acme-corp",
+        "parent": null,
+        "meter": "api_calls",
+        "value": "1240"
+      },
+      {
+        "date": "03/17/2026",
+        "customer": "acme-corp",
+        "meter": "storage_gb",
+        "value": "85.4"
+      }
+    ]
+  }'
+```
+
+A `200 OK` response indicates every row was accepted and stored.
+
+<Note>
+  The JSON endpoints and the spreadsheet uploader share the same row schema and validation rules. Anything you can upload through the UI you can upload through the API, and vice versa.
+</Note>
+
+## After upload
+
+Uploaded measurements appear in the **Usage** view immediately, filtered by date, customer, and product just like measurements from any other source. They are picked up by the next billing run for any plan that meters against the matching event.

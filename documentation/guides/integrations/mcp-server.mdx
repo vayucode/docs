@@ -1,0 +1,145 @@
+---
+title: "MCP server"
+description: "Connect AI clients like Claude, Cursor, and ChatGPT to Vayu using the Model Context Protocol."
+icon: "robot"
+---
+
+The **Vayu MCP server** exposes your Vayu data to AI clients through the [Model Context Protocol](https://modelcontextprotocol.io). Once connected, AI assistants such as Claude Desktop, Claude Code, Cursor, and claude.ai can answer questions about your customers, contracts, plans, products, meters, invoices, and credits — and chain calls together to explore your account.
+
+The server is read-only. Tools look up and list resources; they cannot create, update, or delete records. Every request is scoped to your Vayu account by your refresh token, so AI clients only see data your user already has access to.
+
+## When to use it
+
+- Ask natural-language questions about your account ("What contracts does Acme have?", "Show me unpaid invoices for last month").
+- Let an AI assistant pull live data into reports, summaries, and workflows without writing API calls by hand.
+- Investigate billing or usage questions interactively from your editor or chat client.
+
+## Endpoint
+
+| Environment | URL |
+| ----------- | --- |
+| Production  | `https://mcp.withvayu.com/mcp` |
+
+Use this URL in any MCP client that supports the Streamable HTTP transport.
+
+## Authentication
+
+The MCP server authenticates every request with a Cognito token in the `Authorization: Bearer <token>` header. Two token types are accepted:
+
+- **Refresh token** (recommended) — long-lived. The server exchanges it for a short-lived ID token on each request and caches the result. You paste it into your AI client once.
+- **ID token** — short-lived (~1 hour). Use only when you can refresh it yourself.
+
+### Generate a refresh token
+
+1. Sign in to the Vayu web app.
+2. Go to **Integrations** → **Generate token**.
+3. Copy the generated refresh token.
+
+<Warning>
+  Treat refresh tokens like passwords. Anyone who holds the token can read your Vayu data through the MCP server. Rotate the token from **Integrations → Generate token** if you suspect it has been exposed.
+</Warning>
+
+## Connect Claude Desktop
+
+Add the Vayu server to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or the equivalent path on Windows:
+
+```json
+{
+  "mcpServers": {
+    "vayu": {
+      "url": "https://mcp.withvayu.com/mcp",
+      "headers": {
+        "Authorization": "Bearer <your-refresh-token>"
+      }
+    }
+  }
+}
+```
+
+Restart Claude Desktop. Try asking: *"Use Vayu to find customers named Acme and show their currency."*
+
+<Tip>
+  Older Claude Desktop versions that don't support the HTTP transport can use the `mcp-remote` bridge instead. Replace the configuration with a `command` entry that runs `npx -y mcp-remote https://mcp.withvayu.com/mcp --header "Authorization: Bearer <your-refresh-token>"`.
+</Tip>
+
+## Connect Claude Code
+
+Register the server with the `claude mcp add` command:
+
+```bash
+claude mcp add --transport http vayu https://mcp.withvayu.com/mcp \
+  --header "Authorization: Bearer <your-refresh-token>"
+```
+
+Choose a scope with `--scope`:
+
+- `local` (default) — current project only.
+- `user` — shared across all your projects.
+- `project` — written to `.mcp.json` and committed with the repo. Don't use this with a personal token.
+
+Verify the registration with `claude mcp list`, then restart Claude Code. Vayu tools appear under the `vayu` server.
+
+## Connect Cursor
+
+Add the server to Cursor's MCP config (`.cursor/mcp.json` for a single project or `~/.cursor/mcp.json` globally):
+
+```json
+{
+  "mcpServers": {
+    "vayu": {
+      "url": "https://mcp.withvayu.com/mcp",
+      "headers": {
+        "Authorization": "Bearer <your-refresh-token>"
+      }
+    }
+  }
+}
+```
+
+Open **Cursor Settings → MCP** and toggle the `vayu` server on. Tools become available in Cursor's Agent mode.
+
+## Connect claude.ai
+
+claude.ai supports remote MCP servers on Pro, Team, and Enterprise plans:
+
+1. Open **Settings → Connectors → Add custom connector**.
+2. **Server URL**: `https://mcp.withvayu.com/mcp`.
+3. **Authentication**: select **Custom header**.
+   - Header name: `Authorization`
+   - Header value: `Bearer <your-refresh-token>`
+4. Save. The connector appears in the chat composer's tools menu — enable it for the conversation and start asking questions about your Vayu data.
+
+## Available tools
+
+The MCP server ships these read-only tools. Names are prefixed with `vayu_` so AI clients can group them.
+
+| Tool | What it does |
+| ---- | ------------ |
+| `vayu_get_customer` | Look up a single customer by Vayu id. Returns name, externalId, currency, address, and creation date. |
+| `vayu_find_customers` | Search customers by name (partial, case-insensitive) and/or externalId (exact). Returns up to 20 matches. |
+| `vayu_get_contract` | Look up a single contract by Vayu id, integration id, or externalId. Returns status, type, dates, currency override, account manager, notes, and labels. |
+| `vayu_list_contracts_for_customer` | List contracts for one customer, optionally filtered by status. Returns up to 50, newest start date first. |
+| `vayu_get_plan` | Look up a single plan template by Vayu id. Returns plan settings and fees. |
+| `vayu_list_plans` | List plan templates in the account, paginated and sortable. |
+| `vayu_get_catalog_product` | Look up a single catalog product by Vayu id. |
+| `vayu_list_catalog_products` | List catalog products in the account, paginated. |
+| `vayu_get_meter` | Look up a single meter by Vayu id. Returns meter configuration and aggregation rules. |
+| `vayu_list_meters` | List meters in the account, paginated. |
+| `vayu_get_invoice` | Look up a single invoice by Vayu id. Returns header, totals, and line items. |
+| `vayu_list_invoices_for_customer` | List invoices for one customer, optionally filtered by review and billing status. |
+| `vayu_get_invoice_payment_status` | Return the payment status for a single invoice. |
+| `vayu_list_credit_ledger_entries` | List credit ledger entries for a customer, paginated. |
+| `vayu_list_custom_fields` | List custom field definitions for a given resource type, paginated. |
+
+List endpoints share a common pagination contract. They accept `limit` (1–50, default 25) and an opaque `cursor`, and return `nextCursor` when more pages are available. Sortable lists also accept `sortBy` and `sortDirection`. Changing `sortBy` or `sortDirection` mid-pagination invalidates the cursor — restart from no cursor.
+
+## Rate limits
+
+Each account has a token-bucket rate limit on the MCP server (10 burst capacity, 1 request per second sustained by default). When exceeded, the server responds with HTTP `429` and a `Retry-After` header. AI clients retry automatically.
+
+## Troubleshooting
+
+- **`401 Unauthorized`** — your token is expired, malformed, or scoped to the wrong account. Generate a new refresh token from **Integrations → Generate token**.
+- **`429 Too Many Requests`** — you're hitting the rate limit. Slow the AI client down or wait for the `Retry-After` window.
+- **Tool returns "not found"** — the agent likely passed the wrong id. Use `vayu_find_customers` (or another list tool) to discover the correct id, then retry.
+- **Need to correlate with support** — every response includes an `X-Request-Id` header that's also embedded in error messages. Share that id when reporting an issue.

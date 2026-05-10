@@ -122,7 +122,8 @@
                 "icon": "meter-bolt",
                 "pages": [
                   "usage",
-                  "documentation/guides/data-metering/events"
+                  "documentation/guides/data-metering/events",
+                  "documentation/guides/data-metering/upload-measurements"
                 ]
               },
               {
@@ -320,7 +321,8 @@
               "documentation/guides/integrations/salesforce",
               "documentation/guides/integrations/quickbooks2",
               "documentation/guides/integrations/netsuite",
-              "documentation/guides/integrations/snowflake"
+              "documentation/guides/integrations/snowflake",
+              "documentation/guides/integrations/mcp-server"
             ]
           }
         ]
