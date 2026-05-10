@@ -113,6 +113,22 @@ This ensures billing, finance, and operations teams always see the **current pay
 
 Future iterations may allow parts of this onboarding to be initiated or guided directly from Vayu.
 
+### **Applied credits and partial payments**
+
+When you apply a Vayu credit or record a partial payment against an invoice that has been synced to Stripe, Vayu automatically reduces the **amount due** on the corresponding Stripe-hosted invoice so the customer-facing page reflects the updated balance.
+
+Because Stripe finalizes invoices at export, line items can no longer be edited directly. Vayu instead issues an **out-of-band credit note** in Stripe for the applied amount. This is Stripe's canonical primitive for adjusting a finalized invoice's amount due, and it preserves the original invoice and an auditable adjustment record.
+
+The behavior on each action:
+
+- **Apply a credit in Vayu** → Vayu issues a Stripe credit note for the credit amount. The Stripe-hosted invoice shows the reduced amount due.
+- **Record a partial payment in Vayu** → Vayu issues a Stripe credit note for the payment amount. The Stripe-hosted invoice shows the remaining balance.
+- **Credit or payment fully covers the balance** → Stripe automatically transitions the invoice to **paid** when the credit note brings amount due to zero.
+
+The sync only runs when the invoice is linked to Stripe and is currently **open** in Stripe. Invoices that aren't synced, or that are in any other Stripe status (`draft`, `paid`, `void`, `uncollectible`), are skipped silently. If Stripe is temporarily unavailable, the credit or payment still completes in Vayu and the warning is logged—your user-facing operation is never blocked by a Stripe outage.
+
+No configuration is required. The sync runs automatically for every Stripe-connected customer.
+
 ## Configuring the Stripe Integration
 
 Go to your Stripe and get an API key for your Stripe account.
