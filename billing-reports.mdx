@@ -54,6 +54,12 @@ Use this report to prioritize collection efforts, identify customers with recurr
 
 Invoices are marked as overdue automatically when they pass their due date without payment. Payment status updates flow back from integrated payment providers ([Stripe](/documentation/guides/integrations/stripe)) and ERP systems ([NetSuite](/documentation/guides/integrations/netsuite), [QuickBooks](/documentation/guides/integrations/quickbooks2)) to ensure the report reflects current payment state.
 
+#### How partially-paid invoices are counted
+
+Aging buckets and the per-invoice amount column show the **remaining balance** for each overdue invoice, not the original invoice total. If a customer has paid part of an invoice, only the unpaid portion contributes to the report.
+
+For example, if a $10,000 invoice has $1,000 already applied as payment, AR Health includes $9,000 in the relevant aging bucket. Fully-unpaid invoices continue to show their full amount, and fully-paid invoices are excluded. The same logic powers the **Overdue** highlight on the invoices page (`/customers/{id}/invoices` and the global `/invoices` list), so the figures stay consistent across surfaces.
+
 ### Email Exception Report
 
 The Email exception report monitors email delivery issues related to billing communications. This report surfaces failed invoice sends, bounced emails, and other delivery problems that could prevent customers from receiving billing notifications.
