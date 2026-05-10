@@ -301,7 +301,8 @@
               }
             ]
           }
-        ]
+        ],
+        "icon": "phone-plus"
       },
       {
         "tab": "Integrations",
