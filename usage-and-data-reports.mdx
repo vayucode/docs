@@ -10,6 +10,7 @@ Usage & Data reports provide visibility into how customers are consuming your pr
 - **Anonymous customers** - Identify new or unassigned customers that were imported or created without full attribution.
 - **Usage by product** - Break down usage across different products or pricing components.
 - **Usage report** - View a detailed, granular breakdown of usage activity.
+- **Unmetered events** - Identify ingested events that did not match any metered product or pricing rule.
 
 Usage & Data reports provide visibility into how customers consume your product and how that consumption maps to billing. These reports help you identify usage patterns, detect billing issues, and ensure that all usage is properly charged.
 
@@ -113,3 +114,24 @@ The report displays:
 Use this report to audit usage data, investigate billing questions, and verify that usage is being recorded and charged correctly. The report supports export to CSV for further analysis or reconciliation with external systems.
 
 Usage events are ingested in real-time and processed according to the contract's pricing rules. The report shows both billed and unbilled usage, allowing you to track consumption throughout the billing cycle.
+
+### Unmetered Events
+
+The Unmetered events report surfaces ingested events that were not matched to a metered product or pricing rule. These events are stored but excluded from billing because no active meter is configured to count them. Reviewing this report helps you catch misconfigured meters, missing products, and unintended event names before they cause revenue leakage.
+
+The report displays:
+
+- Customer alias for the account that emitted the event
+- Event name as received during ingestion
+- Event count for the selected time range
+- Filter field values captured on the event payload (such as region, plan, or product identifier)
+
+Use this report to:
+
+- Detect new event names emitted by your application that do not yet have a meter configured
+- Confirm that recently launched meters are catching the expected events
+- Investigate gaps when expected usage does not appear on invoices
+
+You can scope the report using optional `startTime` and `endTime` parameters to focus on a specific ingestion window. The available filter fields depend on the metadata your events carry and are listed alongside the report so you can pivot the data by any captured dimension.
+
+Once you identify an unmetered event, create or update the corresponding meter and product mapping. Future events that match the new configuration will appear in the standard Usage report and be eligible for billing.
