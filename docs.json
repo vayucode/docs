@@ -165,6 +165,7 @@
             "icon": "file-doc",
             "pages": [
               "api-reference/pages/introduction",
+              "api-reference/pages/public-api-v1",
               "api-reference/pages/connecting-to-vayu",
               "api-reference/pages/sdk",
               "api-reference/pages/errors",
