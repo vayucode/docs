@@ -28,9 +28,49 @@ Vayu syncs account and deal-related data from Salesforce and associates it with 
 
 Salesforce is authoritative for account identity, opportunity structure, and CRM-managed fields.
 
-Vayu does not write back to Salesforce and does not attempt to replicate CRM functionality.
+Salesforce remains the system of record for CRM data, and Vayu does not attempt to replicate CRM functionality. Vayu can export billing artifacts — invoices and payments — back to Salesforce so finance and revenue teams have a unified view of customer activity inside the CRM. See [Exporting invoices and payments to Salesforce](#exporting-invoices-and-payments-to-salesforce) for details.
 
 Only data required to support revenue workflows is ingested, and Salesforce record identifiers are preserved for traceability.
+
+## **Exporting invoices and payments to Salesforce**
+
+Vayu can push invoices and payments generated in Vayu to the corresponding Salesforce account, giving revenue and sales teams visibility into billing activity without leaving the CRM.
+
+Two export flows are supported:
+
+- **Invoice export** — Sends a Vayu invoice and its line-level detail to Salesforce, linked to the matching Salesforce account.
+- **Payment export** — Sends payment records (including status and amount) to Salesforce, linked to the originating invoice and account.
+
+### **When to use exports**
+
+Use Salesforce exports when your sales, customer success, or finance teams rely on Salesforce as the day-to-day workspace and need to see:
+
+- Invoice issuance, amounts, and status alongside the Salesforce account.
+- Payment receipts and reconciliation status without switching tools.
+- A complete deal-to-cash trail tied back to the Salesforce opportunity.
+
+### **Prerequisites**
+
+- The Salesforce integration is installed and connected. See [Installation](#installation).
+- The Vayu customer is mapped to a Salesforce account (the integration uses the Salesforce **account ID** as the export target).
+- For payment exports, the related invoice must have been exported to Salesforce first.
+
+### **How exports are triggered**
+
+Exports are managed as background jobs in Vayu. Each invoice or payment export runs as an individual task scoped to a single record, so failures are isolated and retried independently.
+
+| Job | What it does |
+| :-- | :-- |
+| Salesforce dispatch export invoices | Queues invoice export tasks for eligible invoices on the account. |
+| Salesforce dispatch export payments | Queues payment export tasks for eligible payments on the account. |
+| Salesforce export invoice | Exports a single Vayu invoice to the linked Salesforce account. |
+| Salesforce export payment | Exports a single Vayu payment to the linked Salesforce account. |
+
+Export activity, retries, and errors appear in the integration's sync logs in Vayu, alongside the originating invoice or payment.
+
+### **Field mappings**
+
+Each export task carries the Vayu integration ID, the target Salesforce account ID, and the Vayu record identifier (invoice ID or payment ID). Vayu preserves these identifiers on the Salesforce side to keep records traceable and to prevent duplicate writes on retry.
 
 ## **Installation**
 
