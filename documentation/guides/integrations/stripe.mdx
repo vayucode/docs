@@ -113,6 +113,18 @@ This ensures billing, finance, and operations teams always see the **current pay
 
 Future iterations may allow parts of this onboarding to be initiated or guided directly from Vayu.
 
+### Syncing applied credits and partial payments
+
+When a customer applies Vayu credits or records a partial payment against an invoice that has already been synced to Stripe, Vayu keeps the Stripe-hosted invoice in step automatically by issuing an **out-of-band credit note**.
+
+This means the **remaining balance shown on the Stripe-hosted invoice** always matches the balance in Vayu, so customers paying through Stripe never overpay.
+
+- **Pre-sync credits** – Credits applied before the invoice is synced to Stripe are backfilled in a single credit note on first sync.
+- **Post-sync credits and partial payments** – Each new credit application creates a corresponding out-of-band credit note in Stripe.
+- **Full settlement** – When an applied credit covers the entire remaining balance, the invoice is marked **Paid** in Vayu and closed in Stripe automatically.
+
+No action is required to enable this behavior — it runs as part of the standard Stripe sync flow for any customer with Stripe set as their primary payment provider.
+
 ## Configuring the Stripe Integration
 
 Go to your Stripe and get an API key for your Stripe account.

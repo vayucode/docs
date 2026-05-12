@@ -39,3 +39,27 @@ Use the payment status endpoint to retrieve and verify invoice payment informati
 
   `The response includes: - billingStatus - Current payment status - amountDue - Outstanding amount - amountPaid - Amount already paid - total - Total invoice amount - dueDate - Payment due date - paidAt - Date payment was received - invoicePdfUrl - Link to invoice PDF ## Automatic payment status updates When using integrated payment systems like Stripe, payment status updates automatically: - **Successful payments** - Invoice status updates to Paid in Vayu automatically - **Failed payments** - Surface in outstanding balances and AR workflows - **No manual intervention needed** - Billing and finance teams see current payment state in real-time This eliminates the need to manually mark invoices as paid when using integrated payment processors. ## Payment tracking Once marked as paid: - The invoice appears in paid invoice filters - The paid date is recorded for reporting - Outstanding balance calculations exclude the invoice - AR aging reports reflect the payment - The invoice is locked from further editing ## Best practices - **Verify payment receipt** - Confirm funds are received before marking as paid - **Document payment method** - Add notes about how payment was received - **Reconcile regularly** - Match marked payments against bank deposits - **Use integrations when possible** - Automated payment tracking reduces manual work and errors`
 </ResponseField>
+
+## Custom field columns
+
+You can surface **customer** and **contract** custom field values as optional columns on the **Payments** page, making it easier to slice, sort, and reconcile payments using the same custom fields you already track on customers and contracts.
+
+### When to use custom field columns
+
+Add custom field columns when you need to:
+
+- Group payments by attributes that are not part of the default table (for example, region, segment, billing entity, or contract type).
+- Reconcile payments against external systems that key off your custom field values.
+- Export a payments view that includes the metadata your finance or RevOps team uses elsewhere in Vayu.
+
+### Showing or hiding columns
+
+1. Navigate to **Payments**.
+2. Open the column picker above the table.
+3. Toggle on any **customer** or **contract** custom field you want to display.
+
+Your column selection is saved automatically and persists the next time you open the page.
+
+<Note>
+  Payments that are not linked to an invoice (such as standalone payments or overpayments) have no associated contract, so contract custom field columns are empty for those rows. Customer custom fields still appear as long as the payment is linked to a customer.
+</Note>
