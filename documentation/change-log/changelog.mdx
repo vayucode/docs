@@ -6,6 +6,19 @@ icon: "clock-one"
 
 # Change Log
 
+<Update label="May 11, 2026" tags={["Payments", "Billing & Invoicing"]}>
+  # Release 2026.05.11
+
+  **Payments**
+
+  - Customer and contract custom fields are now available as optional columns on the [Payments page](/documentation/guides/invoices/mark#custom-field-columns). Toggle them on from the column picker to see custom field values alongside each payment.
+
+  **Billing & Invoicing**
+
+  - Applied credits and partial payments now sync to Stripe automatically. When you apply a Vayu credit to an invoice that is already in Stripe, Vayu issues an [out-of-band credit note](/documentation/guides/integrations/stripe#syncing-applied-credits-and-partial-payments) so the Stripe-hosted invoice reflects the correct remaining balance. Invoices fully covered by an applied credit are also marked as paid.
+  - The Trial Period option has been removed from the one-off invoice flow.
+</Update>
+
 <Update label="May 6, 2026" tags={["UI"]}>
   # Reporting Upgrades
 
