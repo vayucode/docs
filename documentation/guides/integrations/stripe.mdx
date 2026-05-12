@@ -113,6 +113,16 @@ This ensures billing, finance, and operations teams always see the **current pay
 
 Future iterations may allow parts of this onboarding to be initiated or guided directly from Vayu.
 
+### Failed payment notifications
+
+When an auto-collected Stripe payment fails, Vayu surfaces the failure in the **Notification Center** so your team can act without digging through Stripe.
+
+- A `Stripe collect invoice` task is created for the affected invoice and appears in the Notification Center alongside other invoice tasks.
+- Each notification includes the invoice number and customer name so you can identify the impacted account at a glance.
+- Selecting the notification opens the task details, where you can review the failure and take follow-up action (for example, contacting the customer or retrying collection).
+
+Auto-collection only runs once an invoice is **approved** and its **due date** has passed. Invoices that are not yet due or not yet approved are skipped — no notification is raised in those cases.
+
 ## Configuring the Stripe Integration
 
 Go to your Stripe and get an API key for your Stripe account.
@@ -149,7 +159,7 @@ After a payment attempt:
 - Stripe updates the **payment intent status** (success or failure).
 - Vayu retrieves this status and updates the invoice accordingly.
 - Successful payments automatically update the invoice status to **Paid** in Vayu.
-- Failed payments surface as part of Vayu’s **outstanding balances (OOS)** and AR workflows.
+- Failed payments surface as part of Vayu’s **outstanding balances (OOS)** and AR workflows, and as a `Stripe collect invoice` task in the **Notification Center**.
 
 This ensures billing, finance, and operations teams always see the **current payment state** without switching systems.
 
