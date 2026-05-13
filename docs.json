@@ -112,7 +112,7 @@
                   "documentation/guides/invoices/dunning",
                   "documentation/guides/invoices/untitled-page",
                   "documentation/guides/invoices/untitled-page-3",
-                  "documentation/guides/invoices/untitled-page-1",
+                  "documentation/guides/invoices/credits",
                   "documentation/guides/invoices/mark",
                   "documentation/guides/invoices/untitled-page-4"
                 ]
@@ -326,5 +326,8 @@
         ]
       }
     ]
+  },
+  "styling": {
+    "latex": true
   }
 }
