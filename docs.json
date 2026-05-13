@@ -2,13 +2,13 @@
   "theme": "mint",
   "name": "Vayu docs",
   "colors": {
-    "primary": "#0499CB",
-    "light": "#06ADBA",
+    "primary": "#00a7df",
+    "light": "#00e5f5",
     "dark": "#163B7E"
   },
   "logo": {
     "light": "/assets/logo/light.svg",
-    "dark": "/assets/logo/dark.svg"
+    "dark": "/assets/logo/light.svg"
   },
   "favicon": "/assets/favicon.png",
   "navbar": {
