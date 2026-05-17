@@ -1,0 +1,130 @@
+---
+title: 'Public API (v1)'
+description: 'Use the simpler v1 REST API with single-header authentication and the Vayu Developer Portal.'
+icon: 'rocket'
+---
+
+The Vayu Public API (v1) is a simpler, REST-first surface for integrating with Vayu. It uses a single `x-api-key` header for authentication, exposes versioned endpoints under `/v1`, and ships with a dedicated Developer Portal for managing API keys.
+
+<Note>
+The v1 Public API is hosted at a separate base URL from the legacy `connect.withvayu.com` endpoints. Existing integrations against `connect.withvayu.com` continue to work — pick the surface that best fits your use case.
+</Note>
+
+## Base URL
+
+```
+https://api.withvayu.com
+```
+
+## What's available
+
+The v1 Public API covers the most common billing operations:
+
+| Resource | Operations |
+|---|---|
+| Customers | Create, read, update, delete, list, bulk delete, lookup by external ID |
+| Products | Create, read, update, delete, list, bulk delete |
+| Contracts | Create, read, update, delete, list, bulk delete |
+| Invoices | Read, list |
+| Units | Create, read, delete, list, bulk upsert, bulk delete, recalculate |
+| System | Health check, version |
+
+## Authentication
+
+Every authenticated request includes a single header:
+
+| Header | Value |
+|---|---|
+| `x-api-key` | Your Public API key |
+
+```bash
+curl https://api.withvayu.com/v1/customers \
+  -H "x-api-key: YOUR_API_KEY"
+```
+
+Requests without a valid key receive a `401 Unauthorized` response with a structured error body containing `type`, `code`, `message`, `doc_url`, and `request_id`.
+
+The following endpoints do **not** require authentication:
+
+- `GET /v1/system/health`
+- `GET /v1/system/version`
+
+## Get an API key
+
+API keys are managed through the Vayu Developer Portal:
+
+1. Sign in to your Vayu account and open the Developer Portal.
+2. Go to **API Keys** and click **Create API Key**.
+3. Give the key a descriptive name (for example, `production-billing-service`).
+4. Copy the key immediately — it is only shown once.
+
+Keys are scoped to your account and apply to every request made with that key. To revoke a key, delete it from the **API Keys** tab; revoked keys are rejected immediately.
+
+### Key rotation
+
+Rotate keys without downtime by issuing a new key, switching your application over, verifying success, and then revoking the old key.
+
+## Make your first request
+
+List all customers in your account:
+
+```bash
+curl https://api.withvayu.com/v1/customers \
+  -H "x-api-key: YOUR_API_KEY"
+```
+
+A successful response returns a paginated list:
+
+```json
+{
+  "customers": [],
+  "total": 0,
+  "hasMore": false
+}
+```
+
+Create a customer with an `externalId` so future calls can use either identifier:
+
+```bash
+curl -X POST https://api.withvayu.com/v1/customers \
+  -H "x-api-key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Acme Corp",
+    "externalId": "acme-001"
+  }'
+```
+
+Repeating the call with the same `externalId` upserts the existing customer.
+
+## Identifiers
+
+Most resources expose two interchangeable identifiers:
+
+- **Vayu ID** — assigned by Vayu and returned on every entity.
+- **External ID** — your own identifier, settable through the API or the Vayu app. Customer endpoints accept it via `/v1/customers/by-external-id/{externalId}`.
+
+Use whichever identifier is more convenient — both are accepted on supported lookup, update, and delete endpoints.
+
+## Bulk operations
+
+Several resources support bulk delete and bulk upsert endpoints — for example, `POST /v1/customers/bulk-delete` and `POST /v1/units/bulk-upsert`. Use these when you need to apply the same change to many records in a single round trip.
+
+## Best practices
+
+- **Never commit API keys to source control.** Use environment variables or a secrets manager.
+- **Use separate keys for each environment** (development, staging, production).
+- **Give keys descriptive names** so you can identify which service or environment uses each one.
+- **Rotate keys periodically** and revoke any that are no longer in use.
+- **Restrict access** to API keys to team members who need them.
+
+## Choosing between the v1 API and `connect.withvayu.com`
+
+| | v1 Public API | `connect.withvayu.com` |
+|---|---|---|
+| Base URL | `https://api.withvayu.com` | `https://connect.withvayu.com` |
+| Auth | Single `x-api-key` header | `x-api-key` + Bearer access token from `/login` |
+| Key management | Developer Portal | Integrations tab in the Vayu app |
+| Best for | New integrations that want minimal auth setup | Existing integrations and the official SDKs |
+
+The official [SDKs](/api-reference/pages/sdk) currently target `connect.withvayu.com`. For direct REST integrations against the v1 API, send your `x-api-key` header on each request.
