@@ -30,9 +30,6 @@
     }
   },
   "seo": {
-    "metatags": {
-      "robots": "noindex"
-    },
     "indexing": "navigable"
   },
   "navigation": {
