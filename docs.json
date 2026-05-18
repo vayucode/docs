@@ -8,7 +8,7 @@
   },
   "logo": {
     "light": "/assets/logo/light.svg",
-    "dark": "/assets/logo/light.svg"
+    "dark": "/images/Vayuwhitetextlogo.png"
   },
   "favicon": "/assets/favicon.png",
   "navbar": {
@@ -93,7 +93,7 @@
                     "group": "Contracts",
                     "icon": "file-contract",
                     "pages": [
-                      "documentation/guides/plans-and-pricing/contract-processing",
+                      "documentation/guides/plans-and-pricing/contract-lifecycle",
                       "documentation/guides/plans-and-pricing/phases",
                       "documentation/guides/plans-and-pricing/plan-templates-and-contracts"
                     ]
@@ -118,7 +118,7 @@
                 "group": "Data Metering",
                 "icon": "meter-bolt",
                 "pages": [
-                  "usage",
+                  "documentation/guides/data-metering/usage",
                   "documentation/guides/data-metering/events"
                 ]
               },
@@ -126,10 +126,10 @@
                 "group": "Reports",
                 "icon": "file-arrow-down",
                 "pages": [
-                  "reports-overview",
-                  "billing-reports",
-                  "usage-and-data-reports",
-                  "accounting-reports"
+                  "documentation/guides/reports-overview",
+                  "documentation/guides/billing-reports",
+                  "documentation/guides/usage-and-data-reports",
+                  "documentation/guides/accounting-reports"
                 ]
               },
               {
@@ -317,7 +317,8 @@
               "documentation/guides/integrations/salesforce",
               "documentation/guides/integrations/quickbooks2",
               "documentation/guides/integrations/netsuite",
-              "documentation/guides/integrations/snowflake"
+              "documentation/guides/integrations/snowflake",
+              "documentation/guides/integrations/slack"
             ]
           }
         ]
