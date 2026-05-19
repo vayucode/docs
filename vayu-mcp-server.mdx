@@ -1,6 +1,6 @@
 ---
-title: "Vayu MCP Server"
-sidebarTitle: "Vayu MCP"
+title: "Vayu MCP"
+sidebarTitle: "Vayu MCP Server"
 description: "Connect AI assistants like Claude and Cursor to your Vayu workspace through the Vayu MCP server."
 icon: "waves-sine"
 ---
@@ -42,9 +42,9 @@ Available tool groups include:
   - Fetch full customer details
 - _Contracts_
   - Retrieve a contract by Vayu ID or supported integration ID
-  - List contracts for a customer
+  - List contracts, optionally filtered by customer and other supported fields
 - _Invoices_
-  - List invoices for a customer
+  - List invoices, optionally filtered by customer and other supported fields
   - Fetch full invoice details, including line items and totals
   - Check invoice payment status
 - _Catalog products_
@@ -59,7 +59,9 @@ Available tool groups include:
 - _Custom fields_
   - List custom field definitions for supported entities
 - _Credits_
-  - List credit ledger entries for a customer
+  - List credit ledger entries, optionally filtered by customer
+
+Tool names are prefixed with `vayu_` in MCP clients. List endpoints support pagination, and list results follow the server's supported sorting semantics where available.
 
 ## Supported AI clients
 
@@ -70,20 +72,20 @@ Vayu MCP works with MCP-compatible clients, including:
 - Cursor
 - claude.ai
 - MCP Inspector
-- Other MCP clients that support remote HTTP servers and custom auth headers
+- Other MCP clients that support remote HTTP servers and OAuth-based authentication
 
 ## Authentication
 
-Vayu MCP uses a bearer token in the `Authorization` header.
+Vayu MCP is exposed as an OAuth 2.1 protected resource.
 
-To get a token:
+When a compatible MCP client connects to the Vayu MCP endpoint, it discovers the authorization flow automatically through standard protected-resource metadata, including:
 
-1. Log in to Vayu.
-2. Go to _Integrations_.
-3. Generate a token.
-4. Copy the token and store it securely.
+- The `WWW-Authenticate` response header
+- The `/.well-known/oauth-protected-resource` metadata document
 
-Treat this token like a password. Anyone with the token can access your Vayu data through MCP with the same account scope.
+From there, the client launches the browser-based sign-in flow and obtains access tokens directly from the configured authorization server, currently Descope.
+
+This means there is no manual token copy and paste for supported clients. Users simply connect to the MCP server and complete sign-in in the browser.
 
 ## Endpoints
 
@@ -94,57 +96,52 @@ Use the endpoint that matches your environment:
 
 ## Connect Claude Desktop
 
-Add Vayu MCP to your Claude Desktop config:
+1. Open Claude Desktop MCP settings.
+2. Choose _Add MCP server_.
+3. Paste the Vayu MCP server URL.
+4. Click _Connect_.
+5. Complete the browser sign-in flow when prompted.
 
-```json
-{
-  "mcpServers": {
-    "vayu": {
-      "url": "https://mcp.withvayu.com/mcp",
-      "headers": {
-        "Authorization": "Bearer <your-token>"
-      }
-    }
-  }
-}
+Once connected, Claude Desktop can use the Vayu MCP tools in your conversations.
+
+Example prompt:
+
+```text
+Find customers named Acme and show me their overdue invoices.
 ```
 
-## Connect Claude Code
+Connect Claude CodeUse the CLI to register the server:
 
-Use the CLI to register the server:
-
-```json
-{
-  "mcpServers": {
-    "vayu": {
-      "url": "https://mcp.withvayu.com/mcp",
-      "headers": {
-        "Authorization": "Bearer <your-token>"
-      }
-    }
-  }
-}
+```shellscript
+claude mcp add --transport http vayu https://mcp.withvayu.com/mcp
 ```
 
-After saving, enable the server in Cursor's MCP settings.\\
+Then follow the sign-in flow when Claude Code prompts for authentication.
 
-## Connect [claude.ai](http://claude.ai)
+## Connect Cursor
 
-To connect a hosted MCP server in [claude.ai](http://claude.ai):\\
+1. Open Cursor settings.
+2. Go to MCP or connectors.
+3. Choose **Add custom MCP server**.
+4. Paste the Vayu MCP server URL.
+5. Click **Connect**.
+6. Complete the browser sign-in flow when prompted.
 
-1. Open _Settings_ → _Connectors_.
-2. Choose _Add custom connector_.
-3. Enter the server URL.
-4. Use a custom header for authentication.
-5. Set `Authorization` to `Bearer <your-token>`.
+After that, enable the server in Cursor and start using Vayu tools from chat or agent workflows.
 
-\
-\
-Once connected, enable the connector in the conversation where you want to use Vayu.\\
+## Connect [Claude.ai](http://claude.ai)
+
+1. Open **Settings** → **Connectors**.
+2. Choose **Add custom connector**.
+3. Paste the Vayu MCP server URL.
+4. Click **Connect**.
+5. Complete the browser sign-in flow when prompted.\
+   \
+   Once connected, enable the connector in the conversation where you want to use Vayu.\
 
 ## Example questions to ask
 
-Here are a few good examples:\\
+Here are a few good examples:
 
 - What's our recognized revenue this quarter?
 - Show me deferred revenue for the last 6 months.
@@ -157,31 +154,27 @@ Here are a few good examples:\\
 - What is this customer's current credit balance?
 - Search for all records related to Fordefi.
 
-\\
-
 ## Security and scope
 
 Vayu MCP is designed to be safe to use in production workflows.\
 \
-A few important notes:\\
+A few important notes:
 
-- Access is scoped to the Vayu account behind the token.
+- Access is scoped to the authenticated Vayu account.
 - The MCP server is read-only.
-- Authentication uses bearer-token authorization.
+- Authentication is handled through the OAuth protected-resource flow.
 - Tool responses are structured for AI use and optimized for natural-language workflows.
 - Pagination is supported on list operations for larger datasets.
 - Audit logging and rate limiting are built into the MCP service.
 - Input validation is enforced on every request.
 
-\\
-
 ## Current limitations
 
 At this stage, Vayu MCP is best suited for retrieval and analysis workflows.\
 \
-Keep in mind that the current toolset is primarily _read-focused_ and that available data depends on your Vayu account and configuration. Additionally, some clients may require support for custom headers when connecting to remote MCP servers.
+Keep in mind that the current toolset is primarily _read-focused_ and that available data depends on your Vayu account and configuration. Additionally, contract billing schedules and usage events aren't currently exposed. Finally, client support depends on MCP compatibility and OAuth protected-resource support.
 
-\\
+\
 
 ## Need help?
 
