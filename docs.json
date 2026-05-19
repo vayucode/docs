@@ -137,7 +137,8 @@
                 "icon": "robot-astromech",
                 "pages": [
                   "ai-insights",
-                  "pdf-extraction"
+                  "pdf-extraction",
+                  "mcp-servers"
                 ]
               },
               {

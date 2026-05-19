@@ -1,0 +1,188 @@
+---
+title: "Vayu MCP Server"
+sidebarTitle: "Vayu MCP"
+description: "Connect AI assistants like Claude and Cursor to your Vayu workspace through the Vayu MCP server."
+icon: "waves-sine"
+---
+
+## Overview
+
+Vayu MCP lets AI assistants connect directly to your Vayu workspace using the Model Context Protocol (MCP).
+
+With it, your team can ask natural-language questions about customers, contracts, invoices, plans, catalog products, meters, credits, and custom field definitions, using live data from Vayu.
+
+It is built to remove the manual back and forth between your billing system and your AI tools. Instead of exporting reports or copying numbers into prompts, your team can query billing and revenue data directly in plain English.
+
+This is designed for customer-facing and internal operations use cases such as:
+
+- Looking up a customer or contract
+- Reviewing invoice status and payment state
+- Exploring billing plans and catalog products
+- Understanding meter configuration
+- Inspecting credit ledger activity
+- Powering AI copilots and internal ops workflows
+
+## What you can do with Vayu MCP
+
+Today, Vayu MCP is focused on secure, read-oriented access to billing and revenue data in your Vayu account.
+
+You can use it for high-value finance and billing questions like:
+
+- Revenue recognition by period
+- Deferred revenue and waterfall analysis
+- MRR, ARR, NRR, and GRR questions
+- Contract and renewal lookups
+- Overdue accounts receivable and invoice status
+- Customer and cross-entity search across your Vayu account
+
+Available tool groups include:
+
+- _Customers_
+  - Find customers by name, external ID, or integration ID
+  - Fetch full customer details
+- _Contracts_
+  - Retrieve a contract by Vayu ID or supported integration ID
+  - List contracts for a customer
+- _Invoices_
+  - List invoices for a customer
+  - Fetch full invoice details, including line items and totals
+  - Check invoice payment status
+- _Catalog products_
+  - List catalog products
+  - Fetch a specific catalog product
+- _Plans_
+  - List plans
+  - Fetch a specific plan
+- _Meters_
+  - List meters
+  - Fetch a specific meter
+- _Custom fields_
+  - List custom field definitions for supported entities
+- _Credits_
+  - List credit ledger entries for a customer
+
+## Supported AI clients
+
+Vayu MCP works with MCP-compatible clients, including:
+
+- Claude Desktop
+- Claude Code
+- Cursor
+- claude.ai
+- MCP Inspector
+- Other MCP clients that support remote HTTP servers and custom auth headers
+
+## Authentication
+
+Vayu MCP uses a bearer token in the `Authorization` header.
+
+To get a token:
+
+1. Log in to Vayu.
+2. Go to _Integrations_.
+3. Generate a token.
+4. Copy the token and store it securely.
+
+Treat this token like a password. Anyone with the token can access your Vayu data through MCP with the same account scope.
+
+## Endpoints
+
+Use the endpoint that matches your environment:
+
+- _Staging:_ `https://mcp.staging.withvayu.com/mcp`
+- _Production:_ `https://mcp.withvayu.com/mcp`
+
+## Connect Claude Desktop
+
+Add Vayu MCP to your Claude Desktop config:
+
+```json
+{
+  "mcpServers": {
+    "vayu": {
+      "url": "https://mcp.withvayu.com/mcp",
+      "headers": {
+        "Authorization": "Bearer <your-token>"
+      }
+    }
+  }
+}
+```
+
+## Connect Claude Code
+
+Use the CLI to register the server:
+
+```json
+{
+  "mcpServers": {
+    "vayu": {
+      "url": "https://mcp.withvayu.com/mcp",
+      "headers": {
+        "Authorization": "Bearer <your-token>"
+      }
+    }
+  }
+}
+```
+
+After saving, enable the server in Cursor's MCP settings.\\
+
+## Connect [claude.ai](http://claude.ai)
+
+To connect a hosted MCP server in [claude.ai](http://claude.ai):\\
+
+1. Open _Settings_ → _Connectors_.
+2. Choose _Add custom connector_.
+3. Enter the server URL.
+4. Use a custom header for authentication.
+5. Set `Authorization` to `Bearer <your-token>`.
+
+\
+\
+Once connected, enable the connector in the conversation where you want to use Vayu.\\
+
+## Example questions to ask
+
+Here are a few good examples:\\
+
+- What's our recognized revenue this quarter?
+- Show me deferred revenue for the last 6 months.
+- List contracts renewing in the next 90 days.
+- Which invoices are overdue for Acme?
+- Show me the payment status of invoice `inv_123`.
+- List active contracts for customer `cus_123`.
+- What plans are active in this workspace?
+- Show me the details for meter `mtr_123`.
+- What is this customer's current credit balance?
+- Search for all records related to Fordefi.
+
+\\
+
+## Security and scope
+
+Vayu MCP is designed to be safe to use in production workflows.\
+\
+A few important notes:\\
+
+- Access is scoped to the Vayu account behind the token.
+- The MCP server is read-only.
+- Authentication uses bearer-token authorization.
+- Tool responses are structured for AI use and optimized for natural-language workflows.
+- Pagination is supported on list operations for larger datasets.
+- Audit logging and rate limiting are built into the MCP service.
+- Input validation is enforced on every request.
+
+\\
+
+## Current limitations
+
+At this stage, Vayu MCP is best suited for retrieval and analysis workflows.\
+\
+Keep in mind that the current toolset is primarily _read-focused_ and that available data depends on your Vayu account and configuration. Additionally, some clients may require support for custom headers when connecting to remote MCP servers.
+
+\\
+
+## Need help?
+
+If you need help enabling Vayu MCP for your workspace, reach out to your Vayu team contact.
