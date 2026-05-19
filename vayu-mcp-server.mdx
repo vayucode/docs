@@ -26,39 +26,32 @@ This is designed for customer-facing and internal operations use cases such as:
 
 Today, Vayu MCP is focused on secure, read-oriented access to billing and revenue data in your Vayu account.
 
-You can use it for high-value finance and billing questions like:
-
-- Revenue recognition by period
-- Deferred revenue and waterfall analysis
-- MRR, ARR, NRR, and GRR questions
-- Contract and renewal lookups
-- Overdue accounts receivable and invoice status
-- Customer and cross-entity search across your Vayu account
+You can use it for high-value finance and billing questions including revenue recognition by period (MRR, ARR, NRR, and GRR), deferred revenue, waterfall analysis, contract/renewal lookups, overdue AR, invoice status, and cross-entity search.
 
 Available tool groups include:
 
-- _Customers_
+- **Customers**
   - Find customers by name, external ID, or integration ID
   - Fetch full customer details
-- _Contracts_
+- **Contracts**
   - Retrieve a contract by Vayu ID or supported integration ID
   - List contracts, optionally filtered by customer and other supported fields
-- _Invoices_
+- **Invoices**
   - List invoices, optionally filtered by customer and other supported fields
   - Fetch full invoice details, including line items and totals
   - Check invoice payment status
-- _Catalog products_
+- **Catalog products**
   - List catalog products
   - Fetch a specific catalog product
-- _Plans_
+- **Plans**
   - List plans
   - Fetch a specific plan
-- _Meters_
+- **Meters**
   - List meters
   - Fetch a specific meter
-- _Custom fields_
+- **Custom fields**
   - List custom field definitions for supported entities
-- _Credits_
+- **Credits**
   - List credit ledger entries, optionally filtered by customer
 
 Tool names are prefixed with `vayu_` in MCP clients. List endpoints support pagination, and list results follow the server's supported sorting semantics where available.
@@ -91,15 +84,15 @@ This means there is no manual token copy and paste for supported clients. Users 
 
 Use the endpoint that matches your environment:
 
-- _Staging:_ `https://mcp.staging.withvayu.com/mcp`
-- _Production:_ `https://mcp.withvayu.com/mcp`
+- **Staging**_:_ `https://mcp.staging.withvayu.com/mcp`
+- **Production**_:_ `https://mcp.withvayu.com/mcp`
 
 ## Connect Claude Desktop
 
 1. Open Claude Desktop MCP settings.
-2. Choose _Add MCP server_.
+2. Choose **Add MCP server**.
 3. Paste the Vayu MCP server URL.
-4. Click _Connect_.
+4. Click **Connect**.
 5. Complete the browser sign-in flow when prompted.
 
 Once connected, Claude Desktop can use the Vayu MCP tools in your conversations.
@@ -161,8 +154,7 @@ Vayu MCP is designed to be safe to use in production workflows.\
 A few important notes:
 
 - Access is scoped to the authenticated Vayu account.
-- The MCP server is read-only.
-- Authentication is handled through the OAuth protected-resource flow.
+- The MCP server is read-only and authentication is handled through the OAuth protected-resource flow.
 - Tool responses are structured for AI use and optimized for natural-language workflows.
 - Pagination is supported on list operations for larger datasets.
 - Audit logging and rate limiting are built into the MCP service.
